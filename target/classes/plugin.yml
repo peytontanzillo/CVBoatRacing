@@ -1,0 +1,11 @@
+name: CVBoatRacing
+main: org.cubeville.cvboatracing.CVBoatRacing
+authors: [Ptown16]
+version: 0.1
+api-version: 1.16
+depend: [CVTools]
+
+commands:
+  boatrace:
+    description: CVBoatRacing Base Command
+
