@@ -1,4 +1,5 @@
 /Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/TrackStatus.java
+/Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/models/Score.java
 /Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/CVBoatRacing.java
 /Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/commands/CloseTrack.java
 /Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/commands/SetTrackExit.java
@@ -7,12 +8,17 @@
 /Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/commands/AddCheckpoint.java
 /Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/models/Track.java
 /Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/ConfigImportManager.java
+/Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/commands/GetPB.java
 /Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/models/RaceSign.java
 /Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/SignManager.java
 /Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/commands/ListCheckpoints.java
+/Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/BoatRaceUtilities.java
+/Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/ScoreManager.java
 /Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/models/Race.java
 /Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/commands/OpenTrack.java
 /Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/commands/CreateTrack.java
 /Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/EventHandlers.java
 /Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/RaceManager.java
+/Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/dbfiles/SQLite.java
 /Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/commands/CreateRaceSign.java
+/Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/dbfiles/BoatRacingDB.java

@@ -20,6 +20,7 @@ public class Track implements Listener {
 	private List<RaceSign> signs = new ArrayList<>();
 	private List<Location> checkpoints = new ArrayList<>();
 	private Queue<Player> queue = new LinkedList<>();
+	private List<Score> scores = new ArrayList<>();
 
 	public Track(String name) {
 		this.name = name;
@@ -101,5 +102,15 @@ public class Track implements Listener {
 
 	public List<RaceSign> getSigns() {
 		return signs;
+	}
+
+	public void removePlayerFromQueue(Player p) {
+		if (queue.contains(p)) {
+			queue.remove(p);
+		}
+	}
+
+	public void addScore(Score score) {
+		this.scores.add(score);
 	}
 }

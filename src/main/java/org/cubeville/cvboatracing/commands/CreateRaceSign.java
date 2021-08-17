@@ -16,7 +16,7 @@ public class CreateRaceSign extends Command {
 	private JavaPlugin plugin;
 
 	public CreateRaceSign(JavaPlugin plugin) {
-		super("createsign");
+		super("track createsign");
 
 		addBaseParameter(new CommandParameterString());
 		setPermission("cvboatrace.createsign");

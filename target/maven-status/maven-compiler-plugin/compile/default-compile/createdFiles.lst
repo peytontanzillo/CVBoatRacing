@@ -1,12 +1,16 @@
 org/cubeville/cvboatracing/models/Race$3.class
 org/cubeville/cvboatracing/TrackStatus.class
 org/cubeville/cvboatracing/commands/SetTrackExit.class
+org/cubeville/cvboatracing/models/Score.class
 org/cubeville/cvboatracing/commands/CloseTrack.class
 org/cubeville/cvboatracing/RaceManager.class
 org/cubeville/cvboatracing/commands/AddCheckpoint.class
 org/cubeville/cvboatracing/models/Race.class
 org/cubeville/cvboatracing/EventHandlers.class
+org/cubeville/cvboatracing/dbfiles/SQLite.class
 org/cubeville/cvboatracing/models/Race$1.class
+org/cubeville/cvboatracing/ScoreManager.class
+org/cubeville/cvboatracing/BoatRaceUtilities.class
 org/cubeville/cvboatracing/CVBoatRacing.class
 org/cubeville/cvboatracing/commands/SetTrackSpawn.class
 org/cubeville/cvboatracing/TrackManager.class
@@ -16,8 +20,10 @@ org/cubeville/cvboatracing/commands/ListCheckpoints.class
 org/cubeville/cvboatracing/commands/CreateRaceSign.class
 org/cubeville/cvboatracing/models/Race$2.class
 org/cubeville/cvboatracing/commands/CreateTrack.class
+org/cubeville/cvboatracing/dbfiles/BoatRacingDB.class
 org/cubeville/cvboatracing/models/RaceSign$1.class
 org/cubeville/cvboatracing/SignManager.class
 org/cubeville/cvboatracing/commands/OpenTrack.class
+org/cubeville/cvboatracing/commands/GetPB.class
 org/cubeville/cvboatracing/models/Track.class
 org/cubeville/cvboatracing/models/RaceSign.class

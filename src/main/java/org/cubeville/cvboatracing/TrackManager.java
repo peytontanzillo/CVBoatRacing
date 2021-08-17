@@ -1,8 +1,12 @@
 package org.cubeville.cvboatracing;
 
+import org.bukkit.entity.Player;
+import org.cubeville.cvboatracing.models.RaceSign;
 import org.cubeville.cvboatracing.models.Track;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class TrackManager {
 
@@ -16,5 +20,19 @@ public class TrackManager {
 
 	public static Track getTrack(String name) {
 		return tracks.get(name);
+	}
+
+	public static List<Track> getTracks() {
+		return new ArrayList<>(tracks.values());
+	}
+
+	public static void clearPlayerFromQueues(Player p) {
+		for (Track track : getTracks()) {
+			track.removePlayerFromQueue(p);
+			int queueSize = track.getQueue().size();
+			for (RaceSign sign : track.getSigns()) {
+				sign.displayQueue(queueSize);
+			}
+		}
 	}
 }
