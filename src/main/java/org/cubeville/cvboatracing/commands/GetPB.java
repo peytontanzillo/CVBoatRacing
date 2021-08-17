@@ -2,9 +2,7 @@ package org.cubeville.cvboatracing.commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.cubeville.commons.commands.Command;
 import org.cubeville.commons.commands.CommandExecutionException;
 import org.cubeville.commons.commands.CommandParameterString;
@@ -41,20 +39,20 @@ public class GetPB extends Command {
 			if (op.hasPlayedBefore()) {
 				if (ScoreManager.getScore(op.getUniqueId(), t) != null) {
 					return new CommandResponse(
-						"§5" + opName + "\'s personal best time on §d§l" + t.getName() + "§5 is §d§l" + getPB(
-							player.getUniqueId(), t) + "§5 !");
+						"§6" + opName + "\'s personal best time on §e§l" + t.getName() + "§6 is §e§l" + getPB(
+							op.getUniqueId(), t) + "§6 !");
 				}
-				return new CommandResponse("§5" + opName + " does not have a registered time on §d§l" + t.getName() + ".");
+				return new CommandResponse("§6" + opName + " does not have a registered time on §e§l" + t.getName() + "§6.");
 			}
 			throw new CommandExecutionException("Cannot find a player with the name " + opName + ".");
 
 		} else {
 			if (ScoreManager.getScore(player.getUniqueId(), t) != null) {
 				return new CommandResponse(
-					"§5Your personal best time on §d§l" + t.getName() + "§5 is §d§l" + getPB(
-						player.getUniqueId(), t) + "§5 !");
+					"§6Your personal best time on §e§l" + t.getName() + "§6 is §e§l" + getPB(
+						player.getUniqueId(), t) + "§6 !");
 			}
-			return new CommandResponse("§5You do not have a registered time on §d§l" + t.getName() + ".");
+			return new CommandResponse("§6You do not have a registered time on §e§l" + t.getName() + "§6.");
 		}
 	}
 

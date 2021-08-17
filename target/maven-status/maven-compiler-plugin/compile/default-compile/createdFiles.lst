@@ -8,6 +8,7 @@ org/cubeville/cvboatracing/commands/AddCheckpoint.class
 org/cubeville/cvboatracing/models/Race.class
 org/cubeville/cvboatracing/EventHandlers.class
 org/cubeville/cvboatracing/dbfiles/SQLite.class
+org/cubeville/cvboatracing/commands/GetLeaderboard.class
 org/cubeville/cvboatracing/models/Race$1.class
 org/cubeville/cvboatracing/ScoreManager.class
 org/cubeville/cvboatracing/BoatRaceUtilities.class

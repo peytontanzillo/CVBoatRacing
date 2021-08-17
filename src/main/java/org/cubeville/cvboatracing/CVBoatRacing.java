@@ -42,6 +42,7 @@ public class CVBoatRacing extends JavaPlugin implements Listener {
         commandParser.addCommand(new AddCheckpoint(this));
         commandParser.addCommand(new ListCheckpoints());
         commandParser.addCommand(new GetPB());
+        commandParser.addCommand(new GetLeaderboard());
 
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new EventHandlers(), this);

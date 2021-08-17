@@ -56,7 +56,6 @@ public class BoatRacingDB extends SQLite {
 				"VALUES(" + scoreId + ", " + checkpoint + ", " + s.getSplit(checkpoint) + ");"
 			);
 		}
-		System.out.println("addscore");
 	}
 
 	public void updateScore(Score s) {
@@ -71,7 +70,6 @@ public class BoatRacingDB extends SQLite {
 				+ splitConditionString(checkpoint, scoreId)
 			);
 		}
-		System.out.println("updatescore");
 	}
 
 	private Integer getScoreID(UUID uuid, Track track) {

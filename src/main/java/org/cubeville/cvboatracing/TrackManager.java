@@ -35,4 +35,10 @@ public class TrackManager {
 			}
 		}
 	}
+
+	public static void sortTrackScores() {
+		for (Track track : tracks.values()) {
+			track.sortScores();
+		}
+	}
 }

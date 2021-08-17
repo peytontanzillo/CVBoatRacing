@@ -7,13 +7,11 @@ import org.bukkit.event.Listener;
 import org.cubeville.cvboatracing.RaceManager;
 import org.cubeville.cvboatracing.TrackStatus;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class Track implements Listener {
 	private String name;
+	private String displayName;
 	private TrackStatus status;
 	private Location spawn;
 	private Location exit;
@@ -112,5 +110,13 @@ public class Track implements Listener {
 
 	public void addScore(Score score) {
 		this.scores.add(score);
+	}
+
+	public void sortScores() {
+		this.scores.sort(Comparator.comparingLong(Score::getFinalTime));
+	}
+
+	public List<Score> getScores() {
+		return this.scores;
 	}
 }

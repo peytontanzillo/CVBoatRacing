@@ -22,6 +22,7 @@ public class ScoreManager {
 		for (Score score : importScoreManager.values()) {
 			addScoreToManager(score);
 		}
+		TrackManager.sortTrackScores();
 	}
 
 	private static void importScoresFromDB(BoatRacingDB db) {
@@ -37,6 +38,7 @@ public class ScoreManager {
 					track,
 					playerUUID
 					);
+				track.addScore(s);
 				importScoreManager.put(scoreID, s);
 			}
 		} catch (SQLException e) {
@@ -92,12 +94,15 @@ public class ScoreManager {
 	public static void setNewPB(UUID uuid, Track track, long finalTime, HashMap<Integer, Long> splits) {
 		Score s = getScore(uuid, track);
 		if (s == null) {
-			database.addScore(addScore(uuid, track, finalTime, splits));
+			Score newScore = addScore(uuid, track, finalTime, splits);
+			database.addScore(newScore);
+			track.addScore(newScore);
 		} else {
 			// update the score that is currently in the db
 			s.setFinalTime(finalTime);
 			s.setSplits(splits);
 			database.updateScore(s);
 		}
+		track.sortScores();
 	}
 }

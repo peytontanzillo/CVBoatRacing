@@ -93,9 +93,13 @@ public class Race {
 		long finalTime = this.endTime - this.startTime;
 		String pbString = " ";
 		if (personalBest == null || personalBest.getFinalTime() > finalTime) {
-			Bukkit.getServer().broadcastMessage("§d§l" + player.getName() + "§5 just got a new personal best time of §d§l" + BoatRaceUtilities.formatTimeString(this.endTime - this.startTime) + "§5 on §d§l" + track.getName() + "!");
 			player.sendMessage("§b You achieved a time of " + BoatRaceUtilities.formatTimeString(finalTime) + " on " + track.getName() + ", which was your personal best!");
 			pbString = "§a§l New Personal Best!";
+			if (finalTime < track.getScores().get(0).getFinalTime()) {
+				Bukkit.getServer().broadcastMessage("§b§l" + player.getName() + "§3 just got a new world record time of §b§l" + BoatRaceUtilities.formatTimeString(this.endTime - this.startTime) + "§3 on §b§l" + track.getName() + "!");
+			} else {
+				Bukkit.getServer().broadcastMessage("§d§l" + player.getName() + "§5 just got a new personal best time of §d§l" + BoatRaceUtilities.formatTimeString(this.endTime - this.startTime) + "§5 on §d§l" + track.getName() + "!");
+			}
 			ScoreManager.setNewPB(player.getUniqueId(), track, finalTime, splits);
 		} else {
 			player.sendMessage("§b You achieved a time of " + BoatRaceUtilities.formatTimeString(finalTime) + " on " + track.getName() + ", which was " + BoatRaceUtilities.formatTimeString(finalTime - personalBest.getFinalTime()) + " behind your personal best!");
