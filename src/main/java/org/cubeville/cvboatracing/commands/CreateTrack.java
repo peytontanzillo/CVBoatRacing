@@ -17,7 +17,7 @@ public class CreateTrack extends BaseCommand {
 	public CreateTrack(JavaPlugin plugin) {
 		super("track create");
 		addBaseParameter(new CommandParameterString());
-		setPermission("cvboatrace.createtrack");
+		setPermission("cvboatrace.track.create");
 		this.plugin = plugin;
 	}
 

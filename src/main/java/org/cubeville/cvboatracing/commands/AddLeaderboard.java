@@ -25,7 +25,7 @@ public class AddLeaderboard extends Command {
 		super("track leaderboards add");
 
 		addBaseParameter(new CommandParameterString());
-		setPermission("cvboatrace.leaderboard.add");
+		setPermission("cvboatrace.leaderboards.add");
 		this.plugin = plugin;
 	}
 

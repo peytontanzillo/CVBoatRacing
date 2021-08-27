@@ -18,7 +18,7 @@ public class ListCheckpoints extends BaseCommand {
 		super("track checkpoints list");
 
 		addBaseParameter(new CommandParameterString());
-		setPermission("cvboatrace.checkpoints.add");
+		setPermission("cvboatrace.checkpoints.list");
 	}
 
 	@Override

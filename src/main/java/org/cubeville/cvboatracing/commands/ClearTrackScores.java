@@ -16,7 +16,7 @@ import java.util.Set;
 public class ClearTrackScores extends BaseCommand {
 
 	public ClearTrackScores() {
-		super("times clear track");
+		super("track scores clear");
 		// track
 		addBaseParameter(new CommandParameterString());
 	}

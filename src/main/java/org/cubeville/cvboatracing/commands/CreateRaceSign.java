@@ -19,7 +19,7 @@ public class CreateRaceSign extends Command {
 		super("track signs add");
 
 		addBaseParameter(new CommandParameterString());
-		setPermission("cvboatrace.createsign");
+		setPermission("cvboatrace.signs.add");
 		this.plugin = plugin;
 	}
 

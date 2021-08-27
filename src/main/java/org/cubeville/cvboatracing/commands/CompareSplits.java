@@ -25,6 +25,7 @@ public class CompareSplits extends Command {
 		addBaseParameter(new CommandParameterString());
 		// player 2
 		addOptionalBaseParameter(new CommandParameterString());
+		setPermission("cvboatrace.splits.compare");
 	}
 
 	@Override

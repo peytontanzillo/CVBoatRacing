@@ -23,7 +23,7 @@ public class DeleteScore extends BaseCommand {
 		addBaseParameter(new CommandParameterString());
 		// player
 		addBaseParameter(new CommandParameterString());
-		setPermission("cvboatrace.track.scores.delete");
+		setPermission("cvboatrace.scores.delete");
 	}
 
 	@Override

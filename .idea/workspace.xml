@@ -2,66 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="448dee9a-ad04-458b-a930-061757266f74" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/peytontanzillo.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/SelectedSplits.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/AddLeaderboard.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ClearPlayerScores.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ClearTrackScores.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/CompareSplits.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteCheckpoint.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteLeaderboard.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteSign.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteTrack.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/GetRank.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ListLeaderboards.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ListSigns.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/models/Leaderboard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/BoatRaceUtilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/BoatRaceUtilities.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/CVBoatRacing.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/CVBoatRacing.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/ConfigImportManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/ConfigImportManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/EventHandlers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/EventHandlers.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/RaceManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/RaceManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/ScoreManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/ScoreManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/SignManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/SignManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/TrackManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/TrackManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/AddCheckpoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/AddCheckpoint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/AddLeaderboard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/AddLeaderboard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ClearPlayerScores.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ClearPlayerScores.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ClearTrackScores.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ClearTrackScores.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/CloseTrack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/CloseTrack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/CompareSplits.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/CompareSplits.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/CreateRaceSign.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/CreateRaceSign.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/GetLeaderboard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/GetLeaderboard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/GetPB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/GetPB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/CreateTrack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/CreateTrack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteScore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteScore.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ListCheckpoints.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ListCheckpoints.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/SetTrackExit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/SetTrackExit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/SetTrackSpawn.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/SetTrackSpawn.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/UseSplits.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/UseSplits.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/dbfiles/BoatRacingDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/dbfiles/BoatRacingDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/models/Race.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/models/Race.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/models/Score.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/models/Score.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/models/Track.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/models/Track.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/CVBoatRacing-0.1.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/CVBoatRacing-0.1.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/BoatRaceUtilities.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/BoatRaceUtilities.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/CVBoatRacing.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/CVBoatRacing.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/ConfigImportManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/ConfigImportManager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/EventHandlers.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/EventHandlers.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/ScoreManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/ScoreManager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/SignManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/SignManager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/TrackManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/TrackManager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/commands/AddCheckpoint.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/commands/AddCheckpoint.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/commands/CreateRaceSign.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/commands/CreateRaceSign.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/commands/GetLeaderboard.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/commands/GetLeaderboard.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/commands/GetPB.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/commands/GetPB.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/commands/ListCheckpoints.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/commands/ListCheckpoints.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/commands/SetTrackExit.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/commands/SetTrackExit.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/commands/SetTrackSpawn.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/commands/SetTrackSpawn.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/dbfiles/BoatRacingDB.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/dbfiles/BoatRacingDB.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/models/Race$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/models/Race$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/models/Race$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/models/Race$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/models/Race$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/models/Race.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/models/Race.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/models/Score.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/models/Score.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/models/Track$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/models/Track$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/models/Track.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/cubeville/cvboatracing/models/Track.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ListLeaderboards.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ListLeaderboards.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ListSigns.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ListSigns.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/OpenTrack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/OpenTrack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -76,20 +29,86 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/plugin.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="90">
+              <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/UseSplits.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="25" column="48" selection-start-line="25" selection-start-column="42" selection-end-line="25" selection-end-column="48" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/OpenTrack.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="22" column="52" selection-start-line="22" selection-start-column="52" selection-end-line="22" selection-end-column="52" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/CloseTrack.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="22" column="42" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteScore.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="232">
+              <caret line="28" column="17" lean-forward="true" selection-start-line="28" selection-start-column="17" selection-end-line="28" selection-end-column="17" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteTrack.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="340">
+              <caret line="36" selection-start-line="36" selection-end-line="36" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/GetPB.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="567">
+              <caret line="45" column="25" lean-forward="true" selection-start-line="36" selection-start-column="24" selection-end-line="45" selection-end-column="25" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/RaceManager.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/GetRank.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="264">
-              <caret line="56" column="50" lean-forward="true" selection-start-line="56" selection-start-column="50" selection-end-line="56" selection-end-column="50" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/EventHandlers.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="46">
-              <caret line="84" column="68" selection-start-line="84" selection-start-column="68" selection-end-line="84" selection-end-column="68" />
+            <state relative-caret-position="449">
+              <caret line="40" column="81" selection-start-line="40" selection-start-column="81" selection-end-line="40" selection-end-column="81" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -98,22 +117,22 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/BoatRaceUtilities.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteLeaderboard.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="226">
-              <caret line="19" column="40" selection-start-line="19" selection-start-column="36" selection-end-line="19" selection-end-column="40" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="510">
+              <caret line="39" selection-start-line="39" selection-end-line="41" selection-end-column="17" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/models/Race.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ClearTrackScores.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="60" column="16" lean-forward="true" selection-start-line="60" selection-start-column="16" selection-end-line="60" selection-end-column="59" />
+            <state relative-caret-position="155">
+              <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -153,10 +172,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvgames/queues/FFAGameQueue.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvgames/queues/GameQueue.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvgames/Paintball.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvgames/arenas/ArenaManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvgames/arenas/AddArenaSpawn.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/DBConnection.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/SQLite.java" />
@@ -178,32 +193,36 @@
         <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/GetRank.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/GetPB.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/TrackManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ClearTrackScores.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteScore.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ClearPlayerScores.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/ScoreManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteTrack.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/GetSigns.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ListSigns.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/models/Leaderboard.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ListLeaderboards.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/AddLeaderboard.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/AddCheckpoint.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ListCheckpoints.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/models/Track.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteLeaderboard.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteCheckpoint.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/SignManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteSign.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/CreateRaceSign.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/UseSplits.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/CompareSplits.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/ConfigImportManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/dbfiles/BoatRacingDB.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/CVBoatRacing.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/EventHandlers.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/models/Race.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/RaceManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/AddLeaderboard.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ClearPlayerScores.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/CompareSplits.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/CreateRaceSign.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/CreateTrack.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteScore.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ListCheckpoints.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ListLeaderboards.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ListSigns.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/OpenTrack.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/CloseTrack.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/plugin.yml" />
+        <option value="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ClearTrackScores.java" />
       </list>
     </option>
   </component>
@@ -231,8 +250,8 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="21" />
-    <option name="y" value="90" />
+    <option name="x" value="13" />
+    <option name="y" value="23" />
     <option name="width" value="1363" />
     <option name="height" value="794" />
   </component>
@@ -283,7 +302,7 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="cvboatracing" type="462c0819:PsiDirectoryNode" />
-              <item name="models" type="462c0819:PsiDirectoryNode" />
+              <item name="commands" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="CVBoatRacing" type="b2602c69:ProjectViewProjectNode" />
@@ -344,7 +363,7 @@
     <frame x="0" y="23" width="1440" height="794" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19241774" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19241774" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -365,13 +384,13 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.24964234" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Palette" order="3" />
-      <window_info active="true" anchor="right" id="Maven" order="4" visible="true" weight="0.15236051" />
+      <window_info anchor="right" id="Maven" order="4" visible="true" weight="0.15236051" />
       <window_info anchor="right" id="Theme Preview" order="5" />
       <window_info anchor="right" id="Capture Analysis" order="6" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
     </layout>
     <layout-to-restore>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18597998" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19241774" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -380,7 +399,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49928468" weight="0.16034986" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32944608" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32944608" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -403,7 +422,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvgames/queues/GameQueue.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvgames/CVGames.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvgames/Paintball.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvgames/arenas/AddArenaSpawn.java" />
@@ -465,85 +483,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/AddCheckpoint.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="18" column="40" selection-start-line="18" selection-start-column="40" selection-end-line="18" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/CloseTrack.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/CreateTrack.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="37" column="44" selection-start-line="37" selection-start-column="44" selection-end-line="37" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/GetLeaderboard.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
-          <caret line="16" column="33" lean-forward="true" selection-start-line="16" selection-start-column="33" selection-end-line="16" selection-end-column="33" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/GetPB.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="45" column="25" lean-forward="true" selection-start-line="36" selection-start-column="24" selection-end-line="45" selection-end-column="25" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/GetRank.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="111">
-          <caret line="40" column="81" selection-start-line="40" selection-start-column="81" selection-end-line="40" selection-end-column="81" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ListCheckpoints.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="17" column="40" selection-start-line="17" selection-start-column="40" selection-end-line="17" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ListLeaderboards.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="281">
-          <caret line="50" column="1" lean-forward="true" selection-start-line="50" selection-start-column="1" selection-end-line="50" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ListSigns.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="40" column="17" lean-forward="true" selection-start-line="40" selection-start-column="17" selection-end-line="40" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/OpenTrack.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/SetTrackExit.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
@@ -572,44 +511,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteTrack.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="36" selection-start-line="36" selection-end-line="36" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteLeaderboard.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="235">
-          <caret line="39" selection-start-line="39" selection-end-line="41" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteCheckpoint.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="235">
-          <caret line="40" selection-start-line="40" selection-end-line="42" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteSign.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="371">
-          <caret line="50" selection-start-line="50" selection-end-line="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/CreateRaceSign.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-91">
-          <caret line="18" column="34" selection-start-line="18" selection-start-column="34" selection-end-line="18" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/models/Score.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="493">
@@ -622,30 +523,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/UseSplits.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="33" column="52" selection-start-line="33" selection-start-column="52" selection-end-line="33" selection-end-column="54" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/CVBoatRacing.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="92">
           <caret line="30" column="32" selection-start-line="30" selection-start-column="32" selection-end-line="30" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/CompareSplits.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="918">
-          <caret line="67" column="65" selection-start-line="67" selection-start-column="65" selection-end-line="67" selection-end-column="65" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -678,16 +559,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteScore.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="410">
-          <caret line="46" column="24" selection-start-line="46" selection-start-column="24" selection-end-line="46" selection-end-column="151" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/ScoreManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="592">
@@ -699,37 +570,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ClearPlayerScores.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/BoatRaceUtilities.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="354">
-          <caret line="28" selection-start-line="28" selection-end-line="31" selection-end-column="17" />
+        <state relative-caret-position="226">
+          <caret line="19" column="40" selection-start-line="19" selection-start-column="36" selection-end-line="19" selection-end-column="40" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ClearTrackScores.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/models/Race.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="337">
-          <caret line="27" selection-start-line="27" selection-end-line="32" selection-end-column="17" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="176">
+          <caret line="60" column="16" lean-forward="true" selection-start-line="60" selection-start-column="16" selection-end-line="60" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/AddCheckpoint.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="21" column="57" selection-start-line="21" selection-start-column="31" selection-end-line="21" selection-end-column="57" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/AddLeaderboard.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="24" column="41" selection-start-line="24" selection-start-column="41" selection-end-line="24" selection-end-column="41" />
+        <state relative-caret-position="204">
+          <caret line="27" column="16" selection-start-line="27" selection-start-column="16" selection-end-line="27" selection-end-column="61" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/BoatRaceUtilities.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ClearPlayerScores.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="19" column="40" selection-start-line="19" selection-start-column="36" selection-end-line="19" selection-end-column="40" />
+        <state relative-caret-position="153">
+          <caret line="21" column="31" selection-start-line="21" selection-start-column="31" selection-end-line="21" selection-end-column="54" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -746,17 +621,167 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/models/Race.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="60" column="16" lean-forward="true" selection-start-line="60" selection-start-column="16" selection-end-line="60" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/RaceManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="264">
           <caret line="56" column="50" lean-forward="true" selection-start-line="56" selection-start-column="50" selection-end-line="56" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/CreateRaceSign.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="167">
+          <caret line="21" column="31" selection-start-line="21" selection-start-column="31" selection-end-line="21" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/CreateTrack.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="19" column="54" selection-start-line="19" selection-start-column="31" selection-end-line="19" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteCheckpoint.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="40" selection-start-line="40" selection-end-line="42" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteSign.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="680">
+          <caret line="50" selection-start-line="50" selection-end-line="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/GetLeaderboard.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="16" column="33" lean-forward="true" selection-start-line="16" selection-start-column="33" selection-end-line="16" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ListCheckpoints.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ListLeaderboards.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="26" column="17" lean-forward="true" selection-start-line="26" selection-start-column="17" selection-end-line="26" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ListSigns.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="26" column="40" selection-start-line="26" selection-start-column="40" selection-end-line="26" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/CompareSplits.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="294">
+          <caret line="28" column="9" lean-forward="true" selection-start-line="28" selection-start-column="9" selection-end-line="28" selection-end-column="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/OpenTrack.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="22" column="52" selection-start-line="22" selection-start-column="52" selection-end-line="22" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/CloseTrack.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="22" column="42" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/UseSplits.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="25" column="48" selection-start-line="25" selection-start-column="42" selection-end-line="25" selection-end-column="48" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/plugin.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteLeaderboard.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="39" selection-start-line="39" selection-end-line="41" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/ClearTrackScores.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="155">
+          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteScore.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="232">
+          <caret line="28" column="17" lean-forward="true" selection-start-line="28" selection-start-column="17" selection-end-line="28" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/DeleteTrack.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="36" selection-start-line="36" selection-end-line="36" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/GetPB.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="567">
+          <caret line="45" column="25" lean-forward="true" selection-start-line="36" selection-start-column="24" selection-end-line="45" selection-end-column="25" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/commands/GetRank.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="449">
+          <caret line="40" column="81" selection-start-line="40" selection-start-column="81" selection-end-line="40" selection-end-column="81" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
