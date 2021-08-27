@@ -15,7 +15,7 @@ import java.util.Set;
 public class ListCheckpoints extends BaseCommand {
 
 	public ListCheckpoints() {
-		super("track checkpoint list");
+		super("track checkpoints list");
 
 		addBaseParameter(new CommandParameterString());
 		setPermission("cvboatrace.checkpoints.add");
@@ -35,8 +35,14 @@ public class ListCheckpoints extends BaseCommand {
 		CommandResponse cr = new CommandResponse();
 
 		for (int i = 0; i < cps.size(); i++) {
-			cr.addMessage("&b" + (i + 1) + ": " + cps.get(i).toString());
+			cr.addMessage("&b" + (i + 1) + ": " + formatCheckpoint(cps.get(i)));
 		}
 		return cr;
+	}
+
+	private String formatCheckpoint(Location loc) {
+		return "x: " + loc.getBlockX() +
+		" y: " + loc.getBlockY() +
+		" z: " + loc.getBlockZ();
 	}
 }

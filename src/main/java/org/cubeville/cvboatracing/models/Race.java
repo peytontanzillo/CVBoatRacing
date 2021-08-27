@@ -13,11 +13,13 @@ import org.bukkit.util.Vector;
 import org.cubeville.cvboatracing.*;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class Race {
 	private JavaPlugin plugin;
 	private Track track;
 	private Player player;
+	private Score comparingTime;
 	private Score personalBest;
 	private HashMap<Integer, Long> splits = new HashMap<>();
 	private int checkpointIndex;
@@ -37,12 +39,29 @@ public class Race {
 		this.countdownTimer = 0;
 		this.minuteCap = 3; // The player can go for x minutes before they are kicked out of the game
 		this.personalBest = ScoreManager.getScore(player.getUniqueId(), track);
+		this.comparingTime = determineComparingTime();
+
 		this.startRace();
+	}
+
+	private Score determineComparingTime() {
+		if (SelectedSplits.isUsingWR(player.getUniqueId())) {
+			return ScoreManager.getWRScore(track);
+		}
+
+		UUID selectedSplitPlayer = SelectedSplits.getSelectedSplitPlayer(player.getUniqueId());
+		if (selectedSplitPlayer != null) {
+			return ScoreManager.getScore(selectedSplitPlayer, track);
+		}
+		return this.personalBest;
 	}
 
 	public void startRace() {
 		this.track.setStatus(TrackStatus.IN_USE);
 		TrackManager.clearPlayerFromQueues(player);
+		if (!this.track.getSpawn().getChunk().isLoaded()) {
+			this.track.getSpawn().getChunk().load();
+		}
 		player.teleport(this.track.getSpawn());
 		Boat b = (Boat)this.player.getWorld().spawnEntity(this.track.getSpawn(), EntityType.BOAT);
 		b.addPassenger(this.player);
@@ -69,14 +88,18 @@ public class Race {
 	}
 
 	private String getSplitString(long currentTime) {
-		if (personalBest != null) {
-			long pbSplit = personalBest.getSplit(checkpointIndex);
-			if (pbSplit > currentTime) {
-				return " §6(§a-" + BoatRaceUtilities.formatTimeString(pbSplit - currentTime) + "§6)";
-			} else if (pbSplit < currentTime) {
-				return " §6(§c+" + BoatRaceUtilities.formatTimeString(currentTime - pbSplit) + "§6)";
+		if (comparingTime != null) {
+			long comparingSplit = comparingTime.getSplit(checkpointIndex);
+			String comparingName = "";
+			if (!comparingTime.getPlayerUUID().equals(player.getUniqueId())) {
+				comparingName = " -- " + comparingTime.getPlayerName();
+			}
+			if (comparingSplit > currentTime) {
+				return " §6(§a-" + BoatRaceUtilities.formatTimeString(comparingSplit - currentTime) + "§6)" + comparingName;
+			} else if (comparingSplit < currentTime) {
+				return " §6(§c+" + BoatRaceUtilities.formatTimeString(currentTime - comparingSplit) + "§6)" + comparingName;
 			} else {
-				return " §6(§e00:00.000§6)";
+				return " §6(§e00:00.000§6)" + comparingName;
 			}
 		}
 		return "";
@@ -93,14 +116,22 @@ public class Race {
 		long finalTime = this.endTime - this.startTime;
 		String pbString = " ";
 		if (personalBest == null || personalBest.getFinalTime() > finalTime) {
-			player.sendMessage("§b You achieved a time of " + BoatRaceUtilities.formatTimeString(finalTime) + " on " + track.getName() + ", which was your personal best!");
-			pbString = "§a§l New Personal Best!";
-			if (finalTime < track.getScores().get(0).getFinalTime()) {
-				Bukkit.getServer().broadcastMessage("§b§l" + player.getName() + "§3 just got a new world record time of §b§l" + BoatRaceUtilities.formatTimeString(this.endTime - this.startTime) + "§3 on §b§l" + track.getName() + "!");
-			} else {
-				Bukkit.getServer().broadcastMessage("§d§l" + player.getName() + "§5 just got a new personal best time of §d§l" + BoatRaceUtilities.formatTimeString(this.endTime - this.startTime) + "§5 on §d§l" + track.getName() + "!");
+			String pbBy = "";
+			if (personalBest != null) {
+				pbBy = ", which was your personal best by " + BoatRaceUtilities.formatTimeString(personalBest.getFinalTime() - finalTime);
 			}
+			player.sendMessage("§b You achieved a time of " + BoatRaceUtilities.formatTimeString(finalTime) + " on " + track.getName() + pbBy + "!");
+			pbString = "§a§l New Personal Best!";
+			Score wr = ScoreManager.getWRScore(track);
 			ScoreManager.setNewPB(player.getUniqueId(), track, finalTime, splits);
+			if (wr == null || finalTime < wr.getFinalTime()) {
+				Bukkit.getServer().broadcastMessage("§b§l" + player.getName() + "§3 just got a new world record time of §b§l" + BoatRaceUtilities.formatTimeString(finalTime) + "§3 on §b§l" + track.getName() + "!");
+			} else {
+				Bukkit.getServer().broadcastMessage("§d§l" + player.getName() + "§5 just got a new personal best time of §d§l" + BoatRaceUtilities.formatTimeString(finalTime) + "§5, which put them at rank §d§l#" + ScoreManager.getScorePlacement(track, player.getUniqueId()) + "§5 on §d§l" + track.getName() + "!");
+			}
+			if (ScoreManager.shouldRefreshLeaderboard(finalTime, track)) {
+				track.loadLeaderboards();
+			}
 		} else {
 			player.sendMessage("§b You achieved a time of " + BoatRaceUtilities.formatTimeString(finalTime) + " on " + track.getName() + ", which was " + BoatRaceUtilities.formatTimeString(finalTime - personalBest.getFinalTime()) + " behind your personal best!");
 		}
@@ -159,13 +190,10 @@ public class Race {
 	}
 
 	private void startStopwatch() {
-		this.stopwatch = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, new Runnable() {
-			@Override
-			public void run() {
-				long elapsed = System.currentTimeMillis() - startTime;
-				if ((int) elapsed / 60000 >= minuteCap) { cancelRace("You took too long to finish.");}
-				player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§a§l" + BoatRaceUtilities.formatTimeString(elapsed)));
-			}
+		this.stopwatch = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
+			long elapsed = System.currentTimeMillis() - startTime;
+			if ((int) elapsed / 60000 >= minuteCap) { cancelRace("You took too long to finish.");}
+			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§a§l" + BoatRaceUtilities.formatTimeString(elapsed)));
 		}, 0L, 1L);
 	}
 

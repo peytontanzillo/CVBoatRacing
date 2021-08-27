@@ -14,13 +14,26 @@ public class BoatRaceUtilities {
 
 	public static List<String> getLeaderboardLines(Track t, int startIndex, int endIndex) {
 		List<String> result = new ArrayList<>();
-		List<Score> sortedTimes = t.getScores();
-		for (int i = startIndex; i <= endIndex; i++) {
-			if (i >= sortedTimes.size()) { break; }
-			Score s = sortedTimes.get(i);
-			String playerName = Bukkit.getOfflinePlayer(s.getPlayerUUID()).getName();
-			result.add("§e§l#" + (i + 1) + "§b " + playerName + " §f- " + formatTimeString(s.getFinalTime()));
+		result.add("§e§lLeaderboard for §6§l" + t.getName());
+		result.add("§f§l--------------------------------");
+		if (ScoreManager.getTrackScores(t) == null) {
+			result.add("§e§lThere are no scores on this track.");
+		} else {
+			List<Score> sortedTimes = new ArrayList<>(ScoreManager.getTrackScores(t));
+			for (int i = startIndex; i <= endIndex; i++) {
+				if (i >= sortedTimes.size()) {
+					break;
+				}
+				Score s = sortedTimes.get(i);
+				result.add("§e§l#" + (i + 1) + "§b " + s.getPlayerName() + " §f- " + formatTimeString(
+					s.getFinalTime()));
+			}
+			if (result.size() == 2) {
+				result.add("§7§oThere are no times for places " + (startIndex + 1) + " - " + (endIndex + 1)
+					+ ".");
+			}
 		}
+		result.add("§f§l--------------------------------");
 		return result;
 	}
 }

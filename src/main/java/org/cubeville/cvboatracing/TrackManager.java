@@ -36,9 +36,18 @@ public class TrackManager {
 		}
 	}
 
-	public static void sortTrackScores() {
-		for (Track track : tracks.values()) {
-			track.sortScores();
-		}
+	public static void clearArmorStands() {
+		getTracks().forEach(Track::clearLeaderboards);
 	}
+
+	public static void loadLeaderboards() {
+		getTracks().forEach(Track::loadLeaderboards);
+	}
+
+	public static void deleteTrack(Track track) {
+		tracks.remove(track.getName());
+		ScoreManager.deleteAllScores(track);
+	}
+
+
 }

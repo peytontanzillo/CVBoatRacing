@@ -45,6 +45,11 @@ public class SignManager {
 		return signs.get(createKey(location));
 	}
 
+	public static RaceSign deleteSign(Location location) {
+		return signs.remove(createKey(location));
+	}
+
+
 	public static String createKey(Location l) {
 		String coordinateString = l.getX() + "," + l.getY() + "," + l.getZ();
 		return "#" + l.getWorld().getName() + "~" + coordinateString;

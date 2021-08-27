@@ -6,26 +6,24 @@ import org.cubeville.cvboatracing.models.Track;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 public class ScoreManager {
 
-	private static HashMap<Integer, Score> importScoreManager = new HashMap<>(); // database id -> score
-	private static HashMap<UUID, HashMap<String, Score>> scoreManager = new HashMap<>(); // player uuid -> track id -> score
+	private static HashMap<String, TreeSet<Score>> scoreManager = new HashMap<>(); // player uuid -> track id -> score
 	private static BoatRacingDB database;
 
 	public static void importDataFromDatabase(BoatRacingDB db) {
+		HashMap<Integer, Score> importScoreManager = new HashMap<>();
 		database = db;
-		importScoresFromDB(db);
-		importSplitsFromDB(db);
+		importScoresFromDB(db, importScoreManager);
+		importSplitsFromDB(db, importScoreManager);
 		for (Score score : importScoreManager.values()) {
 			addScoreToManager(score);
 		}
-		TrackManager.sortTrackScores();
 	}
 
-	private static void importScoresFromDB(BoatRacingDB db) {
+	private static void importScoresFromDB(BoatRacingDB db, HashMap<Integer, Score> importScoreManager) {
 		try {
 			ResultSet scoresSet = db.getAllScores();
 			if (scoresSet == null) { return; }
@@ -38,7 +36,6 @@ public class ScoreManager {
 					track,
 					playerUUID
 					);
-				track.addScore(s);
 				importScoreManager.put(scoreID, s);
 			}
 		} catch (SQLException e) {
@@ -47,62 +44,119 @@ public class ScoreManager {
 
 	}
 
-	public static void importSplitsFromDB(BoatRacingDB db) {
+	public static void importSplitsFromDB(BoatRacingDB db, HashMap<Integer, Score> importScoreManager) {
 		try {
 			ResultSet splitSet = db.getAllSplits();
 			if (splitSet == null) { return; }
 			while (splitSet.next()) {
-				importScoreManager.get(splitSet.getInt("score_id"))
-					.addSplit(splitSet.getInt("cp_id"), splitSet.getLong("time"));
+				Score score = importScoreManager.get(splitSet.getInt("score_id"));
+				if (score == null) {
+					database.deleteSplits(splitSet.getInt("score_id"));
+					break;
+				}
+				score.addSplit(splitSet.getInt("cp_id"), splitSet.getLong("time"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
 
+	public static TreeSet<Score> getTrackScores(Track track) {
+		return scoreManager.get(track.getName());
 	}
 
 	public static Score getScore(UUID uuid, Track track) {
-		HashMap<String, Score> playerMap = scoreManager.get(uuid);
-		if (playerMap != null) {
-			return playerMap.get(track.getName());
+		TreeSet<Score> scoreList = scoreManager.get(track.getName());
+		if (scoreList != null) {
+			for (Score score : scoreList) {
+				if (score.getPlayerUUID().equals(uuid)) {
+					return score;
+				}
+			}
+		}
+		return null;
+	}
+
+	public static Score getWRScore(Track track) {
+		if (getTrackScores(track) != null) {
+			return getTrackScores(track).first();
+		};
+		return null;
+	}
+
+	public static Integer getScorePlacement(Track track, UUID uuid) {
+		if (getTrackScores(track) == null) {
+			return null;
+		}
+		List<Score> sortedTimes = new ArrayList<>(getTrackScores(track));
+		for (int i = 0; i < sortedTimes.size(); i++) {
+			if (sortedTimes.get(i).getPlayerUUID().equals(uuid)) {
+				return i + 1;
+			}
 		}
 		return null;
 	}
 
 	public static Score addScore(UUID uuid, Track track, long finalTime, HashMap<Integer, Long> splits) {
 		Score s = new Score(finalTime, track, uuid);
-		HashMap<String, Score> oldMap = scoreManager.get(uuid);
-		if (oldMap == null) {
-			oldMap = new HashMap<>();
-		}
 		s.setSplits(splits);
-		oldMap.put(track.getName(), s);
-		scoreManager.put(uuid, oldMap);
+		addScoreToManager(s);
 		return s;
 	}
 
+	public static boolean shouldRefreshLeaderboard(long finalTime, Track track) {
+		List<Score> scores = new ArrayList<>(getTrackScores(track));
+		if (scores.size() <= 10) { return true; }
+		return scores.get(9).getFinalTime() >= finalTime;
+	}
+
 	public static void addScoreToManager(Score score) {
-		HashMap<String, Score> oldMap = scoreManager.get(score.getPlayerUUID());
-		if (oldMap == null) {
-			oldMap = new HashMap<>();
+		TreeSet<Score> oldList = scoreManager.get(score.getTrack().getName());
+		if (oldList == null) {
+			oldList = new TreeSet<>(Comparator.comparingLong(Score::getFinalTime));
 		}
-		score.setSplits(score.getSplits());
-		oldMap.put(score.getTrack().getName(), score);
-		scoreManager.put(score.getPlayerUUID(), oldMap);
+		oldList.add(score);
+		scoreManager.put(score.getTrack().getName(), oldList);
 	}
 
 	public static void setNewPB(UUID uuid, Track track, long finalTime, HashMap<Integer, Long> splits) {
 		Score s = getScore(uuid, track);
+		Score newScore = addScore(uuid, track, finalTime, splits);
 		if (s == null) {
-			Score newScore = addScore(uuid, track, finalTime, splits);
 			database.addScore(newScore);
-			track.addScore(newScore);
 		} else {
 			// update the score that is currently in the db
-			s.setFinalTime(finalTime);
-			s.setSplits(splits);
-			database.updateScore(s);
+			scoreManager.get(track.getName()).remove(s);
+			database.updateScore(newScore);
 		}
-		track.sortScores();
+	}
+
+	public static void deleteScore(Score deleting) {
+		TreeSet<Score> scoreList = scoreManager.get(deleting.getTrack().getName());
+		scoreList.remove(deleting);
+		database.deleteScore(deleting);
+	}
+
+	public static void deleteAllScores(Track track) {
+		scoreManager.remove(track.getName());
+		database.deleteTrackScores(track);
+	}
+
+	public static void deletePlayerScores(UUID uuid) {
+		for (String trackName : scoreManager.keySet()) {
+			TreeSet<Score> scores = scoreManager.get(trackName);
+			Score removingScore = null;
+			for (Score score : scores) {
+				if (score.getPlayerUUID().equals(uuid)) {
+					removingScore = score;
+					break;
+				}
+			}
+			if (removingScore != null) {
+				scores.remove(removingScore);
+				TrackManager.getTrack(trackName).loadLeaderboards();
+			}
+		}
+		database.deletePlayerScores(uuid);
 	}
 }

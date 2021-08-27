@@ -39,10 +39,10 @@ public class GetPB extends Command {
 			if (op.hasPlayedBefore()) {
 				if (ScoreManager.getScore(op.getUniqueId(), t) != null) {
 					return new CommandResponse(
-						"§6" + opName + "\'s personal best time on §e§l" + t.getName() + "§6 is §e§l" + getPB(
+						"§6" + op.getName() + "\'s personal best time on §e§l" + t.getName() + "§6 is §e§l" + getPB(
 							op.getUniqueId(), t) + "§6 !");
 				}
-				return new CommandResponse("§6" + opName + " does not have a registered time on §e§l" + t.getName() + "§6.");
+				return new CommandResponse("§6" + op.getName() + " does not have a registered time on §e§l" + t.getName() + "§6.");
 			}
 			throw new CommandExecutionException("Cannot find a player with the name " + opName + ".");
 

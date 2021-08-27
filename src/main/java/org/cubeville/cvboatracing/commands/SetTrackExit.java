@@ -36,9 +36,9 @@ public class SetTrackExit extends Command {
 		List<String> locParameters = new ArrayList<>(
 			Arrays.asList(
 				pLoc.getWorld().getName(), // world
-				String.valueOf(pLoc.getBlockX()),
-				String.valueOf(pLoc.getBlockY()),
-				String.valueOf(pLoc.getBlockZ()),
+				String.valueOf(pLoc.getX()),
+				String.valueOf(pLoc.getY()),
+				String.valueOf(pLoc.getZ()),
 				String.valueOf(pLoc.getYaw()),
 				String.valueOf(pLoc.getPitch())
 			)

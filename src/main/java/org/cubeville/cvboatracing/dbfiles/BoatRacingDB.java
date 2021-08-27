@@ -1,9 +1,15 @@
 package org.cubeville.cvboatracing.dbfiles;
 
+import org.bukkit.plugin.java.JavaPlugin;
 import org.cubeville.cvboatracing.CVBoatRacing;
 import org.cubeville.cvboatracing.models.Score;
 import org.cubeville.cvboatracing.models.Track;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
@@ -14,19 +20,21 @@ public class BoatRacingDB extends SQLite {
 		super(boatRacing);
 	}
 
-	public String SQLiteCreateScoresTable = "CREATE TABLE IF NOT EXISTS scores (" + // make sure to put your table name in here too.
+	public String SQLiteCreateScoresTable = "PRAGMA foreign_keys = ON;" +
+		"CREATE TABLE IF NOT EXISTS scores (" + // make sure to put your table name in here too.
 		"`score_id` INTEGER PRIMARY KEY AUTOINCREMENT," +
 		"`uuid` varchar(32) NOT NULL," +
 		"`time` BIGINT NOT NULL," +
 		"`track_id` varchar(32) NOT NULL" +
 		");";
 
-	public String SQLiteCreateSplitsTable = "CREATE TABLE IF NOT EXISTS splits (" + // make sure to put your table name in here too.
+	public String SQLiteCreateSplitsTable = "PRAGMA foreign_keys = ON;" +
+		"CREATE TABLE IF NOT EXISTS splits (" + // make sure to put your table name in here too.
 		"`split_id` INTEGER PRIMARY KEY AUTOINCREMENT," +
 		"`time` BIGINT NOT NULL," +
 		"`cp_id` INTEGER NOT NULL," +
 		"`score_id` INTEGER NOT NULL," +
-		"FOREIGN KEY (`score_id`) REFERENCES scores(`score_id`)" +
+		"FOREIGN KEY (`score_id`) REFERENCES scores(`score_id`) ON DELETE CASCADE" +
 		");";
 
 	public void load() {
@@ -41,6 +49,15 @@ public class BoatRacingDB extends SQLite {
 
 	public ResultSet getAllSplits() {
 		return getResult("SELECT * FROM `splits`");
+	}
+
+	public void createBackup(JavaPlugin plugin) throws IOException {
+		File dbFile = new File(plugin.getDataFolder(), "scores.db");
+		if (dbFile.exists()) {
+			Path source = dbFile.toPath();
+			Path destination = plugin.getDataFolder().toPath();
+			Files.copy(source, destination.resolve("scores-backup.db"), StandardCopyOption.REPLACE_EXISTING);
+		}
 	}
 
 	public void addScore(Score s) {
@@ -70,6 +87,23 @@ public class BoatRacingDB extends SQLite {
 				+ splitConditionString(checkpoint, scoreId)
 			);
 		}
+	}
+
+	public void deleteScore(Score score) {
+		update("DELETE FROM `scores`" + scoreConditionString(score.getPlayerUUID(), score.getTrack()));
+
+	}
+
+	public void deleteTrackScores(Track track) {
+		update("DELETE FROM `scores` WHERE `track_id` = \"" + track.getName() + "\"");
+	}
+
+	public void deleteSplits(int scoreID) {
+		update("DELETE FROM `splits` WHERE `score_id` = " + scoreID);
+	}
+
+	public void deletePlayerScores(UUID uuid) {
+		update("DELETE FROM `scores` WHERE `uuid` = \"" + uuid.toString() + "\"");
 	}
 
 	private Integer getScoreID(UUID uuid, Track track) {

@@ -16,7 +16,7 @@ public class AddCheckpoint extends Command {
 	private JavaPlugin plugin;
 
 	public AddCheckpoint(JavaPlugin plugin) {
-		super("track checkpoint add");
+		super("track checkpoints add");
 
 		addBaseParameter(new CommandParameterString());
 		setPermission("cvboatrace.checkpoints.add");
