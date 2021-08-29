@@ -105,6 +105,9 @@ public class ScoreManager {
 	}
 
 	public static boolean shouldRefreshLeaderboard(long finalTime, Track track) {
+		if (getTrackScores(track) == null) {
+			return true;
+		}
 		List<Score> scores = new ArrayList<>(getTrackScores(track));
 		if (scores.size() <= 10) { return true; }
 		return scores.get(9).getFinalTime() >= finalTime;

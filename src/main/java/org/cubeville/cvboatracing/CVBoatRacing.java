@@ -1,6 +1,5 @@
 package org.cubeville.cvboatracing;
 
-import com.sun.deploy.jcp.controller.DeleteFiles;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
@@ -10,7 +9,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.cubeville.commons.commands.CommandParser;
 import org.cubeville.cvboatracing.commands.*;
 import org.cubeville.cvboatracing.dbfiles.BoatRacingDB;
-import org.cubeville.cvboatracing.dbfiles.SQLite;
 
 import java.io.IOException;
 

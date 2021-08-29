@@ -16,7 +16,7 @@ public class SetTrackSpawn extends Command {
 		super("track setspawn");
 
 		addBaseParameter(new CommandParameterString());
-		setPermission("cvboatrace.setspawn");
+		setPermission("cvboatrace.track.setspawn");
 		this.plugin = plugin;
 	}
 
