@@ -20,16 +20,14 @@ public class BoatRacingDB extends SQLite {
 		super(boatRacing);
 	}
 
-	public String SQLiteCreateScoresTable = "PRAGMA foreign_keys = ON;" +
-		"CREATE TABLE IF NOT EXISTS scores (" + // make sure to put your table name in here too.
+	public String SQLiteCreateScoresTable = "CREATE TABLE IF NOT EXISTS scores (" +
 		"`score_id` INTEGER PRIMARY KEY AUTOINCREMENT," +
 		"`uuid` varchar(32) NOT NULL," +
 		"`time` BIGINT NOT NULL," +
 		"`track_id` varchar(32) NOT NULL" +
 		");";
 
-	public String SQLiteCreateSplitsTable = "PRAGMA foreign_keys = ON;" +
-		"CREATE TABLE IF NOT EXISTS splits (" + // make sure to put your table name in here too.
+	public String SQLiteCreateSplitsTable = "CREATE TABLE IF NOT EXISTS splits (" +
 		"`split_id` INTEGER PRIMARY KEY AUTOINCREMENT," +
 		"`time` BIGINT NOT NULL," +
 		"`cp_id` INTEGER NOT NULL," +
