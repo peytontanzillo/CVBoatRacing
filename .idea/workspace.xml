@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="448dee9a-ad04-458b-a930-061757266f74" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/models/Race.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/models/Race.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -45,8 +44,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/models/Race.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="426">
-              <caret line="141" column="34" lean-forward="true" selection-start-line="141" selection-start-column="34" selection-end-line="141" selection-end-column="34" />
+            <state relative-caret-position="338">
+              <caret line="132" column="107" selection-start-line="132" selection-start-column="107" selection-end-line="132" selection-end-column="107" />
             </state>
           </provider>
         </entry>
@@ -787,8 +786,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/cubeville/cvboatracing/models/Race.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="426">
-          <caret line="141" column="34" lean-forward="true" selection-start-line="141" selection-start-column="34" selection-end-line="141" selection-end-column="34" />
+        <state relative-caret-position="338">
+          <caret line="132" column="107" selection-start-line="132" selection-start-column="107" selection-end-line="132" selection-end-column="107" />
         </state>
       </provider>
     </entry>
