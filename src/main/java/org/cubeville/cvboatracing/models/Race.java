@@ -125,9 +125,12 @@ public class Race {
 			Score wr = ScoreManager.getWRScore(track);
 			ScoreManager.setNewPB(player.getUniqueId(), track, finalTime, splits);
 			if (wr == null || finalTime < wr.getFinalTime()) {
-				Bukkit.getServer().broadcastMessage("§b§l" + player.getName() + "§3 just got a new world record time of §b§l" + BoatRaceUtilities.formatTimeString(finalTime) + "§3 on §b§l" + track.getName() + "!");
+				String broadcastString = "&b&l" + player.getName() + "&3 just got a new world record time of &b&l" + BoatRaceUtilities.formatTimeString(finalTime) + "&3 on &b&l" + track.getName() + "&3!";
+				//Bukkit.getServer().broadcastMessage("§b§l" + player.getName() + "§3 just got a new world record time of §b§l" + BoatRaceUtilities.formatTimeString(finalTime) + "§3 on §b§l" + track.getName() + "!");
+				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "runalias announceboatswr " + broadcastString);
 			} else {
-				Bukkit.getServer().broadcastMessage("§d§l" + player.getName() + "§5 just got a new personal best time of §d§l" + BoatRaceUtilities.formatTimeString(finalTime) + "§5, which put them at rank §d§l#" + ScoreManager.getScorePlacement(track, player.getUniqueId()) + "§5 on §d§l" + track.getName() + "!");
+				String broadcastString = "&d&l" + player.getName() + "&5 just got a new personal best time of &d&l" + BoatRaceUtilities.formatTimeString(finalTime) + "&5, which put them at rank &d&l#" + ScoreManager.getScorePlacement(track, player.getUniqueId()) + "&5 on &d&l" + track.getName() + "&5!";
+				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "runalias announceboats " + broadcastString);
 			}
 			if (ScoreManager.shouldRefreshLeaderboard(finalTime, track)) {
 				track.loadLeaderboards();
