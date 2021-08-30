@@ -9,7 +9,7 @@ import java.util.List;
 
 public class BoatRaceUtilities {
 	public static String formatTimeString(long time) {
-		return String.format("%d:%02d.%03d", (int) time / 60000, (int) (time / 1000) % 60, (int) time % 1000);
+		return String.format("%d:%02d.%02d", (int) time / 60000, (int) (time / 1000) % 60, (int) (time / 10) % 100);
 	}
 
 	public static List<String> getLeaderboardLines(Track t, int startIndex, int endIndex) {

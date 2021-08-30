@@ -27,8 +27,7 @@ public class Race {
 	private int countdownFreeze;
 	private int stopwatch;
 	private int minuteCap;
-	private long startTime;
-	private long endTime;
+	private long elapsed;
 
 	public Race(Track track, Player player, JavaPlugin plugin) {
 		this.track = track;
@@ -79,9 +78,8 @@ public class Race {
 				stopStopwatch();
 				this.completeRace();
 			} else if (checkpointIndex != 0) {
-				long currentTime = System.currentTimeMillis() - startTime;
-				splits.put(checkpointIndex, currentTime);
-				player.sendMessage("§6CP" + checkpointIndex + ": " + BoatRaceUtilities.formatTimeString(currentTime) + getSplitString(currentTime));
+				splits.put(checkpointIndex, elapsed);
+				player.sendMessage("§6CP" + checkpointIndex + ": " + BoatRaceUtilities.formatTimeString(elapsed) + getSplitString(elapsed));
 			}
 			checkpointIndex++;
 		}
@@ -113,32 +111,31 @@ public class Race {
 	}
 
 	public void completeRace() {
-		long finalTime = this.endTime - this.startTime;
 		String pbString = " ";
-		if (personalBest == null || personalBest.getFinalTime() > finalTime) {
+		if (personalBest == null || personalBest.getFinalTime() > elapsed) {
 			String pbBy = "";
 			if (personalBest != null) {
-				pbBy = ", which was your personal best by " + BoatRaceUtilities.formatTimeString(personalBest.getFinalTime() - finalTime);
+				pbBy = ", which was your personal best by " + BoatRaceUtilities.formatTimeString(personalBest.getFinalTime() - elapsed);
 			}
-			player.sendMessage("§b You achieved a time of " + BoatRaceUtilities.formatTimeString(finalTime) + " on " + track.getName() + pbBy + "!");
+			player.sendMessage("§b You achieved a time of " + BoatRaceUtilities.formatTimeString(elapsed) + " on " + track.getName() + pbBy + "!");
 			pbString = "§a§l New Personal Best!";
 			Score wr = ScoreManager.getWRScore(track);
-			ScoreManager.setNewPB(player.getUniqueId(), track, finalTime, splits);
-			if (wr == null || finalTime < wr.getFinalTime()) {
-				String broadcastString = "&b&l" + player.getName() + "&3 just got a new world record time of &b&l" + BoatRaceUtilities.formatTimeString(finalTime) + "&3 on &b&l" + track.getName() + "&3!";
+			ScoreManager.setNewPB(player.getUniqueId(), track, elapsed, splits);
+			if (wr == null || elapsed < wr.getFinalTime()) {
+				String broadcastString = "&b&l" + player.getName() + "&3 just got a new world record time of &b&l" + BoatRaceUtilities.formatTimeString(elapsed) + "&3 on &b&l" + track.getName() + "&3!";
 				//Bukkit.getServer().broadcastMessage("§b§l" + player.getName() + "§3 just got a new world record time of §b§l" + BoatRaceUtilities.formatTimeString(finalTime) + "§3 on §b§l" + track.getName() + "!");
 				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "runalias /announceboatswr " + broadcastString);
 			} else {
-				String broadcastString = "&d&l" + player.getName() + "&5 just got a new personal best time of &d&l" + BoatRaceUtilities.formatTimeString(finalTime) + "&5, which put them at rank &d&l#" + ScoreManager.getScorePlacement(track, player.getUniqueId()) + "&5 on &d&l" + track.getName() + "&5!";
+				String broadcastString = "&d&l" + player.getName() + "&5 just got a new personal best time of &d&l" + BoatRaceUtilities.formatTimeString(elapsed) + "&5, which put them at rank &d&l#" + ScoreManager.getScorePlacement(track, player.getUniqueId()) + "&5 on &d&l" + track.getName() + "&5!";
 				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "runalias /announceboatspb " + broadcastString);
 			}
-			if (ScoreManager.shouldRefreshLeaderboard(finalTime, track)) {
+			if (ScoreManager.shouldRefreshLeaderboard(elapsed, track)) {
 				track.loadLeaderboards();
 			}
 		} else {
-			player.sendMessage("§b You achieved a time of " + BoatRaceUtilities.formatTimeString(finalTime) + " on " + track.getName() + ", which was " + BoatRaceUtilities.formatTimeString(finalTime - personalBest.getFinalTime()) + " behind your personal best!");
+			player.sendMessage("§bYou achieved a time of " + BoatRaceUtilities.formatTimeString(elapsed) + " on " + track.getName() + ", which was " + BoatRaceUtilities.formatTimeString(elapsed - personalBest.getFinalTime()) + " behind your personal best!");
 		}
-		player.sendTitle("§d§l" + BoatRaceUtilities.formatTimeString(this.endTime - this.startTime), pbString, 5, 90, 5);
+		player.sendTitle("§d§l" + BoatRaceUtilities.formatTimeString(this.elapsed), pbString, 5, 90, 5);
 		this.finishRace();
 	}
 
@@ -186,22 +183,21 @@ public class Race {
 	private void endCountdown() {
 		Bukkit.getScheduler().cancelTask(this.countdownTimer);
 		Bukkit.getScheduler().cancelTask(this.countdownFreeze);
-		this.startTime = System.currentTimeMillis();
 		countdownTimer = 0;
 		countdownFreeze = 0;
 		startStopwatch();
 	}
 
 	private void startStopwatch() {
+		this.elapsed = 0;
 		this.stopwatch = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
-			long elapsed = System.currentTimeMillis() - startTime;
+			this.elapsed = this.elapsed + 50;
 			if ((int) elapsed / 60000 >= minuteCap) { cancelRace("You took too long to finish.");}
 			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§a§l" + BoatRaceUtilities.formatTimeString(elapsed)));
 		}, 0L, 1L);
 	}
 
 	private void stopStopwatch() {
-		endTime = System.currentTimeMillis();
 		Bukkit.getScheduler().cancelTask(this.stopwatch);
 		stopwatch = 0;
 	}
