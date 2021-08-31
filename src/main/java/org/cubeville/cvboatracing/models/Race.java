@@ -146,6 +146,9 @@ public class Race {
 		RaceManager.removeRace(player, track);
 		Entity v = player.getVehicle();
 		Bukkit.getScheduler().runTaskLater(plugin, () -> {
+			if (!this.track.getExit().getChunk().isLoaded()) {
+				this.track.getExit().getChunk().load();
+			}
 			player.teleport(track.getExit());
 			if (v != null) { v.remove(); }
 		}, 1L);
