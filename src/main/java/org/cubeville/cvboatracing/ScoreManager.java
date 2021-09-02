@@ -34,7 +34,8 @@ public class ScoreManager {
 				Score s = new Score(
 					scoresSet.getLong("time"),
 					track,
-					playerUUID
+					playerUUID,
+					scoresSet.getLong("timestamp")
 					);
 				importScoreManager.put(scoreID, s);
 			}
@@ -46,12 +47,14 @@ public class ScoreManager {
 
 	public static void importSplitsFromDB(BoatRacingDB db, HashMap<Integer, Score> importScoreManager) {
 		try {
+			System.out.println("importing splits from the db");
 			ResultSet splitSet = db.getAllSplits();
 			if (splitSet == null) { return; }
 			while (splitSet.next()) {
+				System.out.println("cp_id: " + splitSet.getInt("cp_id") + ", time:" +  splitSet.getLong("time"));
 				Score score = importScoreManager.get(splitSet.getInt("score_id"));
 				if (score == null) {
-					database.deleteSplits(splitSet.getInt("score_id"));
+					db.deleteSplitsAtScore(splitSet.getInt("score_id"));
 					break;
 				}
 				score.addSplit(splitSet.getInt("cp_id"), splitSet.getLong("time"));
@@ -98,7 +101,8 @@ public class ScoreManager {
 	}
 
 	public static Score addScore(UUID uuid, Track track, long finalTime, HashMap<Integer, Long> splits) {
-		Score s = new Score(finalTime, track, uuid);
+		Score s = new Score(finalTime, track, uuid, System.currentTimeMillis());
+		System.out.println(splits);
 		s.setSplits(splits);
 		addScoreToManager(s);
 		return s;
@@ -116,20 +120,23 @@ public class ScoreManager {
 	public static void addScoreToManager(Score score) {
 		TreeSet<Score> oldList = scoreManager.get(score.getTrack().getName());
 		if (oldList == null) {
-			oldList = new TreeSet<>(Comparator.comparingLong(Score::getFinalTime));
+			oldList = new TreeSet<>(Comparator.comparingLong(Score::getFinalTime).thenComparingLong(Score::getTimestamp));
 		}
 		oldList.add(score);
 		scoreManager.put(score.getTrack().getName(), oldList);
 	}
 
 	public static void setNewPB(UUID uuid, Track track, long finalTime, HashMap<Integer, Long> splits) {
+		System.out.println("Set new PB!");
 		Score s = getScore(uuid, track);
 		Score newScore = addScore(uuid, track, finalTime, splits);
 		if (s == null) {
+			System.out.println("add score to db");
 			database.addScore(newScore);
 		} else {
+			System.out.println("update score in db");
 			// update the score that is currently in the db
-			scoreManager.get(track.getName()).remove(s);
+			//scoreManager.get(track.getName()).remove(s);
 			database.updateScore(newScore);
 		}
 	}
@@ -142,6 +149,7 @@ public class ScoreManager {
 
 	public static void deleteAllScores(Track track) {
 		scoreManager.remove(track.getName());
+		database.deleteTrackSplits(track);
 		database.deleteTrackScores(track);
 	}
 

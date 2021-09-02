@@ -1,7 +1,5 @@
 package org.cubeville.cvboatracing;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.util.*;
 
 public class SelectedSplits {

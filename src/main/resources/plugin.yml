@@ -91,6 +91,10 @@ permissions:
     description: View your ranking for a track.
     default: true
 
+  cvboatrace.help:
+    description: View all commands for cvboatrace
+    default: true
+
   cvboatrace.splits.compare:
     description: Compare splits gotten on a track between multiple players.
     default: true

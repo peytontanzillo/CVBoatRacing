@@ -96,6 +96,6 @@ public class CompareSplits extends Command {
 		} else if (t1 < t2) {
 			return "§a-" + BoatRaceUtilities.formatTimeString(t2 - t1);
 		}
-		return "§e00:00.000";
+		return "§e00:00.00";
 	}
 }

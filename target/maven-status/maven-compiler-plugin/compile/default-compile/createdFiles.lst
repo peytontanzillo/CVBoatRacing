@@ -15,6 +15,7 @@ org/cubeville/cvboatracing/commands/GetRank.class
 org/cubeville/cvboatracing/models/Race$2.class
 org/cubeville/cvboatracing/commands/CreateTrack.class
 org/cubeville/cvboatracing/dbfiles/BoatRacingDB.class
+org/cubeville/cvboatracing/commands/Help.class
 org/cubeville/cvboatracing/SignManager.class
 org/cubeville/cvboatracing/commands/DeleteTrack.class
 org/cubeville/cvboatracing/commands/ClearPlayerScores.class

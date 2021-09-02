@@ -1,7 +1,6 @@
 package org.cubeville.cvboatracing;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -10,7 +9,6 @@ import org.cubeville.cvboatracing.models.RaceSign;
 import org.cubeville.cvboatracing.models.Track;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 public class RaceManager {

@@ -97,7 +97,7 @@ public class Race {
 			} else if (comparingSplit < currentTime) {
 				return " §6(§c+" + BoatRaceUtilities.formatTimeString(currentTime - comparingSplit) + "§6)" + comparingName;
 			} else {
-				return " §6(§e00:00.000§6)" + comparingName;
+				return " §6(§e00:00.00§6)" + comparingName;
 			}
 		}
 		return "";
@@ -117,8 +117,8 @@ public class Race {
 			if (personalBest != null) {
 				pbBy = ", which was your personal best by " + BoatRaceUtilities.formatTimeString(personalBest.getFinalTime() - elapsed);
 			}
-			player.sendMessage("§b You achieved a time of " + BoatRaceUtilities.formatTimeString(elapsed) + " on " + track.getName() + pbBy + "!");
-			pbString = "§a§l New Personal Best!";
+			player.sendMessage("§bYou achieved a time of " + BoatRaceUtilities.formatTimeString(elapsed) + " on " + track.getName() + pbBy + "!");
+			pbString = "§a§lNew Personal Best!";
 			Score wr = ScoreManager.getWRScore(track);
 			ScoreManager.setNewPB(player.getUniqueId(), track, elapsed, splits);
 			if (wr == null || elapsed < wr.getFinalTime()) {

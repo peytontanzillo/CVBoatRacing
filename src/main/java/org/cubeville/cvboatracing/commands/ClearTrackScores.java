@@ -19,6 +19,7 @@ public class ClearTrackScores extends BaseCommand {
 		super("track scores clear");
 		// track
 		addBaseParameter(new CommandParameterString());
+		setPermission("cvboatrace.scores.clear");
 	}
 
 	@Override

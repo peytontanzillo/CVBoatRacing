@@ -14,6 +14,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
@@ -72,6 +73,19 @@ public class EventHandlers implements Listener {
 			Race r = RaceManager.getRace(p);
 			if (r != null) {
 				RaceManager.cancelRace(p, "You left the boat during the race.");
+				e.getVehicle().remove();
+			}
+		}
+	}
+
+	@EventHandler
+	public void onVehicleDestroy(VehicleDestroyEvent e) {
+		if (e.getVehicle().getType() == EntityType.BOAT && e.getVehicle().getPassengers().size() > 0 && e.getVehicle().getPassengers().get(0).getType() == EntityType.PLAYER) {
+			// will cancel race if the player exited their boat in a race
+			Player p = (Player) e.getVehicle().getPassengers().get(0);
+			Race r = RaceManager.getRace(p);
+			if (r != null) {
+				RaceManager.cancelRace(p, "Your boat was destroyed during the race.");
 				e.getVehicle().remove();
 			}
 		}

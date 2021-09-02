@@ -24,7 +24,8 @@ public class BoatRacingDB extends SQLite {
 		"`score_id` INTEGER PRIMARY KEY AUTOINCREMENT," +
 		"`uuid` varchar(32) NOT NULL," +
 		"`time` BIGINT NOT NULL," +
-		"`track_id` varchar(32) NOT NULL" +
+		"`track_id` varchar(32) NOT NULL," +
+		"`timestamp` BIGINT NOT NULL" +
 		");";
 
 	public String SQLiteCreateSplitsTable = "CREATE TABLE IF NOT EXISTS splits (" +
@@ -60,13 +61,14 @@ public class BoatRacingDB extends SQLite {
 
 	public void addScore(Score s) {
 		// add score to database
-		update("INSERT INTO `scores` (uuid, track_id, time) " +
-			"VALUES(\"" + s.getPlayerUUID().toString() + "\", \"" + s.getTrack().getName() + "\", " + s.getFinalTime() + ");"
+		update("INSERT INTO `scores` (uuid, track_id, time, timestamp) " +
+			"VALUES(\"" + s.getPlayerUUID().toString() + "\", \"" + s.getTrack().getName() + "\", " + s.getFinalTime() + ", " + s.getTimestamp() + ");"
 		);
 
 		Integer scoreId = getScoreID(s.getPlayerUUID(), s.getTrack());
 		for (int checkpoint : s.getSplits().keySet()) {
 			// add splits to database
+			System.out.println("Adding cp " + checkpoint + " to the db.");
 			update("INSERT INTO `splits` (score_id, cp_id, time) " +
 				"VALUES(" + scoreId + ", " + checkpoint + ", " + s.getSplit(checkpoint) + ");"
 			);
@@ -88,6 +90,7 @@ public class BoatRacingDB extends SQLite {
 	}
 
 	public void deleteScore(Score score) {
+		update("DELETE FROM splits where score_id in ( SELECT score_id from scores" + scoreConditionString(score.getPlayerUUID(), score.getTrack()) + ")");
 		update("DELETE FROM `scores`" + scoreConditionString(score.getPlayerUUID(), score.getTrack()));
 
 	}
@@ -96,8 +99,12 @@ public class BoatRacingDB extends SQLite {
 		update("DELETE FROM `scores` WHERE `track_id` = \"" + track.getName() + "\"");
 	}
 
-	public void deleteSplits(int scoreID) {
+	public void deleteSplitsAtScore(int scoreID) {
 		update("DELETE FROM `splits` WHERE `score_id` = " + scoreID);
+	}
+
+	public void deleteTrackSplits(Track track) {
+		update("DELETE from splits where score_id in ( SELECT score_id from scores WHERE track_id = \""+ track.getName() + "\")");
 	}
 
 	public void deletePlayerScores(UUID uuid) {

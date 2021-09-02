@@ -23,6 +23,7 @@
 /Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/commands/SetTrackExit.java
 /Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/commands/SetTrackSpawn.java
 /Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/TrackManager.java
+/Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/commands/Help.java
 /Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/commands/AddCheckpoint.java
 /Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/models/Track.java
 /Users/peytontanzillo/Desktop/CV Plugins/CVBoatRacing/src/main/java/org/cubeville/cvboatracing/commands/ListLeaderboards.java

@@ -31,7 +31,10 @@ public class GetLeaderboard extends Command {
 
 		int startIndex = 0;
 		if (baseParameters.size() > 1) {
-			startIndex = 10 * ((int) baseParameters.get(1));
+			if ((int) baseParameters.get(1) < 1) {
+				throw new CommandExecutionException("Index out of bounds.");
+			}
+			startIndex = 10 * (((int) baseParameters.get(1)) - 1);
 		}
 		int numberOfScores = ScoreManager.getTrackScores(t).size();
 		if (numberOfScores < startIndex) {
@@ -43,9 +46,9 @@ public class GetLeaderboard extends Command {
 		}
 		if (numberOfScores > startIndex + 10) {
 			if (baseParameters.size() > 1) {
-				cr.addMessage("/boatrace leaderboard " + baseParameters.get(0) + " " + ((int) baseParameters.get(1) + 1));
+				cr.addMessage("&c/boatrace leaderboard " + baseParameters.get(0) + " " + ((int) baseParameters.get(1) + 1));
 			}
-			cr.addMessage("/boatrace leaderboard " + baseParameters.get(0) + " 2");
+			cr.addMessage("&c/boatrace leaderboard " + baseParameters.get(0) + " 2");
 		}
 		return cr;
 	}
