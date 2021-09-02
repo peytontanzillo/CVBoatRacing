@@ -47,11 +47,9 @@ public class ScoreManager {
 
 	public static void importSplitsFromDB(BoatRacingDB db, HashMap<Integer, Score> importScoreManager) {
 		try {
-			System.out.println("importing splits from the db");
 			ResultSet splitSet = db.getAllSplits();
 			if (splitSet == null) { return; }
 			while (splitSet.next()) {
-				System.out.println("cp_id: " + splitSet.getInt("cp_id") + ", time:" +  splitSet.getLong("time"));
 				Score score = importScoreManager.get(splitSet.getInt("score_id"));
 				if (score == null) {
 					db.deleteSplitsAtScore(splitSet.getInt("score_id"));
@@ -102,7 +100,6 @@ public class ScoreManager {
 
 	public static Score addScore(UUID uuid, Track track, long finalTime, HashMap<Integer, Long> splits) {
 		Score s = new Score(finalTime, track, uuid, System.currentTimeMillis());
-		System.out.println(splits);
 		s.setSplits(splits);
 		addScoreToManager(s);
 		return s;
@@ -127,16 +124,13 @@ public class ScoreManager {
 	}
 
 	public static void setNewPB(UUID uuid, Track track, long finalTime, HashMap<Integer, Long> splits) {
-		System.out.println("Set new PB!");
 		Score s = getScore(uuid, track);
 		Score newScore = addScore(uuid, track, finalTime, splits);
 		if (s == null) {
-			System.out.println("add score to db");
 			database.addScore(newScore);
 		} else {
-			System.out.println("update score in db");
 			// update the score that is currently in the db
-			//scoreManager.get(track.getName()).remove(s);
+			scoreManager.get(track.getName()).remove(s);
 			database.updateScore(newScore);
 		}
 	}

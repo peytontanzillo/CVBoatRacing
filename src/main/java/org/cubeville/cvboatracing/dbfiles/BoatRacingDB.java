@@ -68,7 +68,6 @@ public class BoatRacingDB extends SQLite {
 		Integer scoreId = getScoreID(s.getPlayerUUID(), s.getTrack());
 		for (int checkpoint : s.getSplits().keySet()) {
 			// add splits to database
-			System.out.println("Adding cp " + checkpoint + " to the db.");
 			update("INSERT INTO `splits` (score_id, cp_id, time) " +
 				"VALUES(" + scoreId + ", " + checkpoint + ", " + s.getSplit(checkpoint) + ");"
 			);
