@@ -92,7 +92,7 @@ permissions:
     default: true
 
   cvboatrace.help:
-    description: View all commands for cvboatrace
+    description: View all commands for cvboatrace.
     default: true
 
   cvboatrace.splits.compare:
@@ -100,7 +100,7 @@ permissions:
     default: true
 
   cvboatrace.splits.use:
-    description: Use another user's splits for a race
+    description: Use another user's splits for a race.
     default: true
 
 

@@ -47,8 +47,9 @@ public class GetLeaderboard extends Command {
 		if (numberOfScores > startIndex + 10) {
 			if (baseParameters.size() > 1) {
 				cr.addMessage("&c/boatrace leaderboard " + baseParameters.get(0) + " " + ((int) baseParameters.get(1) + 1));
+			} else {
+				cr.addMessage("&c/boatrace leaderboard " + baseParameters.get(0) + " 2");
 			}
-			cr.addMessage("&c/boatrace leaderboard " + baseParameters.get(0) + " 2");
 		}
 		return cr;
 	}
