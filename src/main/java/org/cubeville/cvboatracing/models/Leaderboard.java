@@ -42,8 +42,14 @@ public class Leaderboard {
 	}
 
 	public void clear() {
-		for (ArmorStand as : armorStands) {
-			as.remove();
+		List<Entity> nearbyEntities = (List<Entity>) Objects.requireNonNull(location.getWorld())
+			.getNearbyEntities(location, 1, 5, 1);
+
+		// Remove entities by selection in case the plugin loses track of the armor stands
+		for (Entity ent : nearbyEntities) {
+			if (ent.getScoreboardTags().contains("CVBoatRace-LeaderboardArmorStand")) {
+				ent.remove();
+			}
 		}
 		armorStands.clear();
 	}
