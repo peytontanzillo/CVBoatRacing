@@ -1,14 +1,14 @@
-name: CVBoatRacing
-main: org.cubeville.cvboatracing.CVBoatRacing
+name: CVRacing
+main: org.cubeville.cvracing.CVRacing
 authors: [Ptown16]
 version: 0.1
-api-version: 1.16
+api-version: 1.18
 depend: [CVTools]
-description: This is a plugin for time trials boat racing on the server cubeville.org!
+description: This is a plugin for time trials racing on the server cubeville.org!
 
 commands:
-  boatrace:
-    description: CVBoatRacing Base Command
+  race:
+    description: CVRacing Base Command
 
 permissions:
   cvboatrace.checkpoints.add:
