@@ -46,6 +46,7 @@ public class CVRacing extends JavaPlugin implements Listener {
         commandParser.addCommand(new CreateTrack(this));
         commandParser.addCommand(new SetTrackSpawn(this));
         commandParser.addCommand(new SetTrackExit(this));
+        commandParser.addCommand(new SetTrackSpectate(this));
         commandParser.addCommand(new SetTrackType(this));
         commandParser.addCommand(new CreateRaceSign(this));
         commandParser.addCommand(new OpenTrack(this));

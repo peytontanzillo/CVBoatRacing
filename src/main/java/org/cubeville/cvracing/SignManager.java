@@ -34,8 +34,8 @@ public class SignManager {
 
 	private static HashMap<String, RaceSign> signs = new HashMap<>();
 
-	public static RaceSign addSign(Sign sign, Track track) {
-		RaceSign raceSign = new RaceSign(sign, track);
+	public static RaceSign addSign(Sign sign, Track track, RaceSignType type) {
+		RaceSign raceSign = new RaceSign(sign, track, type);
 		track.addSign(raceSign);
 		signs.put(createKey(sign.getLocation()), raceSign);
 		return raceSign;

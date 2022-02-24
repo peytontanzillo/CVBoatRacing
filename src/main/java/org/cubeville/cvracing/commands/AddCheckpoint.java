@@ -49,9 +49,7 @@ public class AddCheckpoint extends Command {
 				twLoc.getWorld().getName(), // world
 				String.valueOf(twLoc.getBlockX()),
 				String.valueOf(twLoc.getBlockY()),
-				String.valueOf(twLoc.getBlockZ()),
-				String.valueOf(twLoc.getYaw()),
-				String.valueOf(twLoc.getPitch())
+				String.valueOf(twLoc.getBlockZ())
 			)
 		);
 		twLocations.add(String.join(",", locParameters));

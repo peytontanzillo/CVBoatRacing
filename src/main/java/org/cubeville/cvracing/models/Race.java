@@ -3,6 +3,7 @@ package org.cubeville.cvracing.models;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.AnaloguePowerable;
 import org.bukkit.block.data.BlockData;
@@ -16,6 +17,7 @@ import org.bukkit.util.Vector;
 import org.cubeville.cvracing.*;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Race {
@@ -27,19 +29,18 @@ public class Race {
 	private HashMap<Integer, Long> splits = new HashMap<>();
 	private int checkpointIndex;
 	private int countdownTimer;
-	private int countdownFreeze;
 	private int stopwatch;
 	private int minuteCap;
 	private long elapsed;
+	private ArmorStand armorStand;
 
 	public Race(Track track, Player player, JavaPlugin plugin) {
 		this.track = track;
 		this.player = player;
-		this.checkpointIndex = 0;
-		this.plugin = plugin;
+ 		this.plugin = plugin;
 		this.checkpointIndex = 0;
 		this.countdownTimer = 0;
-		this.minuteCap = 3; // The player can go for x minutes before they are kicked out of the game
+		this.minuteCap = 10; // The player can go for x minutes before they are kicked out of the game
 		this.personalBest = ScoreManager.getScore(player.getUniqueId(), track);
 		this.comparingTime = determineComparingTime();
 
@@ -81,12 +82,22 @@ public class Race {
 				h.getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
 				h.setTamed(true);
 				h.setOwner(this.player);
+				h.setJumpStrength(.8);
+				h.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(.5);
 				v = h;
 				break;
 		}
+		this.armorStand = (ArmorStand) Objects.requireNonNull(this.track.getSpawn().getWorld()).spawnEntity(this.track.getSpawn(), EntityType.ARMOR_STAND);
+		this.armorStand.setVisible(false);
+		this.armorStand.setGravity(false);
+		this.armorStand.setCanPickupItems(false);
+		this.armorStand.setMarker(true);
+		this.armorStand.addScoreboardTag("CVBoatRace-LeaderboardArmorStand");
 		if (v != null) {
 			v.addPassenger(this.player);
-			v.setVelocity(new Vector(0, 0, 0));
+			this.armorStand.addPassenger(v);
+		} else {
+			this.armorStand.addPassenger(this.player);
 		}
 		runCountdown(3);
 	}
@@ -97,15 +108,11 @@ public class Race {
 
 	public void advanceCheckpointIfShould() {
 		Block b = this.getCurrentCheckpoint().getBlock();
-		System.out.println("Tried to advance cp with " + b);
-
 		if (b.getBlockData() instanceof TripwireHook) {
-			System.out.println("Tried to advance cp with tripwire hook");
 			if (((Powerable) b.getBlockData()).isPowered()) {
 				advanceCheckpoint();
 			}
 		} else {
-			System.out.println("Tried to advance cp with other");
 			if (player.getLocation().distance(b.getLocation()) < 1.5) {
 				advanceCheckpoint();
 			}
@@ -210,24 +217,19 @@ public class Race {
 				}
 			}
 		}, 0L, 20L);
-		this.countdownFreeze = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
-			Vehicle v = (Vehicle) player.getVehicle();
-			@Override
-			public void run() {
-				if (v != null) {
-					v.setVelocity(new Vector(0, 0, 0));
-					v.teleport(track.getSpawn());
-				}
-			}
-		}, 0L, 1L);
 	}
 
 	private void endCountdown() {
 		Bukkit.getScheduler().cancelTask(this.countdownTimer);
-		Bukkit.getScheduler().cancelTask(this.countdownFreeze);
 		countdownTimer = 0;
-		countdownFreeze = 0;
+		this.armorStand.eject();
+		this.armorStand.remove();
+		this.armorStand = null;
 		startStopwatch();
+	}
+
+	public boolean isCountingDown() {
+		return countdownTimer != 0;
 	}
 
 	private void startStopwatch() {

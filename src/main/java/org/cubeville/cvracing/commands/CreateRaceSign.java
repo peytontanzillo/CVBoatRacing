@@ -7,6 +7,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.cubeville.commons.commands.*;
+import org.cubeville.cvracing.RaceSignType;
 import org.cubeville.cvracing.SignManager;
 import org.cubeville.cvracing.TrackManager;
 
@@ -17,8 +18,10 @@ public class CreateRaceSign extends Command {
 
 	public CreateRaceSign(JavaPlugin plugin) {
 		super("track signs add");
-
+		// track
 		addBaseParameter(new CommandParameterString());
+		// type
+		addBaseParameter(new CommandParameterEnum(RaceSignType.class));
 		setPermission("cvboatrace.signs.add");
 		this.plugin = plugin;
 	}
@@ -29,6 +32,7 @@ public class CreateRaceSign extends Command {
 
 		FileConfiguration config = plugin.getConfig();
 		String name = baseParameters.get(0).toString().toLowerCase();
+		RaceSignType type = (RaceSignType) baseParameters.get(1);
 
 		if (!config.contains("tracks." + name)) {
 			throw new CommandExecutionException("Track " + baseParameters.get(0) + " does not exist.");
@@ -43,23 +47,19 @@ public class CreateRaceSign extends Command {
 
 		String locationsPath = "tracks." + name + ".signs";
 
-		List<String> signLocations = config.getStringList(locationsPath);
 		List<String> locParameters = new ArrayList<>(
 			Arrays.asList(
 				sLoc.getWorld().getName(), // world
 				String.valueOf(sLoc.getBlockX()),
 				String.valueOf(sLoc.getBlockY()),
-				String.valueOf(sLoc.getBlockZ()),
-				String.valueOf(sLoc.getYaw()),
-				String.valueOf(sLoc.getPitch())
+				String.valueOf(sLoc.getBlockZ())
 			)
 		);
-		signLocations.add(String.join(",", locParameters));
-		config.set(locationsPath, signLocations);
 
-		SignManager.addSign(sign, TrackManager.getTrack(name));
+		config.set(locationsPath + "." + String.join(",", locParameters), type.toString());
+		SignManager.addSign(sign, TrackManager.getTrack(name), type);
 		plugin.saveConfig();
 
-		return new CommandResponse("Successfully created a sign for the track " + baseParameters.get(0) + "!");
+		return new CommandResponse("Successfully created a sign with type " + type + " for the track " + name + "!");
 	}
 }

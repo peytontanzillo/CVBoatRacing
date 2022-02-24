@@ -16,6 +16,7 @@ import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.cubeville.cvracing.models.Race;
 import org.cubeville.cvracing.models.RaceSign;
+import org.spigotmc.event.entity.EntityDismountEvent;
 
 import java.util.UUID;
 
@@ -68,6 +69,7 @@ public class EventHandlers implements Listener {
 
 	@EventHandler
 	public void onExit(VehicleExitEvent e) {
+		System.out.println(e.getExited().getType() + " left the vehicle: " + e.getVehicle().getType());
 		if (e.getExited().getType() == EntityType.PLAYER && RaceManager.racingVehicles.contains(e.getVehicle().getType())) {
 			// will cancel race if the player left their vehicle in a race
 			Player p = (Player) e.getExited();
@@ -75,6 +77,17 @@ public class EventHandlers implements Listener {
 			if (r != null) {
 				RaceManager.cancelRace(p, "You left the vehicle during the race.");
 				e.getVehicle().remove();
+			}
+		}
+	}
+
+	@EventHandler
+	public void onEntityDismount(EntityDismountEvent e) {
+		if (e.getEntity() instanceof Player && e.getDismounted() instanceof ArmorStand) {
+			Player p = (Player) e.getEntity();
+			Race r = RaceManager.getRace(p);
+			if (r != null && r.isCountingDown()) {
+				RaceManager.cancelRace(p, "You tried to get a false start!");
 			}
 		}
 	}

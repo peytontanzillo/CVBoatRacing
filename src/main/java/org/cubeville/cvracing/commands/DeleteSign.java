@@ -1,13 +1,17 @@
 package org.cubeville.cvracing.commands;
 
+import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.cubeville.commons.commands.*;
 import org.cubeville.cvracing.SignManager;
 import org.cubeville.cvracing.TrackManager;
+import org.cubeville.cvracing.models.RaceSign;
 import org.cubeville.cvracing.models.Track;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,8 +23,6 @@ public class DeleteSign extends Command {
 	public DeleteSign(JavaPlugin plugin) {
 		super("track signs delete");
 
-		addBaseParameter(new CommandParameterString());
-		addBaseParameter(new CommandParameterInteger());
 		setPermission("cvboatrace.signs.delete");
 		this.plugin = plugin;
 	}
@@ -30,30 +32,33 @@ public class DeleteSign extends Command {
 		throws CommandExecutionException {
 
 		FileConfiguration config = plugin.getConfig();
-		String name = baseParameters.get(0).toString().toLowerCase();
-		Track track = TrackManager.getTrack(name);
 
-		if (track == null) {
-			throw new CommandExecutionException("Track " + baseParameters.get(0) + " does not exist.");
+		Block block = player.getTargetBlock(null, 100);
+		if (!(SignManager.signMaterials.contains(block.getType()))) {
+			throw new CommandExecutionException("You need to be looking at a sign.");
 		}
 
-		int deletingIndex = (int) baseParameters.get(1);
-		if (deletingIndex > track.getSigns().size()) {
-			throw new CommandExecutionException("That index does not exist, please use /boatrace track signs list to view the indexes.");
+		RaceSign sign = SignManager.getSign(block.getLocation());
+		if (sign == null) {
+			throw new CommandExecutionException("The sign you are looking at is not a race sign");
 		}
-		deletingIndex -= 1;
 
-		String signsPath = "tracks." + name + ".signs";
+		Location sLoc = block.getLocation();
 
-		List<String> signLocations = config.getStringList(signsPath);
-		signLocations.remove(deletingIndex);
-		config.set(signsPath, signLocations);
+		List<String> locParameters = Arrays.asList(
+				sLoc.getWorld().getName(), // world
+				String.valueOf(sLoc.getBlockX()),
+				String.valueOf(sLoc.getBlockY()),
+				String.valueOf(sLoc.getBlockZ())
+		);
 
-		SignManager.deleteSign(track.getSigns().get(deletingIndex).getSign().getLocation());
+		String signsPath = "tracks." + sign.getTrack().getName() + ".signs." + String.join(",", locParameters);
+		config.set(signsPath, null);
+		SignManager.deleteSign(sLoc);
+		sign.getTrack().removeSign(sLoc);
 
-		track.removeSign(deletingIndex);
 		plugin.saveConfig();
 
-		return new CommandResponse("Successfully deleted a sign for the track " + name + "!");
+		return new CommandResponse("Successfully deleted a sign for the track " + sign.getTrack().getName() + "!");
 	}
 }

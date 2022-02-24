@@ -4,10 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.cubeville.cvracing.RaceUtilities;
-import org.cubeville.cvracing.RaceManager;
-import org.cubeville.cvracing.TrackStatus;
-import org.cubeville.cvracing.TrackType;
+import org.cubeville.cvracing.*;
 
 import java.util.*;
 
@@ -18,6 +15,7 @@ public class Track implements Listener {
 	private TrackType type = TrackType.BOAT;
 	private Location spawn;
 	private Location exit;
+	private Location spectate;
 	private List<RaceSign> signs = new ArrayList<>();
 	private List<Location> checkpoints = new ArrayList<>();
 	private List<Leaderboard> leaderboards = new ArrayList<>();
@@ -64,7 +62,15 @@ public class Track implements Listener {
 	}
 	public void addCheckpoint(Location checkpoint) { this.checkpoints.add(checkpoint); }
 	public void removeCheckpoint(int index) { this.checkpoints.remove(index); }
-	public void removeSign(int index) { this.signs.remove(index); }
+	public void removeSign(Location loc) {
+		List<RaceSign> newSigns = new ArrayList<>();
+		for (RaceSign sign: signs) {
+			if (!loc.equals(sign.getSign().getLocation())) {
+				newSigns.add(sign);
+			}
+		}
+		this.signs = newSigns;
+	}
 
 	public void addLeaderboard(Location lbLoc) {
 		leaderboards.add(new Leaderboard(lbLoc));
@@ -90,17 +96,45 @@ public class Track implements Listener {
 		return checkpoints;
 	}
 
-	public void onRightClick(Player p) {
-		switch (status) {
-			case OPEN:
-				RaceManager.addRace(this, p);
+	public void onRightClick(Player p, RaceSignType type) {
+		switch (type) {
+			case TRIALS:
+				switch (status) {
+					case OPEN:
+						RaceManager.addRace(this, p);
+						break;
+					case IN_USE:
+						this.addToQueue(p);
+						break;
+					case CLOSED:
+						p.sendMessage(ChatColor.RED + "This track is currently closed. Please try again later.");
+						break;
+				}
 				break;
-			case IN_USE:
-				this.addToQueue(p);
+			case VERSUS:
+				switch (status) {
+					case OPEN:
+						p.sendMessage(ChatColor.GREEN + "TODO: Add multiplayer");
+						break;
+					case IN_USE:
+						p.sendMessage(ChatColor.RED + "Please wait until the track is open to start a multiplayer game");
+						break;
+					case CLOSED:
+						p.sendMessage(ChatColor.RED + "This track is currently closed. Please try again later.");
+						break;
+				}
 				break;
-			case CLOSED:
-				p.sendMessage(ChatColor.RED + "This track is currently closed. Please try again later.");
+			case ERROR:
+				p.sendMessage(ChatColor.RED + "There was an error setting up this track sign, please contact a server administrator.");
+				break;
+			case SPECTATE:
+				p.teleport(spectate);
+				break;
+			case EXIT:
+				p.teleport(exit);
+				break;
 		}
+
 	}
 
 	private void addToQueue(Player p) {
@@ -128,9 +162,7 @@ public class Track implements Listener {
 	}
 
 	public void removePlayerFromQueue(Player p) {
-		if (queue.contains(p)) {
-			queue.remove(p);
-		}
+		queue.remove(p);
 	}
 
 	public TrackType getType() {
@@ -139,5 +171,9 @@ public class Track implements Listener {
 
 	public void setType(TrackType type) {
 		this.type = type;
+	}
+
+	public void setSpectate(Location spectate) {
+		this.spectate = spectate;
 	}
 }
