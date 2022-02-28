@@ -6,9 +6,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.cubeville.cvracing.models.Race;
-import org.cubeville.cvracing.models.RaceSign;
-import org.cubeville.cvracing.models.Track;
+import org.cubeville.cvracing.models.*;
 
 import java.util.*;
 
@@ -45,35 +43,84 @@ public class RaceManager {
 		plugin = javaPlugin;
 	}
 
-	public static void addRace(Track t, Player p) {
-		Race race = new Race(t, p, plugin);
+	public static void addTrialsRace(Track t, Player p) {
+		Race race = new TrialsRace(t, plugin, p);
 		races.put(p.getUniqueId(), race);
 		racingPlayers.add(p);
 	}
 
-	public static Race getRace(Player p) {
-		return races.get(p.getUniqueId());
+	public static void addVersusRace(Track t, Player p) {
+		VersusRace race = new VersusRace(t, plugin);
+		race.addPlayer(p);
+		t.setVersusRace(race);
+		races.put(p.getUniqueId(), race);
+		racingPlayers.add(p);
+		t.setStatus(TrackStatus.IN_LOBBY);
+		t.getSigns().forEach(RaceSign::displayQueue);
 	}
 
-	public static void advanceCheckpoints(Player p) {
-		Race race  = getRace(p);
+	public static void addPlayerToVersus(Track t, Player p) {
+		VersusRace vr = t.getVersusRace();
+		if (vr.playerSize() >= vr.maxPlayers) {
+			p.sendMessage("This race is full!");
+			return;
+		}
+		if (vr.hasPlayer(p)) {
+			p.sendMessage("You are already in this race.");
+			return;
+		}
+		vr.addPlayer(p);
+		t.setVersusRace(vr);
+		races.put(p.getUniqueId(), vr);
+		racingPlayers.add(p);
+		t.getSigns().forEach(RaceSign::displayQueue);
+	}
+
+	public static void removePlayerFromVersus(Track t, Player p) {
+		VersusRace race = t.getVersusRace();
+		if (race == null || !race.hasPlayer(p)) { return; }
+		race.removePlayer(p);
+		races.remove(p.getUniqueId());
+		racingPlayers.remove(p);
+		if (race.playerSize() == 0) {
+			RaceManager.finishRace(t);
+			t.setVersusRace(null);
+		} else {
+			t.setVersusRace(race);
+		}
+	}
+
+
+	public static Race getRace(Player p) { return races.get(p.getUniqueId()); }
+
+	public static  void advanceCheckpoints(Player p) {
+		Race race = getRace(p);
 		if (race != null) {
-			race.advanceCheckpointIfShould();
+			race.advanceCheckpointIfShould(p);
 		}
 	}
 
 	public static void cancelRace(Player p, String subtitle) {
-		Race race  = getRace(p);
+		Race race = getRace(p);
 		if (race != null) {
-			race.cancelRace(subtitle);
+			race.cancelRace(p, subtitle);
 		}
 	}
 
-	public static void removeRace(Player p1, Track t) {
-		races.remove(p1.getUniqueId());
-		racingPlayers.remove(p1);
+	public static void removeRace(Player p) {
+		races.remove(p.getUniqueId());
+		racingPlayers.remove(p);
+	}
+
+	public static void finishRace(Track t) {
 		if (t.getQueue().size() > 0) {
+			t.setStatus(TrackStatus.IN_USE);
 			startRaceWithQueue(t);
+		} else {
+			t.setStatus(TrackStatus.OPEN);
+			for (RaceSign sign : t.getSigns()) {
+				sign.displayQueue();
+			}
 		}
 	}
 
@@ -85,9 +132,8 @@ public class RaceManager {
 		Player p = t.getPlayerFromQueue();
 		TrackManager.clearPlayerFromQueues(p);
 		if (p != null) {
-			int queueSize = t.getQueue().size();
 			for (RaceSign sign : t.getSigns()) {
-				sign.displayQueue(queueSize);
+				sign.displayQueue();
 			}
 			warnJoiningPlayer(p, t);
 		}
@@ -114,14 +160,9 @@ public class RaceManager {
 		queueCountdowns.put(t.getName(), 0);
 		if (Bukkit.getServer().getPlayerExact(p.getName()) == null) {
 			// they left during the countdown
-			if (t.getQueue().size() > 0) {
-				startRaceWithQueue(t);
-			} else {
-				t.setStatus(TrackStatus.OPEN);
-			}
+			finishRace(t);
 		} else {
-			addRace(t, p);
+			addTrialsRace(t, p);
 		}
 	}
-
 }

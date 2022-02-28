@@ -13,6 +13,7 @@ public class Track implements Listener {
 	private String displayName;
 	private TrackStatus status;
 	private TrackType type = TrackType.BOAT;
+	private VersusRace versusRace;
 	private Location spawn;
 	private Location exit;
 	private Location spectate;
@@ -101,9 +102,10 @@ public class Track implements Listener {
 			case TRIALS:
 				switch (status) {
 					case OPEN:
-						RaceManager.addRace(this, p);
+						RaceManager.addTrialsRace(this, p);
 						break;
 					case IN_USE:
+					case IN_LOBBY:
 						this.addToQueue(p);
 						break;
 					case CLOSED:
@@ -114,10 +116,13 @@ public class Track implements Listener {
 			case VERSUS:
 				switch (status) {
 					case OPEN:
-						p.sendMessage(ChatColor.GREEN + "TODO: Add multiplayer");
+						RaceManager.addVersusRace(this, p);
 						break;
 					case IN_USE:
 						p.sendMessage(ChatColor.RED + "Please wait until the track is open to start a multiplayer game");
+						break;
+					case IN_LOBBY:
+						RaceManager.addPlayerToVersus(this, p);
 						break;
 					case CLOSED:
 						p.sendMessage(ChatColor.RED + "This track is currently closed. Please try again later.");
@@ -140,13 +145,14 @@ public class Track implements Listener {
 	private void addToQueue(Player p) {
 		if (queue.contains(p)) {
 			p.sendMessage(ChatColor.RED + "You are already in the queue!");
-		} else {
-			queue.add(p);
-			p.sendMessage(ChatColor.YELLOW + "You have been been added to the queue!");
-			for (RaceSign sign : this.signs) {
-				sign.displayQueue(queue.size());
-			}
+			return;
 		}
+		queue.add(p);
+		p.sendMessage(ChatColor.YELLOW + "You have been been added to the queue!");
+		for (RaceSign sign : this.signs) {
+			sign.displayQueue();
+		}
+		TrackManager.getTracks().forEach(track -> RaceManager.removePlayerFromVersus(track, p));
 	}
 
 	public Queue<Player> getQueue() {
@@ -175,5 +181,17 @@ public class Track implements Listener {
 
 	public void setSpectate(Location spectate) {
 		this.spectate = spectate;
+	}
+
+	public Location getSpectate() {
+		return spectate;
+	}
+
+	public VersusRace getVersusRace() {
+		return versusRace;
+	}
+
+	public void setVersusRace(VersusRace versusRace) {
+		this.versusRace = versusRace;
 	}
 }

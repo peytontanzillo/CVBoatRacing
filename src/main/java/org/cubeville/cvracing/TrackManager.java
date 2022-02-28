@@ -29,9 +29,18 @@ public class TrackManager {
 	public static void clearPlayerFromQueues(Player p) {
 		for (Track track : getTracks()) {
 			track.removePlayerFromQueue(p);
-			int queueSize = track.getQueue().size();
+			RaceManager.removePlayerFromVersus(track, p);
 			for (RaceSign sign : track.getSigns()) {
-				sign.displayQueue(queueSize);
+				sign.displayQueue();
+			}
+		}
+	}
+
+	public static void clearPlayerFromTrialsQueues(Player p) {
+		for (Track track : getTracks()) {
+			track.removePlayerFromQueue(p);
+			for (RaceSign sign : track.getSigns()) {
+				sign.displayQueue();
 			}
 		}
 	}

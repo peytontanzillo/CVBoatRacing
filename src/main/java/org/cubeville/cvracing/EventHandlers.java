@@ -86,7 +86,7 @@ public class EventHandlers implements Listener {
 		if (e.getEntity() instanceof Player && e.getDismounted() instanceof ArmorStand) {
 			Player p = (Player) e.getEntity();
 			Race r = RaceManager.getRace(p);
-			if (r != null && r.isCountingDown()) {
+			if (r != null && r.isCountingDown(p)) {
 				RaceManager.cancelRace(p, "You tried to get a false start!");
 			}
 		}

@@ -5,245 +5,184 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.AnaloguePowerable;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Powerable;
 import org.bukkit.block.data.type.TripwireHook;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.PressureSensor;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.Vector;
 import org.cubeville.cvracing.*;
 
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.UUID;
 
-public class Race {
-	private JavaPlugin plugin;
-	private Track track;
-	private Player player;
-	private Score comparingTime;
-	private Score personalBest;
-	private HashMap<Integer, Long> splits = new HashMap<>();
-	private int checkpointIndex;
-	private int countdownTimer;
-	private int stopwatch;
+public abstract class Race {
+	protected JavaPlugin plugin;
+	protected Track track;
+	protected HashMap<Player, RaceState> raceStates = new HashMap<>();
 	private int minuteCap;
-	private long elapsed;
-	private ArmorStand armorStand;
+	private HashMap<Player, ArmorStand > armorStands = new HashMap<>();
 
-	public Race(Track track, Player player, JavaPlugin plugin) {
+	public Race(Track track, JavaPlugin plugin) {
 		this.track = track;
-		this.player = player;
  		this.plugin = plugin;
-		this.checkpointIndex = 0;
-		this.countdownTimer = 0;
 		this.minuteCap = 10; // The player can go for x minutes before they are kicked out of the game
-		this.personalBest = ScoreManager.getScore(player.getUniqueId(), track);
-		this.comparingTime = determineComparingTime();
-
-		this.startRace();
 	}
 
-	private Score determineComparingTime() {
-		if (SelectedSplits.isUsingWR(player.getUniqueId())) {
-			return ScoreManager.getWRScore(track);
+	public void setupPlayerOnTrack(Player player, Location location) {
+		raceStates.put(player, new RaceState());
+		TrackManager.clearPlayerFromTrialsQueues(player);
+		if (!location.getChunk().isLoaded()) {
+			location.getChunk().load();
 		}
-
-		UUID selectedSplitPlayer = SelectedSplits.getSelectedSplitPlayer(player.getUniqueId());
-		if (selectedSplitPlayer != null) {
-			return ScoreManager.getScore(selectedSplitPlayer, track);
-		}
-		return this.personalBest;
-	}
-
-	public void startRace() {
-		this.track.setStatus(TrackStatus.IN_USE);
-		TrackManager.clearPlayerFromQueues(player);
-		if (!this.track.getSpawn().getChunk().isLoaded()) {
-			this.track.getSpawn().getChunk().load();
-		}
-		player.teleport(this.track.getSpawn());
+		player.teleport(location);
 		Vehicle v = null;
 		switch (this.track.getType()) {
 			case BOAT:
-				v = (Vehicle) this.player.getWorld().spawnEntity(this.track.getSpawn(), EntityType.BOAT);
+				v = (Vehicle) player.getWorld().spawnEntity(location, EntityType.BOAT);
 				break;
 			case PIG:
-				Pig p = (Pig) this.player.getWorld().spawnEntity(this.track.getSpawn(), EntityType.PIG);
+				Pig p = (Pig) player.getWorld().spawnEntity(location, EntityType.PIG);
 				p.setSaddle(true);
-				this.player.getInventory().setItem(0, new ItemStack(Material.CARROT_ON_A_STICK));
+				player.getInventory().setItem(0, new ItemStack(Material.CARROT_ON_A_STICK));
 				v = p;
 				break;
 			case HORSE:
-				Horse h = (Horse) this.player.getWorld().spawnEntity(this.track.getSpawn(), EntityType.HORSE);
+				Horse h = (Horse) player.getWorld().spawnEntity(location, EntityType.HORSE);
 				h.getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
 				h.setTamed(true);
-				h.setOwner(this.player);
+				h.setOwner(player);
 				h.setJumpStrength(.8);
 				h.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(.5);
 				v = h;
 				break;
 		}
-		this.armorStand = (ArmorStand) Objects.requireNonNull(this.track.getSpawn().getWorld()).spawnEntity(this.track.getSpawn(), EntityType.ARMOR_STAND);
-		this.armorStand.setVisible(false);
-		this.armorStand.setGravity(false);
-		this.armorStand.setCanPickupItems(false);
-		this.armorStand.setMarker(true);
-		this.armorStand.addScoreboardTag("CVBoatRace-LeaderboardArmorStand");
+		ArmorStand as = (ArmorStand) Objects.requireNonNull(location.getWorld()).spawnEntity(location, EntityType.ARMOR_STAND);
+		as.setVisible(false);
+		as.setGravity(false);
+		as.setCanPickupItems(false);
+		as.setMarker(true);
+		as.addScoreboardTag("CVBoatRace-LeaderboardArmorStand");
 		if (v != null) {
-			v.addPassenger(this.player);
-			this.armorStand.addPassenger(v);
+			v.addPassenger(player);
+			as.addPassenger(v);
 		} else {
-			this.armorStand.addPassenger(this.player);
+			as.addPassenger(player);
 		}
-		runCountdown(3);
+		this.armorStands.put(player, as);
 	}
 
-	public Location getCurrentCheckpoint() {
-		return this.track.getCheckpoints().get(this.checkpointIndex);
+	public Location getCurrentCheckpoint(Player p) {
+		return this.track.getCheckpoints().get(this.raceStates.get(p).getCheckpointIndex());
 	}
 
-	public void advanceCheckpointIfShould() {
-		Block b = this.getCurrentCheckpoint().getBlock();
+	public void advanceCheckpointIfShould(Player p) {
+		Block b = this.getCurrentCheckpoint(p).getBlock();
 		if (b.getBlockData() instanceof TripwireHook) {
 			if (((Powerable) b.getBlockData()).isPowered()) {
-				advanceCheckpoint();
+				advanceCheckpoint(p);
 			}
 		} else {
-			if (player.getLocation().distance(b.getLocation()) < 1.5) {
-				advanceCheckpoint();
+			if (p.getLocation().distance(b.getLocation()) < 1.5) {
+				advanceCheckpoint(p);
 			}
 		}
 	}
 
-	private void advanceCheckpoint() {
-		if (checkpointIndex == this.track.getCheckpoints().size() - 1) {
-			stopStopwatch();
-			this.completeRace();
-		} else if (checkpointIndex != 0) {
-			splits.put(checkpointIndex, elapsed);
-			player.sendMessage("§6CP" + checkpointIndex + ": " + RaceUtilities.formatTimeString(elapsed) + getSplitString(elapsed));
+	protected void advanceCheckpoint(Player p) {
+		int playerCheckpointIndex = this.raceStates.get(p).getCheckpointIndex();
+		if (playerCheckpointIndex == this.track.getCheckpoints().size() - 1) {
+			stopStopwatch(p);
+			this.completeRace(p);
+			return;
 		}
-		checkpointIndex++;
-	}
-
-	private String getSplitString(long currentTime) {
-		if (comparingTime != null) {
-			long comparingSplit = comparingTime.getSplit(checkpointIndex);
-			String comparingName = "";
-			if (!comparingTime.getPlayerUUID().equals(player.getUniqueId())) {
-				comparingName = " -- " + comparingTime.getPlayerName();
-			}
-			if (comparingSplit > currentTime) {
-				return " §6(§a-" + RaceUtilities.formatTimeString(comparingSplit - currentTime) + "§6)" + comparingName;
-			} else if (comparingSplit < currentTime) {
-				return " §6(§c+" + RaceUtilities.formatTimeString(currentTime - comparingSplit) + "§6)" + comparingName;
-			} else {
-				return " §6(§e00:00.00§6)" + comparingName;
-			}
+		long elapsed = raceStates.get(p).getElapsed();
+		this.raceStates.get(p).addSplit(playerCheckpointIndex, elapsed);
+		playerCheckpointIndex++;
+		int placement = 0;
+		for (RaceState rs : this.raceStates.values()) {
+			if (rs.getCheckpointIndex() >= playerCheckpointIndex) { placement++; }
 		}
-		return "";
-	}
+		this.raceStates.get(p).setCheckpointIndex(playerCheckpointIndex);
+		this.raceStates.get(p).setPlacement(placement);
+		p.sendMessage("§6CP" + playerCheckpointIndex + ": " + RaceUtilities.formatTimeString(elapsed) + getSplitString(p, elapsed));
 
-	public void cancelRace(String subtitle) {
-		player.sendTitle( ChatColor.RED + "Race ended", ChatColor.DARK_RED + subtitle, 5, 90, 5);
-		if (this.countdownTimer != 0) { endCountdown(); }
-		if (this.stopwatch != 0) { stopStopwatch(); }
-		this.finishRace();
-	}
-
-	public void completeRace() {
-		String pbString = " ";
-		if (personalBest == null || personalBest.getFinalTime() > elapsed) {
-			String pbBy = "";
-			if (personalBest != null) {
-				pbBy = ", which was your personal best by " + RaceUtilities.formatTimeString(personalBest.getFinalTime() - elapsed);
-			}
-			player.sendMessage("§bYou achieved a time of " + RaceUtilities.formatTimeString(elapsed) + " on " + track.getName() + pbBy + "!");
-			pbString = "§a§lNew Personal Best!";
-			Score wr = ScoreManager.getWRScore(track);
-			ScoreManager.setNewPB(player.getUniqueId(), track, elapsed, splits);
-			if (wr == null || elapsed < wr.getFinalTime()) {
-				String broadcastString = "&b&l" + player.getName() + "&3 just got a new world record time of &b&l" + RaceUtilities.formatTimeString(elapsed) + "&3 on &b&l" + track.getName() + "&3!";
-				//Bukkit.getServer().broadcastMessage("§b§l" + player.getName() + "§3 just got a new world record time of §b§l" + BoatRaceUtilities.formatTimeString(finalTime) + "§3 on §b§l" + track.getName() + "!");
-				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "runalias /announceboatswr " + broadcastString);
-			} else {
-				String broadcastString = "&d&l" + player.getName() + "&5 just got a new personal best time of &d&l" + RaceUtilities.formatTimeString(elapsed) + "&5, which put them at rank &d&l#" + ScoreManager.getScorePlacement(track, player.getUniqueId()) + "&5 on &d&l" + track.getName() + "&5!";
-				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "runalias /announceboatspb " + broadcastString);
-			}
-			if (ScoreManager.shouldRefreshLeaderboard(elapsed, track)) {
-				track.loadLeaderboards();
-			}
-		} else {
-			player.sendMessage("§bYou achieved a time of " + RaceUtilities.formatTimeString(elapsed) + " on " + track.getName() + ", which was " + RaceUtilities.formatTimeString(elapsed - personalBest.getFinalTime()) + " behind your personal best!");
-		}
-		player.sendTitle("§d§l" + RaceUtilities.formatTimeString(this.elapsed), pbString, 5, 90, 5);
-		this.finishRace();
-	}
-
-	public void finishRace() {
-		if (track.getQueue().size() == 0) {
-			track.setStatus(TrackStatus.OPEN);
-		}
-		RaceManager.removeRace(player, track);
-		Entity v = player.getVehicle();
-		player.getInventory().clear();
-		Bukkit.getScheduler().runTaskLater(plugin, () -> {
-			if (!this.track.getExit().getChunk().isLoaded()) {
-				this.track.getExit().getChunk().load();
-			}
-			player.teleport(track.getExit());
-			if (v != null) { v.remove(); }
-		}, 1L);
 
 	}
 
-	private void runCountdown(int startCount) {
-		this.countdownTimer = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, new Runnable() {
+	public void cancelRace(Player p, String subtitle) {
+		p.sendTitle( ChatColor.RED + "Race ended", ChatColor.DARK_RED + subtitle, 5, 90, 5);
+		RaceState rs = raceStates.get(p);
+		if (rs.getCountdown() != 0) { endCountdown(p); }
+		if (rs.getStopwatch() != 0) { stopStopwatch(p); }
+		this.endPlayerRace(p);
+	}
+
+	public abstract void completeRace(Player p);
+
+	protected abstract String getSplitString(Player p, long elapsed);
+
+	protected abstract void endPlayerRace(Player p);
+
+	protected void runCountdown(Player p, int startCount) {
+		int countdown = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, new Runnable() {
 			int counter = startCount;
 			@Override
 			public void run() {
 				if (counter > 0) {
-					player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 3.0F, 0.7F);
-					player.sendTitle(ChatColor.RED + String.valueOf(counter), null, 1, 18, 1);
+					p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 3.0F, 0.7F);
+					p.sendTitle(ChatColor.RED + String.valueOf(counter), null, 1, 18, 1);
 					counter--;
 				} else {
-					player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 3.0F, 1.4F);
-					player.sendTitle(ChatColor.GREEN + "Go!", null, 1, 38, 1);
-					endCountdown();
+					p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 3.0F, 1.4F);
+					p.sendTitle(ChatColor.GREEN + "Go!", null, 1, 38, 1);
+					endCountdown(p);
 				}
 			}
 		}, 0L, 20L);
+		this.raceStates.get(p).setCountdown(countdown);
 	}
 
-	private void endCountdown() {
-		Bukkit.getScheduler().cancelTask(this.countdownTimer);
-		countdownTimer = 0;
-		this.armorStand.eject();
-		this.armorStand.remove();
-		this.armorStand = null;
-		startStopwatch();
+	protected void endCountdown(Player p) {
+		Bukkit.getScheduler().cancelTask(this.raceStates.get(p).getCountdown());
+		this.raceStates.get(p).setCountdown(0);
+		ArmorStand as = this.armorStands.get(p);
+		as.eject();
+		as.remove();
+		this.armorStands.remove(p);
+		startStopwatch(p);
 	}
 
-	public boolean isCountingDown() {
-		return countdownTimer != 0;
+	public boolean isCountingDown(Player p) {
+		return this.raceStates.get(p).getCountdown() != 0;
 	}
 
-	private void startStopwatch() {
-		this.elapsed = 0;
-		this.stopwatch = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
-			this.elapsed = this.elapsed + 50;
-			if ((int) elapsed / 60000 >= minuteCap) { cancelRace("You took too long to finish.");}
-			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§a§l" + RaceUtilities.formatTimeString(elapsed)));
+	private void startStopwatch(Player p) {
+		raceStates.get(p).setElapsed(0);
+		int stopwatch = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
+			long elapsed = raceStates.get(p).getElapsed();
+			raceStates.get(p).setElapsed(elapsed + 50);
+			if ((int) elapsed / 60000 >= minuteCap) { cancelRace(p, "You took too long to finish.");}
+			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§a§l" + RaceUtilities.formatTimeString(elapsed)));
 		}, 0L, 1L);
+		raceStates.get(p).setStopwatch(stopwatch);
 	}
 
-	private void stopStopwatch() {
-		Bukkit.getScheduler().cancelTask(this.stopwatch);
-		stopwatch = 0;
+	private void stopStopwatch(Player p) {
+		Bukkit.getScheduler().cancelTask(raceStates.get(p).getStopwatch());
+		raceStates.get(p).setStopwatch(0);
+	}
+
+	protected void removePlayerFromRaceAndSendToLoc(Player p, Location loc) {
+		raceStates.remove(p);
+		p.getInventory().clear();
+		Entity v = p.getVehicle();
+		Bukkit.getScheduler().runTaskLater(plugin, () -> {
+			if (!loc.getChunk().isLoaded()) {
+				loc.getChunk().load();
+			}
+			p.teleport(loc);
+			if (v != null) { v.remove(); }
+		}, 1L);
 	}
 
 	public Track getTrack() {

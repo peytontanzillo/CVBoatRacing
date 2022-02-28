@@ -2,6 +2,7 @@ package org.cubeville.cvracing.models;
 
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.cubeville.cvracing.RaceManager;
 import org.cubeville.cvracing.RaceSignType;
 import org.cubeville.cvracing.TrackStatus;
 
@@ -15,9 +16,9 @@ public class RaceSign {
 		this.sign = sign;
 		this.track = track;
 		this.sign.setLine(1, track.getName());
-		this.displayStatus(track.getStatus());
-		this.displayQueue(track.getQueue().size());
 		this.setType(type);
+		this.displayQueue();
+		this.displayStatus(track.getStatus());
 	}
 
 	public void displayType() {
@@ -43,11 +44,25 @@ public class RaceSign {
 		this.sign.setLine(0, typeText);
 	}
 
-	public void displayQueue(int queueLength) {
-		if (queueLength > 0) {
-			this.sign.setLine(3, "§6§o" + queueLength + " in queue");
-		} else {
-			this.sign.setLine(3, "");
+	public void displayQueue() {
+		switch (type) {
+			case TRIALS:
+				if (track.getQueue().size() > 0) {
+					this.sign.setLine(3, "§6§o" + track.getQueue().size() + " in queue");
+				} else {
+					this.sign.setLine(3, "");
+				}
+				break;
+			case VERSUS:
+				int playerFill = 0;
+				if (track.getVersusRace() != null) {
+					playerFill = track.getVersusRace().playerSize();
+				}
+				this.sign.setLine(3, playerFill + " / 4");
+				break;
+			default:
+				this.sign.setLine(3, "");
+				break;
 		}
 		this.sign.update();
 	}
@@ -65,6 +80,9 @@ public class RaceSign {
 					break;
 				case CLOSED:
 					this.sign.setLine(2, "§c§lCLOSED");
+					break;
+				case IN_LOBBY:
+					this.sign.setLine(2, "§e§lIN LOBBY");
 					break;
 			}
 		}
