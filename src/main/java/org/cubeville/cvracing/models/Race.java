@@ -4,11 +4,10 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.Powerable;
-import org.bukkit.block.data.type.TripwireHook;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.cubeville.cvracing.*;
 
@@ -30,7 +29,7 @@ public abstract class Race {
 
 	public void setupPlayerOnTrack(Player player, Location location) {
 		raceStates.put(player, new RaceState());
-		TrackManager.clearPlayerFromTrialsQueues(player);
+		TrackManager.clearPlayerFromTrialsQueues(player, track);
 		if (!location.getChunk().isLoaded()) {
 			location.getChunk().load();
 		}
@@ -43,6 +42,10 @@ public abstract class Race {
 			case PIG:
 				Pig p = (Pig) player.getWorld().spawnEntity(location, EntityType.PIG);
 				p.setSaddle(true);
+				ItemStack carrotOnStick = new ItemStack(Material.CARROT_ON_A_STICK, 1);
+				ItemMeta stickMeta = carrotOnStick.getItemMeta();
+				stickMeta.setDisplayName("§6§lSpeedy Carrot on a Stick");
+				stickMeta.addEnchant(Enchantment.DURABILITY, 10, true);
 				player.getInventory().setItem(0, new ItemStack(Material.CARROT_ON_A_STICK));
 				v = p;
 				break;
@@ -55,7 +58,24 @@ public abstract class Race {
 				h.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(.5);
 				v = h;
 				break;
+			case ELYTRA:
+				player.getInventory().setChestplate(new ItemStack(Material.ELYTRA, 1));
+				player.getInventory().setItem(0, new ItemStack(Material.FIREWORK_ROCKET, 1));
+				break;
+			case PARKOUR:
+				break;
+			case TRIDENT:
+				ItemStack trident = new ItemStack(Material.TRIDENT, 1);
+				ItemMeta tridentMeta = trident.getItemMeta();
+				tridentMeta.addEnchant(Enchantment.RIPTIDE, 3, false);
+				tridentMeta.setDisplayName("§b§lSpeed Trident");
+				trident.setItemMeta(tridentMeta);
+				player.getInventory().setItem(0, trident);
+				break;
 		}
+		player.getInventory().setItem(8, RaceUtilities.getLeaveItem());
+		player.setCollidable(false);
+
 		ArmorStand as = (ArmorStand) Objects.requireNonNull(location.getWorld()).spawnEntity(location, EntityType.ARMOR_STAND);
 		as.setVisible(false);
 		as.setGravity(false);
@@ -71,49 +91,51 @@ public abstract class Race {
 		this.armorStands.put(player, as);
 	}
 
-	public Location getCurrentCheckpoint(Player p) {
+	private Checkpoint getCurrentCheckpoint(Player p) {
 		return this.track.getCheckpoints().get(this.raceStates.get(p).getCheckpointIndex());
 	}
 
-	public void advanceCheckpointIfShould(Player p) {
-		Block b = this.getCurrentCheckpoint(p).getBlock();
-		if (b.getBlockData() instanceof TripwireHook) {
-			if (((Powerable) b.getBlockData()).isPowered()) {
-				advanceCheckpoint(p);
-			}
-		} else {
-			if (p.getLocation().distance(b.getLocation()) < 1.5) {
-				advanceCheckpoint(p);
-			}
-		}
-	}
-
 	protected void advanceCheckpoint(Player p) {
+		if (!this.getCurrentCheckpoint(p).containsPlayer(p)) { return; }
 		int playerCheckpointIndex = this.raceStates.get(p).getCheckpointIndex();
 		if (playerCheckpointIndex == this.track.getCheckpoints().size() - 1) {
 			stopStopwatch(p);
+			playerCheckpointIndex++;
+			this.raceStates.get(p).setCheckpointIndex(playerCheckpointIndex);
+			this.raceStates.get(p).setPlacement(computePlacement(playerCheckpointIndex));
+			this.raceStates.get(p).setEndTime();
 			this.completeRace(p);
 			return;
+		}
+
+		p.playSound(p.getLocation(), Sound.BLOCK_TRIPWIRE_CLICK_ON, 2F, 1F);
+		if (track.getType() == TrackType.ELYTRA) {
+			p.getInventory().setItem(0, new ItemStack(Material.FIREWORK_ROCKET, 1));
 		}
 		long elapsed = raceStates.get(p).getElapsed();
 		this.raceStates.get(p).addSplit(playerCheckpointIndex, elapsed);
 		playerCheckpointIndex++;
+
+		this.raceStates.get(p).setPlacement(computePlacement(playerCheckpointIndex));
+		this.raceStates.get(p).setCheckpointIndex(playerCheckpointIndex);
+		p.sendMessage("§6CP" + playerCheckpointIndex + ": " + RaceUtilities.formatTimeString(elapsed) + getSplitString(p, elapsed));
+	}
+
+	private int computePlacement(int index) {
 		int placement = 0;
 		for (RaceState rs : this.raceStates.values()) {
-			if (rs.getCheckpointIndex() >= playerCheckpointIndex) { placement++; }
+			if (rs.getCheckpointIndex() >= index) { placement++; }
 		}
-		this.raceStates.get(p).setCheckpointIndex(playerCheckpointIndex);
-		this.raceStates.get(p).setPlacement(placement);
-		p.sendMessage("§6CP" + playerCheckpointIndex + ": " + RaceUtilities.formatTimeString(elapsed) + getSplitString(p, elapsed));
-
-
+		return placement;
 	}
 
 	public void cancelRace(Player p, String subtitle) {
+		if (raceStates.get(p).getEndTime() != 0) { return; }
 		p.sendTitle( ChatColor.RED + "Race ended", ChatColor.DARK_RED + subtitle, 5, 90, 5);
 		RaceState rs = raceStates.get(p);
 		if (rs.getCountdown() != 0) { endCountdown(p); }
 		if (rs.getStopwatch() != 0) { stopStopwatch(p); }
+		this.raceStates.remove(p);
 		this.endPlayerRace(p);
 	}
 
@@ -149,6 +171,9 @@ public abstract class Race {
 		as.eject();
 		as.remove();
 		this.armorStands.remove(p);
+		if (track.getType() == TrackType.ELYTRA) {
+			p.setGliding(true);
+		}
 		startStopwatch(p);
 	}
 
@@ -161,6 +186,7 @@ public abstract class Race {
 		int stopwatch = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
 			long elapsed = raceStates.get(p).getElapsed();
 			raceStates.get(p).setElapsed(elapsed + 50);
+			advanceCheckpoint(p);
 			if ((int) elapsed / 60000 >= minuteCap) { cancelRace(p, "You took too long to finish.");}
 			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§a§l" + RaceUtilities.formatTimeString(elapsed)));
 		}, 0L, 1L);
@@ -173,9 +199,10 @@ public abstract class Race {
 	}
 
 	protected void removePlayerFromRaceAndSendToLoc(Player p, Location loc) {
-		raceStates.remove(p);
 		p.getInventory().clear();
 		Entity v = p.getVehicle();
+		p.setGliding(false);
+		p.setCollidable(true);
 		Bukkit.getScheduler().runTaskLater(plugin, () -> {
 			if (!loc.getChunk().isLoaded()) {
 				loc.getChunk().load();

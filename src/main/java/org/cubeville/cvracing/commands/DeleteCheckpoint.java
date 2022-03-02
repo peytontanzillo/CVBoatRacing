@@ -35,16 +35,19 @@ public class DeleteCheckpoint extends Command {
 		}
 
 		int deletingIndex = (int) baseParameters.get(1);
-		if (deletingIndex > track.getCheckpoints().size()) {
-			throw new CommandExecutionException("That index does not exist, please use /boatrace track checkpoints list to view the indexes.");
+		if (deletingIndex > track.getCheckpoints().size() || deletingIndex <= 0) {
+			throw new CommandExecutionException("That index does not exist, please use /race track checkpoints list to view the indexes.");
 		}
+
 		deletingIndex -= 1;
+		String locationsPath = "tracks." + name + ".checkpoints.";
 
-		String locationsPath = "tracks." + name + ".checkpoints";
-
-		List<String> twLocations = config.getStringList(locationsPath);
-		twLocations.remove(deletingIndex);
-		config.set(locationsPath, twLocations);
+		if (track.getCheckpoints().size() > 1) {
+			for (int i = deletingIndex; i < track.getCheckpoints().size() - 1; i++) {
+				config.set(locationsPath + deletingIndex, config.get(locationsPath + (deletingIndex + 1)));
+			}
+		}
+		config.set(locationsPath + (track.getCheckpoints().size() - 1), null);
 
 		track.removeCheckpoint(deletingIndex);
 		plugin.saveConfig();

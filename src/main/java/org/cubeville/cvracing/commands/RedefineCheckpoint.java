@@ -1,11 +1,6 @@
 package org.cubeville.cvracing.commands;
 
-import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.sk89q.worldedit.internal.annotation.Selection;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,15 +12,17 @@ import org.cubeville.cvracing.models.Track;
 
 import java.util.*;
 
-public class AddCheckpoint extends Command {
+public class RedefineCheckpoint extends Command {
 
 	private JavaPlugin plugin;
 
-	public AddCheckpoint(JavaPlugin plugin) {
-		super("track checkpoints add");
+	public RedefineCheckpoint(JavaPlugin plugin) {
+		super("track checkpoints redefine");
 
 		addBaseParameter(new CommandParameterString());
-		setPermission("cvboatrace.checkpoints.add");
+		addBaseParameter(new CommandParameterInteger());
+
+		setPermission("cvboatrace.checkpoints.redefine");
 		this.plugin = plugin;
 	}
 
@@ -41,6 +38,12 @@ public class AddCheckpoint extends Command {
 			throw new CommandExecutionException("Track " + baseParameters.get(0) + " does not exist.");
 		}
 
+		int redefineIndex = (int) baseParameters.get(1);
+		if (redefineIndex > track.getCheckpoints().size() || redefineIndex <= 0) {
+			throw new CommandExecutionException("That index does not exist, please use /race track checkpoints list to view the indexes.");
+		}
+		redefineIndex -= 1;
+
 		Location min, max;
 
 		try {
@@ -51,12 +54,12 @@ public class AddCheckpoint extends Command {
 			throw new CommandExecutionException("Please make a cuboid worldedit selection before running this command.");
 		}
 
-		String locationsPath = "tracks." + name + ".checkpoints." + track.getCheckpoints().size();
+		String locationsPath = "tracks." + name + ".checkpoints." + redefineIndex;
 
 		config.set(locationsPath + ".min", locToString(min));
 		config.set(locationsPath + ".max", locToString(max));
 
-		TrackManager.getTrack(name).addCheckpoint(new Checkpoint(min, max));
+		track.getCheckpoints().get(redefineIndex).defineBounds(min, max);
 		plugin.saveConfig();
 
 		return new CommandResponse("Successfully created a checkpoint for the track " + baseParameters.get(0) + "!");

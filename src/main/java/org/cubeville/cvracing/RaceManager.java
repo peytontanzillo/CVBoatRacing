@@ -29,8 +29,6 @@ public class RaceManager {
 			Material.WARPED_PRESSURE_PLATE
 	);
 
-	public static final List<Material> checkpointItemTypes = checkpointTriggerTypes.subList(1, checkpointTriggerTypes.size() - 1);
-
 	public static final List<EntityType> racingVehicles = Arrays.asList(EntityType.BOAT, EntityType.PIG, EntityType.HORSE);
 
 
@@ -50,6 +48,11 @@ public class RaceManager {
 	}
 
 	public static void addVersusRace(Track t, Player p) {
+		System.out.println(t.getVersusSpawns().size());
+		if (t.getVersusSpawns().size() == 0) {
+			p.sendMessage("§cThis track is not set up for versus mode. Please contact a server administrator.");
+			return;
+		}
 		VersusRace race = new VersusRace(t, plugin);
 		race.addPlayer(p);
 		t.setVersusRace(race);
@@ -62,11 +65,11 @@ public class RaceManager {
 	public static void addPlayerToVersus(Track t, Player p) {
 		VersusRace vr = t.getVersusRace();
 		if (vr.playerSize() >= vr.maxPlayers) {
-			p.sendMessage("This race is full!");
+			p.sendMessage("§cThis race is full!");
 			return;
 		}
 		if (vr.hasPlayer(p)) {
-			p.sendMessage("You are already in this race.");
+			p.sendMessage("§cYou are already in this race.");
 			return;
 		}
 		vr.addPlayer(p);
@@ -92,13 +95,6 @@ public class RaceManager {
 
 
 	public static Race getRace(Player p) { return races.get(p.getUniqueId()); }
-
-	public static  void advanceCheckpoints(Player p) {
-		Race race = getRace(p);
-		if (race != null) {
-			race.advanceCheckpointIfShould(p);
-		}
-	}
 
 	public static void cancelRace(Player p, String subtitle) {
 		Race race = getRace(p);
@@ -146,7 +142,7 @@ public class RaceManager {
 			public void run() {
 				if (counter > 0 && Bukkit.getServer().getPlayerExact(p.getName()) != null) {
 					p.playSound(p.getLocation(), Sound.BLOCK_DISPENSER_DISPENSE, 3.0F, 0.7F);
-					p.sendMessage("§eStarting race on the track §6§l" + t.getName() + "§e in " + counter + " seconds...");
+					p.sendMessage("§eStarting trials race on the track §6§l" + t.getName() + "§e in " + counter + " seconds...");
 					counter--;
 				} else {
 					startRaceOfQueuedPlayer(p, t);

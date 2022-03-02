@@ -23,8 +23,6 @@ public class SQLite {
 				racing.saveDefaultConfig();
 			}
 			File dbFile = new File(racing.getDataFolder(), "scores.db");
-			System.out.println("data folder path: " + racing.getDataFolder().getPath());
-
 
 			if (!dbFile.exists()) {
 				dbFile.createNewFile();

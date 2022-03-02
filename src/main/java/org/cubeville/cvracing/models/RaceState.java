@@ -9,9 +9,14 @@ public class RaceState {
     private int stopwatch = 0;
     private int placement = 0;
     private long elapsed = 0;
+    private long endTime = 0;
 
     public HashMap<Integer, Long> getSplits() {
         return splits;
+    }
+
+    public Long getSplit(int index) {
+        return splits.get(index);
     }
 
     public int getCheckpointIndex() {
@@ -46,5 +51,13 @@ public class RaceState {
 
     public void setElapsed(long elapsed) {
         this.elapsed = elapsed;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime() {
+        this.endTime = elapsed;
     }
 }

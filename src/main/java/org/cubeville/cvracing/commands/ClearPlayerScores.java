@@ -25,7 +25,6 @@ public class ClearPlayerScores extends BaseCommand {
 	public CommandResponse execute(CommandSender commandSender, Set<String> set, Map<String, Object> map,
 		List<Object> baseParameters) throws CommandExecutionException {
 
-
 		OfflinePlayer op = Bukkit.getOfflinePlayer((String) baseParameters.get(0));
 		if (!op.hasPlayedBefore()) {
 			throw new CommandExecutionException("Player " + baseParameters.get(0) + " does not exist.");

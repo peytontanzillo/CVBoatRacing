@@ -7,6 +7,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.cubeville.cvracing.models.Checkpoint;
 import org.cubeville.cvracing.models.Track;
 
 import java.util.Arrays;
@@ -26,8 +27,8 @@ public class ConfigImportManager {
 			Track track = TrackManager.addTrack(trackName);
 			ConfigurationSection trackConfig = config.getConfigurationSection("tracks." + trackName);
 			assert trackConfig != null;
-			String spawn = trackConfig.getString("spawn");
-			if (spawn != null) { track.setSpawn( parseTeleportLocation(spawn) ); }
+			String spawn = trackConfig.getString("trialsSpawn");
+			if (spawn != null) { track.setTrialsSpawn( parseTeleportLocation(spawn) ); }
 			String exit = trackConfig.getString("exit");
 			if (exit != null) { track.setExit( parseTeleportLocation(exit) ); }
 			String spectate = trackConfig.getString("spectate");
@@ -41,25 +42,14 @@ public class ConfigImportManager {
 			boolean isClosed = trackConfig.getBoolean("isClosed");
 			if (isClosed) { track.setStatus(TrackStatus.CLOSED); }
 
-			Set<String> signLocStrings = Objects.requireNonNull(trackConfig.getConfigurationSection("signs")).getKeys(false);
-			for (String signLocString : signLocStrings) {
-				Location signLoc = parseBlockLocation(signLocString);
-				if (SignManager.signMaterials.contains(signLoc.getBlock().getType())) {
-					Sign sign = (Sign) signLoc.getBlock().getState();
-					try {
-						RaceSignType rt = RaceSignType.valueOf(Objects.requireNonNull(trackConfig.getString("signs." + signLocString)).toUpperCase());
-						SignManager.addSign(sign, track, rt);
-					} catch (IllegalArgumentException|NullPointerException e) {
-						SignManager.addSign(sign, track, RaceSignType.ERROR);
-					}
-				}
-			}
-
-			List<String> cpLocStrings = trackConfig.getStringList("checkpoints");
-			for (String cpLocString : cpLocStrings) {
-				Location cpLoc = parseBlockLocation(cpLocString);
-				if (RaceManager.checkpointItemTypes.contains(cpLoc.getBlock().getType())) {
-					track.addCheckpoint(cpLoc);
+			ConfigurationSection checkpoints = trackConfig.getConfigurationSection("checkpoints");
+			if (checkpoints != null) {
+				int i = 0;
+				while (checkpoints.contains(Integer.toString(i))) {
+					Location min = parseBlockLocation(Objects.requireNonNull(checkpoints.getString(i + ".min")));
+					Location max = parseBlockLocation(Objects.requireNonNull(checkpoints.getString(i + ".max")));
+					track.addCheckpoint(new Checkpoint(min, max));
+					i++;
 				}
 			}
 
@@ -77,6 +67,28 @@ public class ConfigImportManager {
 				}
 				track.addLeaderboard(lbLoc);
 			}
+
+			List<String> trialsSpawnLocStrings = trackConfig.getStringList("versusSpawns");
+			for (String trialsSpawnLocString : trialsSpawnLocStrings) {
+				Location tsLoc = parseTeleportLocation(trialsSpawnLocString);
+				track.addVersusSpawn(tsLoc);
+			}
+
+			try {
+				Set<String> signLocStrings = Objects.requireNonNull(trackConfig.getConfigurationSection("signs")).getKeys(false);
+				for (String signLocString : signLocStrings) {
+					Location signLoc = parseBlockLocation(signLocString);
+					if (SignManager.signMaterials.contains(signLoc.getBlock().getType())) {
+						Sign sign = (Sign) signLoc.getBlock().getState();
+						try {
+							RaceSignType rt = RaceSignType.valueOf(Objects.requireNonNull(trackConfig.getString("signs." + signLocString)).toUpperCase());
+							SignManager.addSign(sign, track, rt);
+						} catch (IllegalArgumentException | NullPointerException e) {
+							SignManager.addSign(sign, track, RaceSignType.ERROR);
+						}
+					}
+				}
+			} catch (IllegalArgumentException|NullPointerException ignored) {}
 		}
 	}
 

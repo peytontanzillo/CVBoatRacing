@@ -7,19 +7,20 @@ import org.cubeville.commons.commands.CommandExecutionException;
 import org.cubeville.commons.commands.CommandParameterString;
 import org.cubeville.commons.commands.CommandResponse;
 import org.cubeville.cvracing.TrackManager;
-import org.cubeville.cvracing.models.Checkpoint;
+import org.cubeville.cvracing.models.Leaderboard;
 import org.cubeville.cvracing.models.Track;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class ListCheckpoints extends BaseCommand {
+public class ListVersusSpawns extends BaseCommand {
 
-	public ListCheckpoints() {
-		super("track checkpoints list");
+	public ListVersusSpawns() {
+		super("track spawns versus list");
 
 		addBaseParameter(new CommandParameterString());
-		setPermission("cvboatrace.checkpoints.list");
+		setPermission("cvboatrace.track.spawns.versus");
 	}
 
 	@Override
@@ -31,17 +32,17 @@ public class ListCheckpoints extends BaseCommand {
 		if (track == null) {
 			throw new CommandExecutionException("Track " + baseParameters.get(0) + " does not exist.");
 		}
-		List<Checkpoint> cps = track.getCheckpoints();
+		List<Leaderboard> leaderboards = track.getLeaderboards();
 
 		CommandResponse cr = new CommandResponse();
 
-		for (int i = 0; i < cps.size(); i++) {
-			cr.addMessage("&b" + (i + 1) + " -- min: " + formatCheckpoint(cps.get(i).getMin()) + " max: " + formatCheckpoint(cps.get(i).getMax()));
+		for (int i = 0; i < leaderboards.size(); i++) {
+			cr.addMessage("&b" + (i + 1) + ": " + formatLeaderboardLocation(leaderboards.get(i).getLocation()));
 		}
 		return cr;
 	}
 
-	private String formatCheckpoint(Location loc) {
+	private String formatLeaderboardLocation(Location loc) {
 		return "x: " + loc.getBlockX() +
 		" y: " + loc.getBlockY() +
 		" z: " + loc.getBlockZ();

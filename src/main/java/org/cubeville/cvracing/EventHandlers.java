@@ -41,35 +41,19 @@ public class EventHandlers implements Listener {
 			}
 			sign.onRightClick(event.getPlayer());
 		}
-	}
 
-	@EventHandler
-	public void onEntityInteract(EntityInteractEvent event) {
-		if (RaceManager.checkpointTriggerTypes.contains(event.getBlock().getType())) {
-			if (RaceManager.racingVehicles.contains(event.getEntityType())) {
-				for ( Entity entity : event.getEntity().getPassengers()) {
-					if (entity.getType() == EntityType.PLAYER) {
-						RaceManager.advanceCheckpoints((Player) entity);
-					}
-				}
-			}
+		if ((event.getAction() == Action.RIGHT_CLICK_BLOCK
+				|| event.getAction() == Action.RIGHT_CLICK_AIR)
+				&& event.getItem() != null
+				&& event.getItem().getType() == RaceUtilities.getLeaveItem().getType()) {
+			RaceManager.cancelRace(event.getPlayer(), "You left the race!");
+			event.setCancelled(true);
 		}
-	}
 
-	@EventHandler
-	public void onBlockRedstone(BlockRedstoneEvent event) {
-		for (Player p : RaceManager.getRacingPlayers()) {
-			if (p.getWorld() == event.getBlock().getWorld()) {
-				if (p.getLocation().distance(event.getBlock().getLocation()) < 1.5) {
-					RaceManager.advanceCheckpoints(p);
-				}
-			}
-		}
 	}
 
 	@EventHandler
 	public void onExit(VehicleExitEvent e) {
-		System.out.println(e.getExited().getType() + " left the vehicle: " + e.getVehicle().getType());
 		if (e.getExited().getType() == EntityType.PLAYER && RaceManager.racingVehicles.contains(e.getVehicle().getType())) {
 			// will cancel race if the player left their vehicle in a race
 			Player p = (Player) e.getExited();

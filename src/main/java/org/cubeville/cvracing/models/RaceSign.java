@@ -58,7 +58,7 @@ public class RaceSign {
 				if (track.getVersusRace() != null) {
 					playerFill = track.getVersusRace().playerSize();
 				}
-				this.sign.setLine(3, playerFill + " / 4");
+				this.sign.setLine(3, playerFill + " / " + track.getVersusSpawns().size());
 				break;
 			default:
 				this.sign.setLine(3, "");

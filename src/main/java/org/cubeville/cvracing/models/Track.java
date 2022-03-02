@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.checkerframework.checker.units.qual.A;
 import org.cubeville.cvracing.*;
 
 import java.util.*;
@@ -14,11 +15,12 @@ public class Track implements Listener {
 	private TrackStatus status;
 	private TrackType type = TrackType.BOAT;
 	private VersusRace versusRace;
-	private Location spawn;
+	private Location trialsSpawn;
+	private List<Location> versusSpawns = new ArrayList<>();
 	private Location exit;
 	private Location spectate;
 	private List<RaceSign> signs = new ArrayList<>();
-	private List<Location> checkpoints = new ArrayList<>();
+	private List<Checkpoint> checkpoints = new ArrayList<>();
 	private List<Leaderboard> leaderboards = new ArrayList<>();
 	private Queue<Player> queue = new LinkedList<>();
 
@@ -35,12 +37,12 @@ public class Track implements Listener {
 		this.exit = exit;
 	}
 
-	public Location getSpawn() {
-		return this.spawn;
+	public Location getTrialsSpawn() {
+		return this.trialsSpawn;
 	}
 
-	public void setSpawn(Location spawn) {
-		this.spawn = spawn;
+	public void setTrialsSpawn(Location trialsSpawn) {
+		this.trialsSpawn = trialsSpawn;
 	}
 
 	public String getName() {
@@ -61,7 +63,7 @@ public class Track implements Listener {
 	public void addSign(RaceSign raceSign) {
 		this.signs.add(raceSign);
 	}
-	public void addCheckpoint(Location checkpoint) { this.checkpoints.add(checkpoint); }
+	public void addCheckpoint(Checkpoint checkpoint) { this.checkpoints.add(checkpoint); }
 	public void removeCheckpoint(int index) { this.checkpoints.remove(index); }
 	public void removeSign(Location loc) {
 		List<RaceSign> newSigns = new ArrayList<>();
@@ -93,7 +95,7 @@ public class Track implements Listener {
 		leaderboards.forEach(Leaderboard::clear);
 	}
 
-	public List<Location> getCheckpoints() {
+	public List<Checkpoint> getCheckpoints() {
 		return checkpoints;
 	}
 
@@ -183,15 +185,19 @@ public class Track implements Listener {
 		this.spectate = spectate;
 	}
 
-	public Location getSpectate() {
-		return spectate;
-	}
-
 	public VersusRace getVersusRace() {
 		return versusRace;
 	}
 
 	public void setVersusRace(VersusRace versusRace) {
 		this.versusRace = versusRace;
+	}
+
+	public List<Location> getVersusSpawns() {
+		return versusSpawns;
+	}
+
+	public void addVersusSpawn(Location versusSpawn) {
+		this.versusSpawns.add(versusSpawn);
 	}
 }

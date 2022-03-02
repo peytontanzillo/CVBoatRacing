@@ -1,5 +1,8 @@
 package org.cubeville.cvracing;
 
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.cubeville.cvracing.models.Score;
 import org.cubeville.cvracing.models.Track;
 
@@ -34,5 +37,13 @@ public class RaceUtilities {
 		}
 		result.add("§f§l--------------------------------");
 		return result;
+	}
+
+	public static ItemStack getLeaveItem() {
+		ItemStack leaveItem = new ItemStack(Material.BARRIER, 1);
+		ItemMeta im = leaveItem.getItemMeta();
+		im.setDisplayName("§c§lLeave Race");
+		leaveItem.setItemMeta(im);
+		return leaveItem;
 	}
 }

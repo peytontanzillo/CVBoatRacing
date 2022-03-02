@@ -9,14 +9,14 @@ import org.cubeville.cvracing.TrackManager;
 
 import java.util.*;
 
-public class SetTrackSpawn extends Command {
+public class SetTrialsSpawn extends Command {
 	private JavaPlugin plugin;
 
-	public SetTrackSpawn(JavaPlugin plugin) {
-		super("track setspawn");
+	public SetTrialsSpawn(JavaPlugin plugin) {
+		super("track spawns trials set");
 
 		addBaseParameter(new CommandParameterString());
-		setPermission("cvboatrace.track.setspawn");
+		setPermission("cvboatrace.track.spawns.trials");
 		this.plugin = plugin;
 	}
 
@@ -31,7 +31,7 @@ public class SetTrackSpawn extends Command {
 			throw new CommandExecutionException("Track " + baseParameters.get(0) + " does not exist.");
 		}
 
-		String locationsPath = "tracks." + name + ".spawn";
+		String locationsPath = "tracks." + name + ".trialsSpawn";
 
 		Location pLoc = player.getLocation();
 		List<String> locParameters = new ArrayList<>(
@@ -46,7 +46,7 @@ public class SetTrackSpawn extends Command {
 		);
 
 		config.set(locationsPath, String.join(",", locParameters));
-		TrackManager.getTrack(name).setSpawn(pLoc);
+		TrackManager.getTrack(name).setTrialsSpawn(pLoc);
 		plugin.saveConfig();
 
 		return new CommandResponse("Set player location as spawn point for the track " + baseParameters.get(0));

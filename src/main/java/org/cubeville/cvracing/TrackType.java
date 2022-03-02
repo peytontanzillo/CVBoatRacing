@@ -4,5 +4,8 @@ public enum TrackType {
     BOAT,
     PARKOUR,
     PIG,
-    HORSE
+    HORSE,
+    ELYTRA,
+    TRIDENT,
+    STRIDER
 }

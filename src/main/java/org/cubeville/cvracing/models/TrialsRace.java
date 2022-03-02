@@ -34,14 +34,13 @@ public class TrialsRace extends Race {
 
     public void startRace() {
         this.getTrack().setStatus(TrackStatus.IN_USE);
-        this.setupPlayerOnTrack(player, this.getTrack().getSpawn());
+        this.setupPlayerOnTrack(player, this.getTrack().getTrialsSpawn());
         runCountdown(player, 3);
     }
 
     protected String getSplitString(Player p, long currentTime) {
         if (comparingTime != null) {
-            System.out.println(comparingTime.getSplits());
-            long comparingSplit = comparingTime.getSplit(this.raceStates.get(p).getCheckpointIndex());
+            long comparingSplit = comparingTime.getSplit(this.raceStates.get(p).getCheckpointIndex() - 1);
             String comparingName = "";
             if (!comparingTime.getPlayerUUID().equals(p.getUniqueId())) {
                 comparingName = " -- " + comparingTime.getPlayerName();
