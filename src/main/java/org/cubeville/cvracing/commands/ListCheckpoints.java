@@ -6,7 +6,9 @@ import org.cubeville.commons.commands.BaseCommand;
 import org.cubeville.commons.commands.CommandExecutionException;
 import org.cubeville.commons.commands.CommandParameterString;
 import org.cubeville.commons.commands.CommandResponse;
+import org.cubeville.cvracing.RaceUtilities;
 import org.cubeville.cvracing.TrackManager;
+import org.cubeville.cvracing.models.CPRegion;
 import org.cubeville.cvracing.models.Checkpoint;
 import org.cubeville.cvracing.models.Track;
 import java.util.List;
@@ -36,14 +38,13 @@ public class ListCheckpoints extends BaseCommand {
 		CommandResponse cr = new CommandResponse();
 
 		for (int i = 0; i < cps.size(); i++) {
-			cr.addMessage("&b" + (i + 1) + " -- min: " + formatCheckpoint(cps.get(i).getMin()) + " max: " + formatCheckpoint(cps.get(i).getMax()));
+			Checkpoint cp = cps.get(i);
+			cr.addMessage("&eCheckpoint " + (i + 1) + " regions:");
+			for (int j = 0; j < cp.getRegions().size(); j++) {
+				CPRegion cpRegion = cp.getRegions().get(j);
+				cr.addMessage((j + 1) + ": min: " + RaceUtilities.formatBlockLocation(cpRegion.getMin()) + " max: " + RaceUtilities.formatBlockLocation(cpRegion.getMax()));
+			}
 		}
 		return cr;
-	}
-
-	private String formatCheckpoint(Location loc) {
-		return "x: " + loc.getBlockX() +
-		" y: " + loc.getBlockY() +
-		" z: " + loc.getBlockZ();
 	}
 }

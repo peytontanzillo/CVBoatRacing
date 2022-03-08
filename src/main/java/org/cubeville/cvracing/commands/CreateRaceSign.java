@@ -56,7 +56,7 @@ public class CreateRaceSign extends Command {
 			)
 		);
 
-		config.set(locationsPath + "." + String.join(",", locParameters), type.toString());
+		config.set(locationsPath + "." + String.join(",", locParameters) + ".type", type.toString());
 		SignManager.addSign(sign, TrackManager.getTrack(name), type);
 		plugin.saveConfig();
 

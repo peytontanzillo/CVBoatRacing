@@ -12,24 +12,7 @@ import java.util.*;
 
 public class RaceManager {
 
-	public static final List<Material> checkpointTriggerTypes = Arrays.asList(
-			Material.TRIPWIRE,
-			Material.TRIPWIRE_HOOK,
-			Material.POLISHED_BLACKSTONE_PRESSURE_PLATE,
-			Material.ACACIA_PRESSURE_PLATE,
-			Material.BIRCH_PRESSURE_PLATE,
-			Material.CRIMSON_PRESSURE_PLATE,
-			Material.DARK_OAK_PRESSURE_PLATE,
-			Material.JUNGLE_PRESSURE_PLATE,
-			Material.HEAVY_WEIGHTED_PRESSURE_PLATE,
-			Material.LIGHT_WEIGHTED_PRESSURE_PLATE,
-			Material.SPRUCE_PRESSURE_PLATE,
-			Material.OAK_PRESSURE_PLATE,
-			Material.STONE_PRESSURE_PLATE,
-			Material.WARPED_PRESSURE_PLATE
-	);
-
-	public static final List<EntityType> racingVehicles = Arrays.asList(EntityType.BOAT, EntityType.PIG, EntityType.HORSE);
+	public static final List<EntityType> racingVehicles = Arrays.asList(EntityType.BOAT, EntityType.PIG, EntityType.HORSE, EntityType.STRIDER);
 
 
 	private static HashMap<UUID, Race> races = new HashMap<>();
@@ -47,13 +30,12 @@ public class RaceManager {
 		racingPlayers.add(p);
 	}
 
-	public static void addVersusRace(Track t, Player p) {
-		System.out.println(t.getVersusSpawns().size());
+	public static void addVersusRace(Track t, Player p, int laps) {
 		if (t.getVersusSpawns().size() == 0) {
 			p.sendMessage("§cThis track is not set up for versus mode. Please contact a server administrator.");
 			return;
 		}
-		VersusRace race = new VersusRace(t, plugin);
+		VersusRace race = new VersusRace(t, plugin, laps);
 		race.addPlayer(p);
 		t.setVersusRace(race);
 		races.put(p.getUniqueId(), race);
@@ -160,5 +142,9 @@ public class RaceManager {
 		} else {
 			addTrialsRace(t, p);
 		}
+	}
+
+	private static void resetPlayerToCheckpoint() {
+
 	}
 }

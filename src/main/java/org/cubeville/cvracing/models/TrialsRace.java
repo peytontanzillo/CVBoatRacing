@@ -13,7 +13,7 @@ public class TrialsRace extends Race {
     private Score personalBest;
 
     public TrialsRace(Track track, JavaPlugin plugin, Player player) {
-        super(track, plugin);
+        super(track, plugin, 1);
         this.player = player;
         this.personalBest = ScoreManager.getScore(player.getUniqueId(), track);
         this.comparingTime = determineComparingTime();
@@ -33,6 +33,7 @@ public class TrialsRace extends Race {
     }
 
     public void startRace() {
+        raceStates.put(player, new RaceState(player));
         this.getTrack().setStatus(TrackStatus.IN_USE);
         this.setupPlayerOnTrack(player, this.getTrack().getTrialsSpawn());
         runCountdown(player, 3);

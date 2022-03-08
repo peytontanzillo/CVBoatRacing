@@ -11,6 +11,7 @@ public class RaceSign {
 	private final Sign sign;
 	private final Track track;
 	private RaceSignType type;
+	private int laps = 1;
 
 	public RaceSign(Sign sign, Track track, RaceSignType type) {
 		this.sign = sign;
@@ -104,6 +105,10 @@ public class RaceSign {
 	}
 
 	public void onRightClick(Player p) {
-		this.track.onRightClick(p, type);
+		this.track.onRightClick(p, type, laps);
+	}
+
+	public void setLaps(int laps) {
+		this.laps = laps;
 	}
 }

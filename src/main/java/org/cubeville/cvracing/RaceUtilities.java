@@ -1,5 +1,6 @@
 package org.cubeville.cvracing;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -7,6 +8,7 @@ import org.cubeville.cvracing.models.Score;
 import org.cubeville.cvracing.models.Track;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class RaceUtilities {
@@ -45,5 +47,45 @@ public class RaceUtilities {
 		im.setDisplayName("§c§lLeave Race");
 		leaveItem.setItemMeta(im);
 		return leaveItem;
+	}
+
+	public static ItemStack getCPResetItem() {
+		ItemStack cpResetItem = new ItemStack(Material.SLIME_BALL, 1);
+		ItemMeta im = cpResetItem.getItemMeta();
+		im.setDisplayName("§a§lGo To Last Checkpoint");
+		cpResetItem.setItemMeta(im);
+		return cpResetItem;
+	}
+
+	public static String formatBlockLocation(Location loc) {
+		return "x: " + loc.getBlockX() +
+				" y: " + loc.getBlockY() +
+				" z: " + loc.getBlockZ();
+	}
+
+	public static String blockLocToString(Location loc) {
+		List<String> locParameters = new ArrayList<>(
+				Arrays.asList(
+						loc.getWorld().getName(), // world
+						String.valueOf(loc.getBlockX()),
+						String.valueOf(loc.getBlockY()),
+						String.valueOf(loc.getBlockZ())
+				)
+		);
+		return String.join(",", locParameters);
+	}
+
+	public static String tpLocToString(Location loc) {
+		List<String> locParameters = new ArrayList<>(
+				Arrays.asList(
+						loc.getWorld().getName(), // world
+						String.valueOf(loc.getX()),
+						String.valueOf(loc.getY()),
+						String.valueOf(loc.getZ()),
+						String.valueOf(loc.getYaw()),
+						String.valueOf(loc.getPitch())
+				)
+		);
+		return String.join(",", locParameters);
 	}
 }

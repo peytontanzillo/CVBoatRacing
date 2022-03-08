@@ -23,6 +23,7 @@ public class Track implements Listener {
 	private List<Checkpoint> checkpoints = new ArrayList<>();
 	private List<Leaderboard> leaderboards = new ArrayList<>();
 	private Queue<Player> queue = new LinkedList<>();
+	private boolean includeReset = false;
 
 	public Track(String name) {
 		this.name = name;
@@ -99,7 +100,7 @@ public class Track implements Listener {
 		return checkpoints;
 	}
 
-	public void onRightClick(Player p, RaceSignType type) {
+	public void onRightClick(Player p, RaceSignType type, int lapNumber) {
 		switch (type) {
 			case TRIALS:
 				switch (status) {
@@ -118,7 +119,7 @@ public class Track implements Listener {
 			case VERSUS:
 				switch (status) {
 					case OPEN:
-						RaceManager.addVersusRace(this, p);
+						RaceManager.addVersusRace(this, p, lapNumber);
 						break;
 					case IN_USE:
 						p.sendMessage(ChatColor.RED + "Please wait until the track is open to start a multiplayer game");
@@ -199,5 +200,13 @@ public class Track implements Listener {
 
 	public void addVersusSpawn(Location versusSpawn) {
 		this.versusSpawns.add(versusSpawn);
+	}
+
+	public boolean isIncludeReset() {
+		return includeReset;
+	}
+
+	public void setIncludeReset(boolean includeReset) {
+		this.includeReset = includeReset;
 	}
 }

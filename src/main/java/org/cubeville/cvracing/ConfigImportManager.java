@@ -7,6 +7,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.cubeville.cvracing.models.CPRegion;
 import org.cubeville.cvracing.models.Checkpoint;
 import org.cubeville.cvracing.models.Track;
 
@@ -33,6 +34,8 @@ public class ConfigImportManager {
 			if (exit != null) { track.setExit( parseTeleportLocation(exit) ); }
 			String spectate = trackConfig.getString("spectate");
 			if (spectate != null) { track.setSpectate( parseTeleportLocation(spectate) ); }
+			boolean canResetToCp = trackConfig.getBoolean("tptocp");
+			track.setIncludeReset(canResetToCp);
 			String type = trackConfig.getString("type");
 			if (type != null) {
 				try { TrackType tt = TrackType.valueOf(type.toUpperCase()); track.setType(tt); }
@@ -46,9 +49,16 @@ public class ConfigImportManager {
 			if (checkpoints != null) {
 				int i = 0;
 				while (checkpoints.contains(Integer.toString(i))) {
-					Location min = parseBlockLocation(Objects.requireNonNull(checkpoints.getString(i + ".min")));
-					Location max = parseBlockLocation(Objects.requireNonNull(checkpoints.getString(i + ".max")));
-					track.addCheckpoint(new Checkpoint(min, max));
+					Checkpoint cp = new Checkpoint();
+					for (String cpRegion : Objects.requireNonNull(checkpoints.getConfigurationSection(String.valueOf(i))).getKeys(false)) {
+						String[] minMax = cpRegion.split("~");
+						CPRegion cpr = cp.addRegion(parseBlockLocation(minMax[0]), parseBlockLocation(minMax[1]));
+						if (checkpoints.contains(i + "." + cpRegion + ".reset")) {
+							cpr.setReset(parseTeleportLocation(Objects.requireNonNull(checkpoints.getString(i + "." + cpRegion + ".reset"))));
+
+						}
+					}
+					track.addCheckpoint(cp);
 					i++;
 				}
 			}
@@ -56,6 +66,10 @@ public class ConfigImportManager {
 			List<String> leaderboardLocStrings = trackConfig.getStringList("leaderboards");
 			for (String lbLocString : leaderboardLocStrings) {
 				Location lbLoc = parseTeleportLocation(lbLocString);
+
+				if(!lbLoc.getChunk().isEntitiesLoaded()) {
+					lbLoc.getChunk().load();
+				}
 				List<Entity> nearbyEntities = (List<Entity>) Objects.requireNonNull(lbLoc.getWorld())
 					.getNearbyEntities(lbLoc, 2, 5, 2);
 
@@ -81,10 +95,14 @@ public class ConfigImportManager {
 					if (SignManager.signMaterials.contains(signLoc.getBlock().getType())) {
 						Sign sign = (Sign) signLoc.getBlock().getState();
 						try {
-							RaceSignType rt = RaceSignType.valueOf(Objects.requireNonNull(trackConfig.getString("signs." + signLocString)).toUpperCase());
+							RaceSignType rt = RaceSignType.valueOf(Objects.requireNonNull(trackConfig.getString("signs." + signLocString + ".type")).toUpperCase());
 							SignManager.addSign(sign, track, rt);
 						} catch (IllegalArgumentException | NullPointerException e) {
 							SignManager.addSign(sign, track, RaceSignType.ERROR);
+						}
+						final int lapCount = trackConfig.getInt("signs." + signLocString + ".laps");
+						if (lapCount > 1) {
+							SignManager.getSign(signLoc).setLaps(lapCount);
 						}
 					}
 				}

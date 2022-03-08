@@ -36,7 +36,7 @@ public class DeleteCheckpoint extends Command {
 
 		int deletingIndex = (int) baseParameters.get(1);
 		if (deletingIndex > track.getCheckpoints().size() || deletingIndex <= 0) {
-			throw new CommandExecutionException("That index does not exist, please use /race track checkpoints list to view the indexes.");
+			throw new CommandExecutionException("Index " + deletingIndex +" does not exist, please use /race track checkpoints list to view the indexes.");
 		}
 
 		deletingIndex -= 1;

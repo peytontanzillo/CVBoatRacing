@@ -11,7 +11,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.cubeville.commons.commands.*;
 import org.cubeville.commons.utils.BlockUtils;
+import org.cubeville.cvracing.RaceUtilities;
 import org.cubeville.cvracing.TrackManager;
+import org.cubeville.cvracing.models.CPRegion;
 import org.cubeville.cvracing.models.Checkpoint;
 import org.cubeville.cvracing.models.Track;
 
@@ -51,26 +53,16 @@ public class AddCheckpoint extends Command {
 			throw new CommandExecutionException("Please make a cuboid worldedit selection before running this command.");
 		}
 
-		String locationsPath = "tracks." + name + ".checkpoints." + track.getCheckpoints().size();
+		Checkpoint cp = new Checkpoint();
+		CPRegion cpRegion = cp.addRegion(min, max);
 
-		config.set(locationsPath + ".min", locToString(min));
-		config.set(locationsPath + ".max", locToString(max));
+		String locationsPath = "tracks." + name + ".checkpoints." + track.getCheckpoints().size() + "." + cpRegion.getString();
 
-		TrackManager.getTrack(name).addCheckpoint(new Checkpoint(min, max));
+		config.createSection(locationsPath);
+
+		TrackManager.getTrack(name).addCheckpoint(cp);
 		plugin.saveConfig();
 
 		return new CommandResponse("Successfully created a checkpoint for the track " + baseParameters.get(0) + "!");
-	}
-
-	private String locToString(Location loc) {
-		List<String> locParameters = new ArrayList<>(
-				Arrays.asList(
-						loc.getWorld().getName(), // world
-						String.valueOf(loc.getBlockX()),
-						String.valueOf(loc.getBlockY()),
-						String.valueOf(loc.getBlockZ())
-				)
-		);
-		return String.join(",", locParameters);
 	}
 }

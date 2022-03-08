@@ -11,24 +11,22 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.cubeville.cvracing.*;
 
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
 
 public abstract class Race {
 	protected JavaPlugin plugin;
 	protected Track track;
 	protected HashMap<Player, RaceState> raceStates = new HashMap<>();
-	private int minuteCap;
-	private HashMap<Player, ArmorStand > armorStands = new HashMap<>();
+	private final int minuteCap = 10; // The player can go for x minutes before they are kicked out of the game
+	int laps;
 
-	public Race(Track track, JavaPlugin plugin) {
+	public Race(Track track, JavaPlugin plugin, int laps) {
 		this.track = track;
- 		this.plugin = plugin;
-		this.minuteCap = 10; // The player can go for x minutes before they are kicked out of the game
+		this.plugin = plugin;
+		this.laps = laps;
 	}
 
 	public void setupPlayerOnTrack(Player player, Location location) {
-		raceStates.put(player, new RaceState());
 		TrackManager.clearPlayerFromTrialsQueues(player, track);
 		if (!location.getChunk().isLoaded()) {
 			location.getChunk().load();
@@ -44,9 +42,10 @@ public abstract class Race {
 				p.setSaddle(true);
 				ItemStack carrotOnStick = new ItemStack(Material.CARROT_ON_A_STICK, 1);
 				ItemMeta stickMeta = carrotOnStick.getItemMeta();
-				stickMeta.setDisplayName("§6§lSpeedy Carrot on a Stick");
+				stickMeta.setDisplayName("§6§lSpeedy Carrot Stick");
 				stickMeta.addEnchant(Enchantment.DURABILITY, 10, true);
-				player.getInventory().setItem(0, new ItemStack(Material.CARROT_ON_A_STICK));
+				carrotOnStick.setItemMeta(stickMeta);
+				player.getInventory().setItem(0, carrotOnStick);
 				v = p;
 				break;
 			case HORSE:
@@ -68,9 +67,21 @@ public abstract class Race {
 				ItemStack trident = new ItemStack(Material.TRIDENT, 1);
 				ItemMeta tridentMeta = trident.getItemMeta();
 				tridentMeta.addEnchant(Enchantment.RIPTIDE, 3, false);
+				tridentMeta.addEnchant(Enchantment.DURABILITY, 10, true);
 				tridentMeta.setDisplayName("§b§lSpeed Trident");
 				trident.setItemMeta(tridentMeta);
 				player.getInventory().setItem(0, trident);
+				break;
+			case STRIDER:
+				Strider s = (Strider) player.getWorld().spawnEntity(location, EntityType.STRIDER);
+				s.setSaddle(true);
+				ItemStack fungusOnStick = new ItemStack(Material.WARPED_FUNGUS_ON_A_STICK, 1);
+				ItemMeta fungusMeta = fungusOnStick.getItemMeta();
+				fungusMeta.setDisplayName("§b§lSpeedy Fungus Stick");
+				fungusMeta.addEnchant(Enchantment.DURABILITY, 10, true);
+				fungusOnStick.setItemMeta(fungusMeta);
+				player.getInventory().setItem(0, fungusOnStick);
+				v = s;
 				break;
 		}
 		player.getInventory().setItem(8, RaceUtilities.getLeaveItem());
@@ -88,7 +99,8 @@ public abstract class Race {
 		} else {
 			as.addPassenger(player);
 		}
-		this.armorStands.put(player, as);
+		this.raceStates.get(player).setArmorStand(as);
+		this.raceStates.get(player).setResetLocation(location);
 	}
 
 	private Checkpoint getCurrentCheckpoint(Player p) {
@@ -96,14 +108,29 @@ public abstract class Race {
 	}
 
 	protected void advanceCheckpoint(Player p) {
-		if (!this.getCurrentCheckpoint(p).containsPlayer(p)) { return; }
-		int playerCheckpointIndex = this.raceStates.get(p).getCheckpointIndex();
-		if (playerCheckpointIndex == this.track.getCheckpoints().size() - 1) {
+		CPRegion regionWithin = this.getCurrentCheckpoint(p).getRegionContaining(p);
+		if (regionWithin == null) { return; }
+
+		RaceState newRaceState = this.raceStates.get(p);
+
+		int playerCheckpointIndex = newRaceState.getCheckpointIndex() + 1;
+		int lapIndex = newRaceState.getLapIndex();
+		if (playerCheckpointIndex == this.track.getCheckpoints().size()) {
+			playerCheckpointIndex = 0;
+			lapIndex += 1;
+		}
+		if (regionWithin.getReset() != null) {
+			newRaceState.setResetLocation(regionWithin.getReset());
+		}
+		newRaceState.setCheckpointIndex(playerCheckpointIndex);
+		newRaceState.setLapIndex(lapIndex);
+
+
+		if (lapIndex == this.laps) {
 			stopStopwatch(p);
-			playerCheckpointIndex++;
-			this.raceStates.get(p).setCheckpointIndex(playerCheckpointIndex);
-			this.raceStates.get(p).setPlacement(computePlacement(playerCheckpointIndex));
-			this.raceStates.get(p).setEndTime();
+			p.playSound(this.track.getExit(), Sound.ENTITY_PLAYER_LEVELUP, 2F, 1F);
+			newRaceState.setEndTime();
+			this.raceStates.put(p, newRaceState);
 			this.completeRace(p);
 			return;
 		}
@@ -112,21 +139,11 @@ public abstract class Race {
 		if (track.getType() == TrackType.ELYTRA) {
 			p.getInventory().setItem(0, new ItemStack(Material.FIREWORK_ROCKET, 1));
 		}
+		int splitIndex = (lapIndex * this.track.getCheckpoints().size()) + playerCheckpointIndex - 1;
 		long elapsed = raceStates.get(p).getElapsed();
-		this.raceStates.get(p).addSplit(playerCheckpointIndex, elapsed);
-		playerCheckpointIndex++;
-
-		this.raceStates.get(p).setPlacement(computePlacement(playerCheckpointIndex));
-		this.raceStates.get(p).setCheckpointIndex(playerCheckpointIndex);
+		newRaceState.addSplit(splitIndex, elapsed);
+		this.raceStates.put(p, newRaceState);
 		p.sendMessage("§6CP" + playerCheckpointIndex + ": " + RaceUtilities.formatTimeString(elapsed) + getSplitString(p, elapsed));
-	}
-
-	private int computePlacement(int index) {
-		int placement = 0;
-		for (RaceState rs : this.raceStates.values()) {
-			if (rs.getCheckpointIndex() >= index) { placement++; }
-		}
-		return placement;
 	}
 
 	public void cancelRace(Player p, String subtitle) {
@@ -135,7 +152,7 @@ public abstract class Race {
 		RaceState rs = raceStates.get(p);
 		if (rs.getCountdown() != 0) { endCountdown(p); }
 		if (rs.getStopwatch() != 0) { stopStopwatch(p); }
-		this.raceStates.remove(p);
+		this.raceStates.get(p).setCanceled(true);
 		this.endPlayerRace(p);
 	}
 
@@ -165,14 +182,18 @@ public abstract class Race {
 	}
 
 	protected void endCountdown(Player p) {
-		Bukkit.getScheduler().cancelTask(this.raceStates.get(p).getCountdown());
-		this.raceStates.get(p).setCountdown(0);
-		ArmorStand as = this.armorStands.get(p);
+		RaceState rs = this.raceStates.get(p);
+		Bukkit.getScheduler().cancelTask(rs.getCountdown());
+		rs.setCountdown(0);
+		ArmorStand as = rs.getArmorStand();
 		as.eject();
 		as.remove();
-		this.armorStands.remove(p);
+		rs.setArmorStand(null);
 		if (track.getType() == TrackType.ELYTRA) {
 			p.setGliding(true);
+		}
+		if (track.isIncludeReset()) {
+			p.getInventory().setItem(7, RaceUtilities.getCPResetItem());
 		}
 		startStopwatch(p);
 	}
@@ -214,5 +235,9 @@ public abstract class Race {
 
 	public Track getTrack() {
 		return track;
+	}
+
+	public void tpPlayerToReset(Player p) {
+		p.teleport(raceStates.get(p).getResetLocation());
 	}
 }

@@ -13,11 +13,13 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.cubeville.cvracing.models.Race;
 import org.cubeville.cvracing.models.RaceSign;
 import org.spigotmc.event.entity.EntityDismountEvent;
 
+import java.util.List;
 import java.util.UUID;
 
 public class EventHandlers implements Listener {
@@ -44,12 +46,17 @@ public class EventHandlers implements Listener {
 
 		if ((event.getAction() == Action.RIGHT_CLICK_BLOCK
 				|| event.getAction() == Action.RIGHT_CLICK_AIR)
-				&& event.getItem() != null
-				&& event.getItem().getType() == RaceUtilities.getLeaveItem().getType()) {
-			RaceManager.cancelRace(event.getPlayer(), "You left the race!");
-			event.setCancelled(true);
+				&& event.getItem() != null) {
+			String displayName = event.getItem().getItemMeta().getDisplayName();
+			if (displayName.equals(RaceUtilities.getLeaveItem().getItemMeta().getDisplayName())) {
+				RaceManager.cancelRace(event.getPlayer(), "You left the race!");
+				event.setCancelled(true);
+			} else if (displayName.equals(RaceUtilities.getCPResetItem().getItemMeta().getDisplayName())) {
+				Race race = RaceManager.getRace(event.getPlayer());
+				if (race == null) { return; }
+				race.tpPlayerToReset(event.getPlayer());
+			}
 		}
-
 	}
 
 	@EventHandler

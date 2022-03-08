@@ -4,37 +4,33 @@ package org.cubeville.cvracing.models;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Checkpoint {
 
-    private Location min, max;
+    private List<CPRegion> regions = new ArrayList<>();
     private String command;
 
-    public Checkpoint(Location min, Location max) {
-        defineBounds(min, max);
+    public CPRegion getRegionContaining(Player p) {
+        for (CPRegion rg : regions) {
+            if (rg.containsPlayer(p)) { return rg; }
+        }
+        return null;
     }
 
-    public boolean containsPlayer(Player p) {
-        Location pLoc = p.getLocation();
-        return isWithin(pLoc.getX(), min.getX(), max.getX())
-                && isWithin(pLoc.getZ(), min.getZ(), max.getZ())
-                && isWithin(pLoc.getY(), min.getY(), max.getY());
+    public CPRegion addRegion(Location min, Location max) {
+        CPRegion cpRegion = new CPRegion(min, max);
+        regions.add(cpRegion);
+        return cpRegion;
     }
 
-    private boolean isWithin(double loc, double min, double max) {
-        return max >= loc && loc >= min;
+    public void removeRegion(int index) {
+        regions.remove(index);
     }
 
-    public Location getMax() {
-        return max;
-    }
-
-    public Location getMin() {
-        return min;
-    }
-
-    public void defineBounds(Location min, Location max) {
-        this.min = min;
-        this.max = max;
+    public List<CPRegion> getRegions() {
+        return regions;
     }
 
     public String getCommand() {

@@ -18,7 +18,7 @@ public class CVRacing extends JavaPlugin implements Listener {
     private RacingDB db;
 
     public void onEnable() {
-        this.getLogger().info("CVBoatRacing Started!");
+        this.getLogger().info("CVRacing Started!");
 
         // database setup
         this.db = new RacingDB(this);
@@ -58,7 +58,12 @@ public class CVRacing extends JavaPlugin implements Listener {
         commandParser.addCommand(new DeleteSign(this));
         commandParser.addCommand(new DeleteLeaderboard(this));
         commandParser.addCommand(new AddVersusSpawn(this));
-        commandParser.addCommand(new RedefineCheckpoint(this));
+        commandParser.addCommand(new RedefineCheckpointRegion(this));
+        commandParser.addCommand(new AddCheckpointRegion(this));
+        commandParser.addCommand(new DeleteCheckpointRegion(this));
+        commandParser.addCommand(new SetCheckpointRegionReset(this));
+        commandParser.addCommand(new SetSignLaps(this));
+        commandParser.addCommand(new SetTrackReset(this));
         commandParser.addCommand(new ListVersusSpawns());
         commandParser.addCommand(new ListCheckpoints());
         commandParser.addCommand(new GetPB());
