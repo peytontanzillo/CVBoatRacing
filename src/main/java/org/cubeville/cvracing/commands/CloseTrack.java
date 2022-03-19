@@ -9,6 +9,7 @@ import org.cubeville.commons.commands.CommandParameterString;
 import org.cubeville.commons.commands.CommandResponse;
 import org.cubeville.cvracing.TrackManager;
 import org.cubeville.cvracing.TrackStatus;
+import org.cubeville.cvracing.models.Track;
 
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,10 @@ public class CloseTrack extends BaseCommand {
 		}
 
 		config.set("tracks." + name + ".isClosed", true);
-		TrackManager.getTrack(name).setStatus(TrackStatus.CLOSED);
+		Track track = TrackManager.getTrack(name);
+		track.setClosed(true);
+		track.setStatus(TrackStatus.CLOSED);
+
 		plugin.saveConfig();
 		return new CommandResponse("&aThe track " + baseParameters.get(0) + " has been closed.");
 	}

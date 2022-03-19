@@ -76,7 +76,7 @@ public class RacingDB extends SQLite {
 
 	public void updateScore(Score s) {
 		update("UPDATE `scores`" +
-			" SET time = " + s.getFinalTime()
+			" SET time = " + s.getFinalTime() + ", timestamp = " + s.getTimestamp()
 			+ scoreConditionString(s.getPlayerUUID(), s.getTrack())
 		);
 		Integer scoreId = getScoreID(s.getPlayerUUID(), s.getTrack());

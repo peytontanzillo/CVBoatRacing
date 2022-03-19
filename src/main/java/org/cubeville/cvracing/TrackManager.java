@@ -7,6 +7,7 @@ import org.cubeville.cvracing.models.Track;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TrackManager {
 
@@ -57,6 +58,16 @@ public class TrackManager {
 	public static void deleteTrack(Track track) {
 		tracks.remove(track.getName());
 		ScoreManager.deleteAllScores(track);
+	}
+
+	public static Track getTrackHostedBy(Player player) {
+		for (Track track : getTracks()) {
+			if (track.getHostedRace() == null) { continue; }
+			if (track.getHostedRace().getHostingPlayer().getUniqueId().equals(player.getUniqueId())) {
+				return track;
+			}
+		}
+		return null;
 	}
 
 

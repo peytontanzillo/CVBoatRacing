@@ -19,6 +19,7 @@ public abstract class Race {
 	protected HashMap<Player, RaceState> raceStates = new HashMap<>();
 	private final int minuteCap = 10; // The player can go for x minutes before they are kicked out of the game
 	int laps;
+	boolean hasStarted = false;
 
 	public Race(Track track, JavaPlugin plugin, int laps) {
 		this.track = track;
@@ -85,7 +86,6 @@ public abstract class Race {
 				break;
 		}
 		player.getInventory().setItem(8, RaceUtilities.getLeaveItem());
-		player.setCollidable(false);
 
 		ArmorStand as = (ArmorStand) Objects.requireNonNull(location.getWorld()).spawnEntity(location, EntityType.ARMOR_STAND);
 		as.setVisible(false);
@@ -147,9 +147,10 @@ public abstract class Race {
 	}
 
 	public void cancelRace(Player p, String subtitle) {
-		if (raceStates.get(p).getEndTime() != 0) { return; }
-		p.sendTitle( ChatColor.RED + "Race ended", ChatColor.DARK_RED + subtitle, 5, 90, 5);
+		if (!raceStates.containsKey(p)) { return; }
 		RaceState rs = raceStates.get(p);
+		if (rs.getEndTime() != 0) { return; }
+		p.sendTitle( ChatColor.RED + "Race ended", ChatColor.DARK_RED + subtitle, 5, 90, 5);
 		if (rs.getCountdown() != 0) { endCountdown(p); }
 		if (rs.getStopwatch() != 0) { stopStopwatch(p); }
 		this.raceStates.get(p).setCanceled(true);
@@ -223,7 +224,6 @@ public abstract class Race {
 		p.getInventory().clear();
 		Entity v = p.getVehicle();
 		p.setGliding(false);
-		p.setCollidable(true);
 		Bukkit.getScheduler().runTaskLater(plugin, () -> {
 			if (!loc.getChunk().isLoaded()) {
 				loc.getChunk().load();
@@ -239,5 +239,13 @@ public abstract class Race {
 
 	public void tpPlayerToReset(Player p) {
 		p.teleport(raceStates.get(p).getResetLocation());
+	}
+
+	public HashMap<Player, RaceState> getRaceStates() {
+		return raceStates;
+	}
+
+	public void setLaps(int laps) {
+		this.laps = laps;
 	}
 }

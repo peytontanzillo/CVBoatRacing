@@ -1,6 +1,7 @@
 package org.cubeville.cvracing.models;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -60,24 +61,23 @@ public class VersusRace extends Race {
         }
     }
 
-    private void startLobbyTimeout() {
+    protected void startLobbyTimeout() {
         lobbyTimeout = Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, () -> {
             for (Player p : raceStates.keySet()) {
                 p.sendMessage("§cThe queue for this race has timed out.");
             }
-            this.raceStates.clear();
-            RaceManager.finishRace(track);
+            this.endRace();
             cancelLobbyTimeout();
         }, LOBBY_TIMEOUT_MINUTES * 60000);
     }
 
-    private void setLobbyCountdown(int time) {
+    protected void setLobbyCountdown(int time) {
         cancelLobbyCountdown();
         countdownValue = time;
         lobbyCountdown =  Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
             if (countdownValue == 0) {
                 cancelLobbyCountdown();
-                startVersusRace();
+                startRace();
             } else if (countdownValue <= 5) {
                 raceStates.keySet().forEach(player -> {
                     player.playSound(player.getLocation(), Sound.BLOCK_TRIPWIRE_CLICK_ON, 2F, 1F);
@@ -108,15 +108,17 @@ public class VersusRace extends Race {
                 break;
             case 0:
                 cancelLobbyTimeout();
+                this.endRace();
                 break;
         }
     }
 
-    private void startVersusRace() {
+    protected void startRace() {
         this.getTrack().setStatus(TrackStatus.IN_USE);
         int i = 0;
         updateSortedRaceStates();
         Scoreboard scoreboard = getRaceScoreboard();
+        hasStarted = true;
         for (Player p : raceStates.keySet()) {
             this.setupPlayerOnTrack(p, track.getVersusSpawns().get(i));
             runCountdown(p, 3);
@@ -125,7 +127,7 @@ public class VersusRace extends Race {
         }
     }
 
-    private Scoreboard getRaceScoreboard() {
+    protected Scoreboard getRaceScoreboard() {
         ScoreboardManager manager = Bukkit.getScoreboardManager();
         Scoreboard scoreboard = manager.getNewScoreboard();
         String objName = "race-" + track.getName();
@@ -142,8 +144,8 @@ public class VersusRace extends Race {
             int cpIndex = currentRaceState.getCheckpointIndex();
 
             String behindSplit = getBehindSplit(currentRaceState, cpIndex, i);
-            String CPString = currentRaceState.getEndTime() == 0 ? " §b[Lap " + (currentRaceState.getLapIndex() + 1) + " CP " + cpIndex + "]" : " §b[Finished]";
-            String entry = getColorByIndex(i) + placeStrings[i] + "§b: §e"
+            String CPString = currentRaceState.getEndTime() == 0 ? " §f[Lap " + (currentRaceState.getLapIndex() + 1) + " CP " + cpIndex + "]" : " §a§l[Finished]";
+            String entry = getColorByIndex(i) + placeStrings[i] + "§f: §e"
                 + sortedRaceStates.get(i).getPlayer().getDisplayName()
                 + behindSplit + CPString;
 
@@ -164,7 +166,7 @@ public class VersusRace extends Race {
         } else {
             behindDiff = currentRaceState.getEndTime() - sortedRaceStates.get(i - 1).getEndTime();
         }
-        return "§f +" + RaceUtilities.formatTimeString(behindDiff);
+        return " §b§l+" + RaceUtilities.formatTimeString(behindDiff);
     }
 
     public boolean hasPlayer(Player p) {
@@ -182,7 +184,7 @@ public class VersusRace extends Race {
         int placement = sortedRaceStates.indexOf(this.raceStates.get(player));
         String timeToAhead = "";
         if (placement != 0) {
-            Player playerAhead = sortedRaceStates.get(placement-1).getPlayer();
+            Player playerAhead = sortedRaceStates.get(placement - 1).getPlayer();
             timeToAhead = "§b which was "
                     + RaceUtilities.formatTimeString(elapsed - this.raceStates.get(playerAhead).getEndTime())
                     + " behind " + playerAhead.getDisplayName();
@@ -196,8 +198,7 @@ public class VersusRace extends Race {
     protected String getSplitString(Player player, long elapsed) {
         updateSortedRaceStates();
         RaceState pState = this.raceStates.get(player);
-        Scoreboard scoreboard = getRaceScoreboard();
-        this.raceStates.keySet().forEach(p -> p.setScoreboard(scoreboard));
+        updateScoreboard();
         int placement = sortedRaceStates.indexOf(pState);
 
         String timeToAhead = "";
@@ -212,10 +213,16 @@ public class VersusRace extends Race {
         return " -- " + getColorByIndex(placement) + placeStrings[placement] + timeToAhead;
     }
 
+    protected void updateScoreboard() {
+        Scoreboard scoreboard = getRaceScoreboard();
+        this.raceStates.keySet().forEach(p -> p.setScoreboard(scoreboard));
+    }
+
     protected void updateSortedRaceStates() {
-        List<RaceState> raceStates = new ArrayList<>(this.raceStates.values());
-        raceStates.sort(new RaceStateComparator(track.getCheckpoints().size()));
-        this.sortedRaceStates = raceStates;
+        this.sortedRaceStates = this.raceStates.values().stream()
+        .filter(v -> !v.isSpectator())
+        .sorted(new RaceStateComparator(track.getCheckpoints().size()))
+        .collect(Collectors.toList());
     }
 
     protected String getColorByIndex(int index) {
@@ -249,21 +256,34 @@ public class VersusRace extends Race {
         return finalResults;
     }
 
+    protected Location endLocation() {
+        return track.getExit();
+    }
+
     @Override
     protected void endPlayerRace(Player player) {
-        this.removePlayerFromRaceAndSendToLoc(player, track.getExit());
-        Scoreboard scoreboard = getRaceScoreboard();
-        this.raceStates.keySet().forEach(p -> p.setScoreboard(scoreboard));
+        if (!hasStarted) {
+            removePlayer(player);
+            player.getInventory().clear();
+            return;
+        }
+        this.removePlayerFromRaceAndSendToLoc(player, endLocation());
+        updateScoreboard();
         for (RaceState rs : raceStates.values()) {
-            if (rs.getEndTime() == 0 && !rs.isCanceled()) {
+            if (rs.getEndTime() == 0 && !rs.isCanceled() && !rs.isSpectator()) {
                 return;
             }
         }
 
+        hasStarted = false;
         this.raceStates.keySet().forEach(p -> {
             finalResults().forEach(p::sendMessage);
             p.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
         });
+        this.endRace();
+    }
+
+    protected void endRace() {
         this.raceStates.clear();
         RaceManager.finishRace(track);
     }

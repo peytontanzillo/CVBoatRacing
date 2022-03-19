@@ -75,7 +75,7 @@ public class CompareSplits extends Command {
 			long s2Time = s2Splits.get(splitIndex);
 			String comparison = getComparison(s1Time, s2Time);
 			result.addMessage(
-				"§6§lCP" + splitIndex + ":§f " + RaceUtilities.formatTimeString(s1Time) + " " +
+				"§6§lCP" + (splitIndex + 1) + ":§f " + RaceUtilities.formatTimeString(s1Time) + " " +
 					comparison + "§f " +
 					RaceUtilities.formatTimeString(s2Time)
 			);

@@ -11,13 +11,12 @@ import java.util.List;
 import java.util.Objects;
 
 public class Leaderboard {
-	private final double LINE_SPACE = .3;
 	private Location location;
-	private List<ArmorStand> armorStands = new ArrayList<>();
+	private List<String> displayText;
 
 	public Leaderboard(Location location) {
 		this.location = location;
-		setDisplay(Collections.singletonList("§e§lLoading..."));
+		setDisplayText(Collections.singletonList("§e§lLoading..."));
 	}
 
 	private ArmorStand spawnArmorStand(Location loc, String text) {
@@ -32,26 +31,31 @@ public class Leaderboard {
 		return as;
 	}
 
-	public void setDisplay(List<String> lines) {
+	public void display() {
+		if (!location.getChunk().isEntitiesLoaded()) { return; }
 		clear();
 		Location loc = location.clone();
-		for (String line : lines) {
-			armorStands.add(spawnArmorStand(loc, line));
+		for (String line : displayText) {
+			double LINE_SPACE = .3;
 			loc.setY(loc.getY() - LINE_SPACE);
+			spawnArmorStand(loc, line);
 		}
 	}
 
-	public void clear() {
-		List<Entity> nearbyEntities = (List<Entity>) Objects.requireNonNull(location.getWorld())
-			.getNearbyEntities(location, 1, 5, 1);
+	public void setDisplayText(List<String> displayText) {
+		this.displayText = displayText;
+		display();
+	}
 
-		// Remove entities by selection in case the plugin loses track of the armor stands
+	public void clear() {
+		if (!location.getChunk().isEntitiesLoaded()) { return; }
+		List<Entity> nearbyEntities = (List<Entity>) Objects.requireNonNull(location.getWorld())
+				.getNearbyEntities(location, 2, 5, 2);
 		for (Entity ent : nearbyEntities) {
 			if (ent.getScoreboardTags().contains("CVBoatRace-LeaderboardArmorStand")) {
 				ent.remove();
 			}
 		}
-		armorStands.clear();
 	}
 
 	public Location getLocation() {

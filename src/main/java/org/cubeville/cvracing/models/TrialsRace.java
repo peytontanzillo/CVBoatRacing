@@ -32,10 +32,11 @@ public class TrialsRace extends Race {
         return this.personalBest;
     }
 
-    public void startRace() {
+    protected void startRace() {
         raceStates.put(player, new RaceState(player));
         this.getTrack().setStatus(TrackStatus.IN_USE);
         this.setupPlayerOnTrack(player, this.getTrack().getTrialsSpawn());
+        hasStarted = true;
         runCountdown(player, 3);
     }
 
@@ -88,6 +89,7 @@ public class TrialsRace extends Race {
 
     protected void endPlayerRace(Player p) {
         RaceManager.removeRace(p);
+        hasStarted = false;
         this.removePlayerFromRaceAndSendToLoc(p, track.getExit());
         RaceManager.finishRace(track);
     }

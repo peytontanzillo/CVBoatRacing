@@ -1,6 +1,7 @@
 package org.cubeville.cvracing;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
@@ -15,8 +16,7 @@ public class RaceManager {
 	public static final List<EntityType> racingVehicles = Arrays.asList(EntityType.BOAT, EntityType.PIG, EntityType.HORSE, EntityType.STRIDER);
 
 
-	private static HashMap<UUID, Race> races = new HashMap<>();
-	private static Set<Player> racingPlayers = new HashSet<>();
+	private static HashMap<Player, Race> races = new HashMap<>();
 	private static HashMap<String, Integer> queueCountdowns = new HashMap<>();
 	private static JavaPlugin plugin;
 
@@ -26,8 +26,7 @@ public class RaceManager {
 
 	public static void addTrialsRace(Track t, Player p) {
 		Race race = new TrialsRace(t, plugin, p);
-		races.put(p.getUniqueId(), race);
-		racingPlayers.add(p);
+		races.put(p, race);
 	}
 
 	public static void addVersusRace(Track t, Player p, int laps) {
@@ -38,10 +37,51 @@ public class RaceManager {
 		VersusRace race = new VersusRace(t, plugin, laps);
 		race.addPlayer(p);
 		t.setVersusRace(race);
-		races.put(p.getUniqueId(), race);
-		racingPlayers.add(p);
+		races.put(p, race);
 		t.setStatus(TrackStatus.IN_LOBBY);
 		t.getSigns().forEach(RaceSign::displayQueue);
+	}
+
+	public static void addHostedRace(Track t, Player p) {
+		RaceManager.cancelTrackRaces(t, "This track will be used for hosting");
+		HostedRace race = new HostedRace(t, plugin, p);
+		t.setHostedRace(race);
+		races.put(p, race);
+		p.teleport(t.getSpectate());
+		for (RaceSign sign : t.getSigns()) {
+			sign.displayType();
+			sign.displayStatus(TrackStatus.HOSTING);
+			sign.displayQueue();
+		}
+	}
+
+	public static void addPlayerToHostedLobby(Track t, Player p) {
+		HostedRace hr = t.getHostedRace();
+		hr.addPlayerToLobby(p);
+		hr.getHostingPlayer().sendMessage(ChatColor.YELLOW + p.getDisplayName() + " has joined the hosted lobby");
+		p.sendMessage(ChatColor.YELLOW + "You have joined the hosted lobby");
+		p.teleport(t.getSpectate());
+		races.put(p, hr);
+	}
+
+	public static void removePlayerFromHostedLobby(Track t, Player p) {
+		HostedRace hr = t.getHostedRace();
+		if (hr == null) { return; }
+		hr.removePlayerFromLobby(p);
+		hr.getHostingPlayer().sendMessage(ChatColor.RED + p.getDisplayName() + " has left the hosted lobby");
+		p.sendMessage(ChatColor.RED + "You have left the hosted lobby");
+		p.teleport(t.getExit());
+		races.remove(p);
+	}
+
+	public static void endHostedRace(Track t) {
+		cancelTrackRaces(t, "This hosted session has ended");
+		t.setHostedRace(null);
+		for (RaceSign sign : t.getSigns()) {
+			sign.displayType();
+			sign.displayStatus(t.isClosed() ? TrackStatus.CLOSED : TrackStatus.OPEN);
+			sign.displayQueue();
+		}
 	}
 
 	public static void addPlayerToVersus(Track t, Player p) {
@@ -55,9 +95,7 @@ public class RaceManager {
 			return;
 		}
 		vr.addPlayer(p);
-		t.setVersusRace(vr);
-		races.put(p.getUniqueId(), vr);
-		racingPlayers.add(p);
+		races.put(p, vr);
 		t.getSigns().forEach(RaceSign::displayQueue);
 	}
 
@@ -65,8 +103,7 @@ public class RaceManager {
 		VersusRace race = t.getVersusRace();
 		if (race == null || !race.hasPlayer(p)) { return; }
 		race.removePlayer(p);
-		races.remove(p.getUniqueId());
-		racingPlayers.remove(p);
+		races.remove(p);
 		if (race.playerSize() == 0) {
 			RaceManager.finishRace(t);
 			t.setVersusRace(null);
@@ -75,8 +112,22 @@ public class RaceManager {
 		}
 	}
 
+	public static void cancelAllRaces(String subtitle) {
+		races.keySet().forEach(p -> getRace(p).cancelRace(p, subtitle));
+	}
 
-	public static Race getRace(Player p) { return races.get(p.getUniqueId()); }
+	public static void cancelTrackRaces(Track track, String subtitle) {
+		Set<Player> keySet = new HashSet<>(races.keySet());
+		keySet.forEach(p -> {
+			Race r = getRace(p);
+			if (r.getTrack().getName().equals(track.getName())) {
+				races.remove(p);
+				r.cancelRace(p, subtitle);
+			}
+		});
+	}
+
+	public static Race getRace(Player p) { return races.get(p); }
 
 	public static void cancelRace(Player p, String subtitle) {
 		Race race = getRace(p);
@@ -86,8 +137,7 @@ public class RaceManager {
 	}
 
 	public static void removeRace(Player p) {
-		races.remove(p.getUniqueId());
-		racingPlayers.remove(p);
+		races.remove(p);
 	}
 
 	public static void finishRace(Track t) {
@@ -100,10 +150,6 @@ public class RaceManager {
 				sign.displayQueue();
 			}
 		}
-	}
-
-	public static Set<Player> getRacingPlayers() {
-		return racingPlayers;
 	}
 
 	private static void startRaceWithQueue(Track t) {
@@ -142,9 +188,5 @@ public class RaceManager {
 		} else {
 			addTrialsRace(t, p);
 		}
-	}
-
-	private static void resetPlayerToCheckpoint() {
-
 	}
 }

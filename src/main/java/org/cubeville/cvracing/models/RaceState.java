@@ -5,6 +5,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class RaceState {
 
@@ -19,6 +20,7 @@ public class RaceState {
     private boolean isCanceled = false;
     private Location resetLocation;
     private ArmorStand armorStand;
+    private boolean isSpectator = false;
 
     public RaceState(Player player) {
         this.player = player;
@@ -107,5 +109,13 @@ public class RaceState {
 
     public void setResetLocation(Location resetLocation) {
         this.resetLocation = resetLocation;
+    }
+
+    public boolean isSpectator() {
+        return isSpectator;
+    }
+
+    public void setSpectator(boolean spectator) {
+        isSpectator = spectator;
     }
 }

@@ -15,6 +15,7 @@ public class Track implements Listener {
 	private TrackStatus status;
 	private TrackType type = TrackType.BOAT;
 	private VersusRace versusRace;
+	private HostedRace hostedRace;
 	private Location trialsSpawn;
 	private List<Location> versusSpawns = new ArrayList<>();
 	private Location exit;
@@ -24,6 +25,7 @@ public class Track implements Listener {
 	private List<Leaderboard> leaderboards = new ArrayList<>();
 	private Queue<Player> queue = new LinkedList<>();
 	private boolean includeReset = false;
+	private boolean isClosed = false;
 
 	public Track(String name) {
 		this.name = name;
@@ -77,6 +79,7 @@ public class Track implements Listener {
 	}
 
 	public void addLeaderboard(Location lbLoc) {
+		System.out.println("Added leaderboard for " + name + " with loaded set to " + lbLoc.getChunk().isEntitiesLoaded());
 		leaderboards.add(new Leaderboard(lbLoc));
 	}
 	public void removeLeaderboard(int index) {
@@ -85,7 +88,7 @@ public class Track implements Listener {
 	}
 
 	public void loadLeaderboards() {
-		leaderboards.forEach(leaderboard -> leaderboard.setDisplay(RaceUtilities.getLeaderboardLines(this, 0, 9)));
+		leaderboards.forEach(leaderboard -> leaderboard.setDisplayText(RaceUtilities.getLeaderboardLines(this, 0, 9)));
 	}
 
 	public List<Leaderboard> getLeaderboards() {
@@ -101,6 +104,10 @@ public class Track implements Listener {
 	}
 
 	public void onRightClick(Player p, RaceSignType type, int lapNumber) {
+		if (hostedRace != null && type != RaceSignType.EXIT) {
+			RaceManager.addPlayerToHostedLobby(this, p);
+			return;
+		}
 		switch (type) {
 			case TRIALS:
 				switch (status) {
@@ -140,9 +147,9 @@ public class Track implements Listener {
 				break;
 			case EXIT:
 				p.teleport(exit);
+				RaceManager.removePlayerFromHostedLobby(this, p);
 				break;
 		}
-
 	}
 
 	private void addToQueue(Player p) {
@@ -160,6 +167,10 @@ public class Track implements Listener {
 
 	public Queue<Player> getQueue() {
 		return queue;
+	}
+
+	public void clearQueue() {
+		queue.clear();
 	}
 
 	public Player getPlayerFromQueue() {
@@ -208,5 +219,25 @@ public class Track implements Listener {
 
 	public void setIncludeReset(boolean includeReset) {
 		this.includeReset = includeReset;
+	}
+
+	public boolean isClosed() {
+		return isClosed;
+	}
+
+	public void setClosed(boolean closed) {
+		isClosed = closed;
+	}
+
+	public void setHostedRace(HostedRace hostedRace) {
+		this.hostedRace = hostedRace;
+	}
+
+	public HostedRace getHostedRace() {
+		return hostedRace;
+	}
+
+	public Location getSpectate() {
+		return spectate;
 	}
 }

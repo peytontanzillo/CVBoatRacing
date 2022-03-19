@@ -23,6 +23,11 @@ public class RaceSign {
 	}
 
 	public void displayType() {
+		if (track.getHostedRace() != null && type != RaceSignType.ERROR && type != RaceSignType.EXIT) {
+			this.sign.setLine(0, "§e§l[HOSTING]");
+			this.sign.update();
+			return;
+		}
 		String typeText = "";
 		switch (type) {
 			case TRIALS:
@@ -43,9 +48,15 @@ public class RaceSign {
 		typeText += type;
 		typeText += "]";
 		this.sign.setLine(0, typeText);
+		this.sign.update();
 	}
 
 	public void displayQueue() {
+		if (track.getHostedRace() != null) {
+			this.sign.setLine(3, "");
+			this.sign.update();
+			return;
+		}
 		switch (type) {
 			case TRIALS:
 				if (track.getQueue().size() > 0) {
@@ -69,7 +80,9 @@ public class RaceSign {
 	}
 
 	public void displayStatus(TrackStatus status) {
-		if (type != RaceSignType.TRIALS && type != RaceSignType.VERSUS) {
+		boolean displayStatusAlways = type == RaceSignType.TRIALS || type == RaceSignType.VERSUS;
+		boolean shouldOverrideStatusHide = status == TrackStatus.HOSTING && type == RaceSignType.SPECTATE;
+		if (!displayStatusAlways && !shouldOverrideStatusHide) {
 			this.sign.setLine(2, "");
 		} else {
 			switch (status) {
@@ -84,6 +97,9 @@ public class RaceSign {
 					break;
 				case IN_LOBBY:
 					this.sign.setLine(2, "§e§lIN LOBBY");
+					break;
+				case HOSTING:
+					this.sign.setLine(2, "§b§lHOSTING");
 					break;
 			}
 		}

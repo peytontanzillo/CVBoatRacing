@@ -43,7 +43,10 @@ public class ConfigImportManager {
 				catch (IllegalArgumentException|NullPointerException ignored) {}
 			}
 			boolean isClosed = trackConfig.getBoolean("isClosed");
-			if (isClosed) { track.setStatus(TrackStatus.CLOSED); }
+			if (isClosed) {
+				track.setClosed(true);
+				track.setStatus(TrackStatus.CLOSED);
+			}
 
 			ConfigurationSection checkpoints = trackConfig.getConfigurationSection("checkpoints");
 			if (checkpoints != null) {
@@ -67,9 +70,6 @@ public class ConfigImportManager {
 			for (String lbLocString : leaderboardLocStrings) {
 				Location lbLoc = parseTeleportLocation(lbLocString);
 
-				if(!lbLoc.getChunk().isEntitiesLoaded()) {
-					lbLoc.getChunk().load();
-				}
 				List<Entity> nearbyEntities = (List<Entity>) Objects.requireNonNull(lbLoc.getWorld())
 					.getNearbyEntities(lbLoc, 2, 5, 2);
 

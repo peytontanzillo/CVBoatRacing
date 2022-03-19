@@ -77,6 +77,14 @@ public class CVRacing extends JavaPlugin implements Listener {
         commandParser.addCommand(new ListLeaderboards());
         commandParser.addCommand(new CompareSplits());
         commandParser.addCommand(new Help());
+        commandParser.addCommand(new HostAddPlayers());
+        commandParser.addCommand(new HostEnd());
+        commandParser.addCommand(new HostListPlayers());
+        commandParser.addCommand(new HostCountdown());
+        commandParser.addCommand(new HostStart());
+        commandParser.addCommand(new HostTransfer());
+        commandParser.addCommand(new HostRemovePlayers());
+        commandParser.addCommand(new HostSetLaps());
 
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new EventHandlers(this), this);
@@ -85,6 +93,7 @@ public class CVRacing extends JavaPlugin implements Listener {
     public void onDisable() {
         this.db.disconnect();
         TrackManager.clearArmorStands();
+        RaceManager.cancelAllRaces("The plugin has been disabled");
     }
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
