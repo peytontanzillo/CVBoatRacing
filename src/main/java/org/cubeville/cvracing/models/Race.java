@@ -28,11 +28,16 @@ public abstract class Race {
 	}
 
 	public void setupPlayerOnTrack(Player player, Location location) {
-		TrackManager.clearPlayerFromTrialsQueues(player, track);
+		TrackManager.clearPlayerFromQueues(player, track);
 		if (!location.getChunk().isLoaded()) {
 			location.getChunk().load();
 		}
-		player.teleport(location);
+		// preserve armor the player is wearing
+		ItemStack[] armor = player.getInventory().getArmorContents().clone();
+		player.getInventory().clear();
+		player.getInventory().setArmorContents(armor);
+		Location tpLoc = location.clone().add(0, 1, 0);
+		player.teleport(tpLoc);
 		Vehicle v = null;
 		switch (this.track.getType()) {
 			case BOAT:
@@ -221,7 +226,6 @@ public abstract class Race {
 	}
 
 	protected void removePlayerFromRaceAndSendToLoc(Player p, Location loc) {
-		p.getInventory().clear();
 		Entity v = p.getVehicle();
 		p.setGliding(false);
 		Bukkit.getScheduler().runTaskLater(plugin, () -> {

@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.cubeville.cvracing.models.Race;
 import org.cubeville.cvracing.models.RaceSign;
+import org.cubeville.cvracing.models.VersusRace;
 import org.spigotmc.event.entity.EntityDismountEvent;
 
 import java.util.List;
@@ -52,12 +53,19 @@ public class EventHandlers implements Listener {
 				&& event.getItem() != null) {
 			String displayName = event.getItem().getItemMeta().getDisplayName();
 			if (displayName.equals(RaceUtilities.getLeaveItem().getItemMeta().getDisplayName())) {
-				RaceManager.cancelRace(event.getPlayer(), "You left the race!");
 				event.setCancelled(true);
+				RaceManager.cancelRace(event.getPlayer(), "You left the race!");
 			} else if (displayName.equals(RaceUtilities.getCPResetItem().getItemMeta().getDisplayName())) {
+				event.setCancelled(true);
 				Race race = RaceManager.getRace(event.getPlayer());
 				if (race == null) { return; }
 				race.tpPlayerToReset(event.getPlayer());
+			} else if (displayName.equals(RaceUtilities.getLeaveQueueItem().getItemMeta().getDisplayName())) {
+				event.setCancelled(true);
+				Race race = RaceManager.getRace(event.getPlayer());
+				if (race instanceof VersusRace) {
+					((VersusRace) race).removePlayer(event.getPlayer());
+				}
 			}
 		}
 	}

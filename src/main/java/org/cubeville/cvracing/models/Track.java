@@ -79,7 +79,6 @@ public class Track implements Listener {
 	}
 
 	public void addLeaderboard(Location lbLoc) {
-		System.out.println("Added leaderboard for " + name + " with loaded set to " + lbLoc.getChunk().isEntitiesLoaded());
 		leaderboards.add(new Leaderboard(lbLoc));
 	}
 	public void removeLeaderboard(int index) {
@@ -104,10 +103,17 @@ public class Track implements Listener {
 	}
 
 	public void onRightClick(Player p, RaceSignType type, int lapNumber) {
-		if (hostedRace != null && type != RaceSignType.EXIT) {
-			RaceManager.addPlayerToHostedLobby(this, p);
-			return;
+		if (type != RaceSignType.EXIT) {
+			if (hostedRace != null) {
+				RaceManager.addPlayerToHostedLobby(this, p);
+				return;
+			}
+			if (RaceManager.getRace(p) != null) {
+				p.sendMessage(ChatColor.RED + "You are already in a race!");
+				return;
+			}
 		}
+
 		switch (type) {
 			case TRIALS:
 				switch (status) {
@@ -183,6 +189,7 @@ public class Track implements Listener {
 
 	public void removePlayerFromQueue(Player p) {
 		queue.remove(p);
+		if (versusRace != null) { versusRace.removePlayerFromState(p); }
 	}
 
 	public TrackType getType() {

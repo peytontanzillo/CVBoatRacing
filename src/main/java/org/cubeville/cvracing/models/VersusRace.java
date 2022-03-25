@@ -2,8 +2,10 @@ package org.cubeville.cvracing.models;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -39,7 +41,6 @@ public class VersusRace extends Race {
 
     public void addPlayer(Player p) {
         raceStates.put(p, new RaceState(p));
-        p.getInventory().setItem(8, RaceUtilities.getLeaveItem());
         raceStates.keySet().forEach(player -> player.sendMessage("§e" + p.getDisplayName() + "§6 has joined the race lobby"));
 
         if (playerSize() > 1 && lobbyCountdown == 0) {
@@ -101,16 +102,28 @@ public class VersusRace extends Race {
     }
 
     public void removePlayer(Player p) {
-        raceStates.remove(p);
-        switch (playerSize()) {
-            case 1:
-                startLobbyTimeout();
-                break;
-            case 0:
-                cancelLobbyTimeout();
-                this.endRace();
-                break;
+        if (!hasStarted) {
+            raceStates.keySet().forEach(player -> player.sendMessage("§e" + p.getDisplayName() + "§6 has left the race lobby"));
+            raceStates.remove(p);
+            switch (playerSize()) {
+                case 1:
+                    startLobbyTimeout();
+                    cancelLobbyCountdown();
+                    raceStates.keySet().forEach(player -> player.sendMessage("§cThere are not enough players to start this race!"));
+                    break;
+                case 0:
+                    cancelLobbyTimeout();
+                    this.endRace();
+                    break;
+            }
+            track.getSigns().forEach(RaceSign::displayQueue);
         }
+        RaceManager.removeRace(p);
+    }
+
+    public void removePlayerFromState(Player p) {
+        raceStates.remove(p);
+        p.setScoreboard(Objects.requireNonNull(Bukkit.getScoreboardManager()).getNewScoreboard());
     }
 
     protected void startRace() {
@@ -262,11 +275,7 @@ public class VersusRace extends Race {
 
     @Override
     protected void endPlayerRace(Player player) {
-        if (!hasStarted) {
-            removePlayer(player);
-            player.getInventory().clear();
-            return;
-        }
+        removePlayer(player);
         this.removePlayerFromRaceAndSendToLoc(player, endLocation());
         updateScoreboard();
         for (RaceState rs : raceStates.values()) {

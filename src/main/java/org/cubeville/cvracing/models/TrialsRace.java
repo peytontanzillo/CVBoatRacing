@@ -17,6 +17,9 @@ public class TrialsRace extends Race {
         this.player = player;
         this.personalBest = ScoreManager.getScore(player.getUniqueId(), track);
         this.comparingTime = determineComparingTime();
+    }
+
+    public void start() {
         this.startRace();
     }
 
@@ -71,11 +74,11 @@ public class TrialsRace extends Race {
             Score wr = ScoreManager.getWRScore(track);
             ScoreManager.setNewPB(p.getUniqueId(), track, elapsed, raceStates.get(p).getSplits());
             if (wr == null || elapsed < wr.getFinalTime()) {
-                String broadcastString = "&b&l" + p.getName() + "&3 just got a new world record time of &b&l" + RaceUtilities.formatTimeString(elapsed) + "&3 on &b&l" + track.getName() + "&3!";
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "runalias /announceboatswr " + broadcastString);
+                String broadcastString = "§b§l" + p.getName() + "§3 just got a new world record time of §b§l" + RaceUtilities.formatTimeString(elapsed) + "§3 on §b§l" + track.getName() + "§3!";
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "runalias /announceracewr " + broadcastString);
             } else {
-                String broadcastString = "&d&l" + p.getName() + "&5 just got a new personal best time of &d&l" + RaceUtilities.formatTimeString(elapsed) + "&5, which put them at rank &d&l#" + ScoreManager.getScorePlacement(track, p.getUniqueId()) + "&5 on &d&l" + track.getName() + "&5!";
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "runalias /announceboatspb " + broadcastString);
+                String broadcastString = "§d§l" + p.getName() + "§5 just got a new personal best time of §d§l" + RaceUtilities.formatTimeString(elapsed) + "§5, which put them at rank §d§l#" + ScoreManager.getScorePlacement(track, p.getUniqueId()) + "§5 on §d§l" + track.getName() + "§5!";
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "runalias /announceracepb " + broadcastString);
             }
             if (ScoreManager.shouldRefreshLeaderboard(elapsed, track)) {
                 track.loadLeaderboards();

@@ -42,10 +42,7 @@ public class RaceState {
 
     public int getStopwatch() { return stopwatch; }
 
-    public void addSplit(int index, long time) {
-        System.out.println("Adding split at " + index);
-        this.splits.put(index, time);
-    }
+    public void addSplit(int index, long time) { this.splits.put(index, time); }
 
     public void setCheckpointIndex(int index) {
         this.checkpointIndex = index;
@@ -117,5 +114,13 @@ public class RaceState {
 
     public void setSpectator(boolean spectator) {
         isSpectator = spectator;
+    }
+
+    public void reset() {
+        this.checkpointIndex = 0;
+        this.lapIndex = 0;
+        this.endTime = 0;
+        this.elapsed = 0;
+        this.splits.clear();
     }
 }

@@ -16,6 +16,12 @@ public class Leaderboard {
 
 	public Leaderboard(Location location) {
 		this.location = location;
+		if (!location.getChunk().isForceLoaded()) {
+			location.getChunk().setForceLoaded(true);
+		}
+		if (!location.getChunk().isLoaded()) {
+			location.getChunk().load();
+		}
 		setDisplayText(Collections.singletonList("§e§lLoading..."));
 	}
 
@@ -32,7 +38,7 @@ public class Leaderboard {
 	}
 
 	public void display() {
-		if (!location.getChunk().isEntitiesLoaded()) { return; }
+		if (!location.getChunk().isEntitiesLoaded() && !location.getChunk().isLoaded()) { return; }
 		clear();
 		Location loc = location.clone();
 		for (String line : displayText) {
@@ -48,7 +54,7 @@ public class Leaderboard {
 	}
 
 	public void clear() {
-		if (!location.getChunk().isEntitiesLoaded()) { return; }
+		if (!location.getChunk().isEntitiesLoaded() && !location.getChunk().isLoaded()) { return; }
 		List<Entity> nearbyEntities = (List<Entity>) Objects.requireNonNull(location.getWorld())
 				.getNearbyEntities(location, 2, 5, 2);
 		for (Entity ent : nearbyEntities) {

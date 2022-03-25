@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.cubeville.cvracing.models.RaceSign;
 import org.cubeville.cvracing.models.Track;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,20 +28,12 @@ public class TrackManager {
 		return new ArrayList<>(tracks.values());
 	}
 
-	public static void clearPlayerFromQueues(Player p) {
-		for (Track track : getTracks()) {
-			track.removePlayerFromQueue(p);
-			RaceManager.removePlayerFromVersus(track, p);
-			for (RaceSign sign : track.getSigns()) {
-				sign.displayQueue();
-			}
-		}
-	}
+	public static void clearPlayerFromQueues(Player p) { clearPlayerFromQueues(p, null); }
 
-	public static void clearPlayerFromTrialsQueues(Player p, Track t) {
+	public static void clearPlayerFromQueues(Player p, @Nullable Track t) {
 		for (Track track : getTracks()) {
+			if (track.equals(t)) { continue; }
 			track.removePlayerFromQueue(p);
-			if (t != track) { RaceManager.removePlayerFromVersus(track, p); }
 			for (RaceSign sign : track.getSigns()) {
 				sign.displayQueue();
 			}

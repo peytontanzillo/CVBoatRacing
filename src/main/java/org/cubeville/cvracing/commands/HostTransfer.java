@@ -6,8 +6,10 @@ import org.cubeville.commons.commands.CommandExecutionException;
 import org.cubeville.commons.commands.CommandParameterOnlinePlayer;
 import org.cubeville.commons.commands.CommandResponse;
 import org.cubeville.cvracing.RaceManager;
+import org.cubeville.cvracing.TrackManager;
 import org.cubeville.cvracing.models.HostedRace;
 import org.cubeville.cvracing.models.Race;
+import org.cubeville.cvracing.models.Track;
 
 import java.util.List;
 import java.util.Map;
@@ -26,15 +28,11 @@ public class HostTransfer extends Command {
 
 	@Override
 	public CommandResponse execute(Player player, Set<String> set, Map<String, Object> map, List<Object> baseParameters) throws CommandExecutionException {
-		Race race = RaceManager.getRace(player);
-		if (!(race instanceof HostedRace)) {
+		Track track = TrackManager.getTrackHostedBy(player);
+		if (track == null) {
 			throw new CommandExecutionException("You are not currently hosting a track.");
 		}
-		HostedRace hostedRace = (HostedRace) race;
-
-		if (!hostedRace.getHostingPlayer().equals(player)) {
-			throw new CommandExecutionException("You are not hosting this race!");
-		}
+		HostedRace hostedRace = track.getHostedRace();
 
 		Player transferringPlayer = (Player) baseParameters.get(0);
 

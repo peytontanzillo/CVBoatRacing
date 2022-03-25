@@ -3,6 +3,7 @@ package org.cubeville.cvracing.models;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Scoreboard;
 import org.cubeville.cvracing.RaceManager;
 
@@ -26,6 +27,7 @@ public class HostedRace extends VersusRace {
         if (p.equals(hostingPlayer)) {
             RaceManager.endHostedRace(track);
         }
+        p.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
         raceStates.remove(p);
     }
 
@@ -35,7 +37,7 @@ public class HostedRace extends VersusRace {
 
     @Override
     public void cancelRace(Player p, String subtitle) {
-        if (p.equals(hostingPlayer)) {
+        if (p.equals(hostingPlayer) && raceStates.get(hostingPlayer).isSpectator()) {
             RaceManager.endHostedRace(track);
         } else if (!raceStates.get(p).isSpectator()) {
             super.cancelRace(p, subtitle);
@@ -44,24 +46,32 @@ public class HostedRace extends VersusRace {
 
     @Override
     public void addPlayer(Player p) {
-        raceStates.keySet().forEach(player -> player.sendMessage("§b§l" + p.getDisplayName() + " will be racing in the next race!"));
+        raceStates.keySet().forEach(player -> player.sendMessage("§b" + p.getDisplayName() + " will be racing in the next race!"));
         raceStates.get(p).setSpectator(false);
 
     }
 
     @Override
+    public void setLaps(int laps) {
+        raceStates.keySet().forEach(player -> player.sendMessage("§bThis race will be " + laps + " laps long!"));
+        super.setLaps(laps);
+    }
+
+    @Override
     public void removePlayer(Player p) {
-        raceStates.keySet().forEach(player -> player.sendMessage("§b§l" + p.getDisplayName() + " will no longer be racing in the next race."));
         raceStates.get(p).setSpectator(true);
+        RaceManager.removeRace(p);
     }
 
     @Override
     protected void startRace() {
         int i = 0;
+        hasStarted = true;
         updateSortedRaceStates();
         Scoreboard scoreboard = getRaceScoreboard();
         for (Player p : raceStates.keySet()) {
             if (!raceStates.get(p).isSpectator()) {
+                RaceManager.addRace(p, this);
                 this.setupPlayerOnTrack(p, track.getVersusSpawns().get(i));
                 runCountdown(p, 3);
                 i++;
@@ -78,7 +88,9 @@ public class HostedRace extends VersusRace {
     @Override
     protected void endRace() {
         // set everyone to be spectators
+        hasStarted = false;
         raceStates.values().forEach(rs -> {
+            rs.reset();
             rs.setSpectator(true);
             rs.setCanceled(false);
         });
@@ -92,6 +104,7 @@ public class HostedRace extends VersusRace {
     }
 
     public void startCountdown() {
+        raceStates.keySet().forEach(player -> player.sendMessage("§e§lStarting " + laps + " lap race on " + track.getName() + "!"));
         setLobbyCountdown(5);
     }
 }

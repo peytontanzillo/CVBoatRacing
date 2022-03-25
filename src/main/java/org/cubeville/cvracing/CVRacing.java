@@ -85,6 +85,7 @@ public class CVRacing extends JavaPlugin implements Listener {
         commandParser.addCommand(new HostTransfer());
         commandParser.addCommand(new HostRemovePlayers());
         commandParser.addCommand(new HostSetLaps());
+        commandParser.addCommand(new HostAnnounce());
 
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new EventHandlers(this), this);

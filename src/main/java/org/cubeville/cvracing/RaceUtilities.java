@@ -42,19 +42,27 @@ public class RaceUtilities {
 	}
 
 	public static ItemStack getLeaveItem() {
-		ItemStack leaveItem = new ItemStack(Material.BARRIER, 1);
-		ItemMeta im = leaveItem.getItemMeta();
+		ItemStack item = new ItemStack(Material.COPPER_INGOT, 1);
+		ItemMeta im = item.getItemMeta();
 		im.setDisplayName("§c§lLeave Race");
-		leaveItem.setItemMeta(im);
-		return leaveItem;
+		item.setItemMeta(im);
+		return item;
 	}
 
 	public static ItemStack getCPResetItem() {
-		ItemStack cpResetItem = new ItemStack(Material.SLIME_BALL, 1);
-		ItemMeta im = cpResetItem.getItemMeta();
-		im.setDisplayName("§a§lGo To Last Checkpoint");
-		cpResetItem.setItemMeta(im);
-		return cpResetItem;
+		ItemStack item = new ItemStack(Material.GOLD_INGOT, 1);
+		ItemMeta im = item.getItemMeta();
+		im.setDisplayName("§e§lGo To Last Checkpoint");
+		item.setItemMeta(im);
+		return item;
+	}
+
+	public static ItemStack getLeaveQueueItem() {
+		ItemStack item = new ItemStack(Material.COPPER_INGOT, 1);
+		ItemMeta im = item.getItemMeta();
+		im.setDisplayName("§c§lLeave Queue");
+		item.setItemMeta(im);
+		return item;
 	}
 
 	public static String formatBlockLocation(Location loc) {

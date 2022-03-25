@@ -25,15 +25,11 @@ public class HostAddPlayers extends Command {
 
 	@Override
 	public CommandResponse execute(Player player, Set<String> set, Map<String, Object> map, List<Object> baseParameters) throws CommandExecutionException {
-		Race race = RaceManager.getRace(player);
-		if (!(race instanceof HostedRace)) {
+		Track track = TrackManager.getTrackHostedBy(player);
+		if (track == null) {
 			throw new CommandExecutionException("You are not currently hosting a track.");
 		}
-		HostedRace hostedRace = (HostedRace) race;
-
-		if (!hostedRace.getHostingPlayer().equals(player)) {
-			throw new CommandExecutionException("You are not hosting this race!");
-		}
+		HostedRace hostedRace = track.getHostedRace();
 
 		Player addingPlayer = (Player) baseParameters.get(0);
 
@@ -48,6 +44,6 @@ public class HostAddPlayers extends Command {
 
 		hostedRace.addPlayer(addingPlayer);
 
-		return new CommandResponse("Added " + player.getDisplayName() + " to the race");
+		return new CommandResponse("Added " + addingPlayer.getDisplayName() + " to the race");
 	}
 }
