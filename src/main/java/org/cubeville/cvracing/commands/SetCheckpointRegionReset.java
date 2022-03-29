@@ -30,7 +30,7 @@ public class SetCheckpointRegionReset extends Command {
 		// rg id
 		addBaseParameter(new CommandParameterInteger());
 
-		setPermission("cvboatrace.checkpoints.regions.setreset");
+		setPermission("cvracing.setup.rgreset");
 		this.plugin = plugin;
 	}
 

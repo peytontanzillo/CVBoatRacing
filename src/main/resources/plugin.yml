@@ -11,96 +11,138 @@ commands:
     description: CVRacing Base Command
 
 permissions:
-  cvboatrace.checkpoints.add:
-    description: Add a checkpoint to a track. Must be looking at a tripwire hook to set a checkpoint!
+
+# Administration Commands
+  cvracing.admin.scores:
+    description: Allow a user to remove scores from a track
+    default: op
+  cvracing.admin.open:
+    description: Allow a user to open a track
+    default: op
+  cvracing.admin.close:
+    description: Allow a user to close a track
+    default: op
+  cvracing.admin.customization:
+    description: Allow a user to set another person's customizations
+    default: op
+  cvracing.admin.commands:
+    description: Allow the user to run various help commands
     default: op
 
-  cvboatrace.checkpoints.delete:
-    description: Delete a checkpoint for a track at a specific index.
+# Track Setup Commands
+  cvracing.setup.cps.view:
+    description: Allow a user to view a track's checkpoints
+    default: op
+  cvracing.setup.cps.edit:
+    description: Allow a user to edit a track's checkpoints
+    default: op
+  cvracing.setup.cpcommands.view:
+    description: Allow a user to view a track's checkpoint commands
+    default: op
+  cvracing.setup.cpcommands.edit:
+    description: Allow a user to edit a track's checkpoint commands
+    default: op
+  cvracing.setup.leaderboards.view:
+    description: Allow a user to view a track's leaderboards
+    default: op
+  cvracing.setup.leaderboards.edit:
+    description: Allow a user to edit a track's leaderboards
+    default: op
+  cvracing.setup.spawns.view:
+    description: Allow a user to view a track's spawns
+    default: op
+  cvracing.setup.spawns.edit:
+    description: Allow a user to edit a track's spawns
+    default: op
+  cvracing.setup.signs.view:
+    description: Allow a user to view a track's signs
+    default: op
+  cvracing.setup.signs.edit:
+    description: Allow a user to edit a track's signs
+    default: op
+  cvracing.setup.create:
+    description: Allow a user to create a track
+    default: op
+  cvracing.setup.delete:
+    description: Allow a user to delete a track
+    default: op
+  cvracing.setup.type:
+    description: Allow a user to set the type of a track
+    default: op
+  cvracing.setup.tptocp:
+    description: Allow a user to set the tptocp value of a track
+    default: op
+  cvracing.setup.spectate:
+    description: Allow a user to set the spectate location of a track
+    default: op
+  cvracing.setup.exit:
+    description: Allow a user to set the exit location of a track
+    default: op
+  cvracing.setup.rgreset:
+    description: Allow a user to set the region reset location of a track (for tptocp)
+    default: op
+  cvracing.setup.center:
+    description: Allow someone setting up a track to center their position in a block
     default: op
 
-  cvboatrace.checkpoints.list:
-    description: List all checkpoints for a track.
+# Hosting Commands
+  cvracing.host.players.edit:
+    description: Allow a user to edit the players queued up for a hosted race
+    default: op
+  cvracing.host.players.view:
+    description: Allow a user to view the players queued up for a hosted race
+    default: op
+  cvracing.host.countdown:
+    description: Allow a user to start the countdown for a hosted race
+    default: op
+  cvracing.host.start:
+    description: Allow a user to start a hosted race
+    default: op
+  cvracing.host.end:
+    description: Allow a user to end a hosted race
+    default: op
+  cvracing.host.laps:
+    description: Allow a user to set a specific number of laps for a race
+    default: op
+  cvracing.host.transfer:
+    description: Allow a user to transfer hosting priveledges to another user
     default: op
 
-  cvboatrace.leaderboards.add:
-    description: Add a leaderboard displaying top times for a track.
-    default: op
-
-  cvboatrace.leaderboards.delete:
-    description: Delete a leaderboard for a track at a specific index.
-    default: op
-
-  cvboatrace.leaderboards.list:
-    description: List all leaderboards for a track.
-    default: op
-
-  cvboatrace.leaderboard:
-    description: View the leaderboard for a track.
+# Customization Commands
+  cvracing.customization.boat:
+    description: Allow a user to set their boat color
+    default: true
+  cvracing.customization.horse.color:
+    description: Allow a user to set their horse color
+    default: true
+  cvracing.customization.horse.style:
+    description: Allow a user to set their horse style
+    default: true
+  cvracing.customization.horse.armor:
+    description: Allow a user to set their horse armor
+    default: true
+  cvracing.customization.horse.armor.hex:
+    description: Allow a user to set their horse armor to be a specific hex color
     default: true
 
-  cvboatrace.signs.add:
-    description: Add a race sign for a track.
-    default: op
-
-  cvboatrace.signs.delete:
-    description: Delete a race sign for a track at a specific index.
-    default: op
-
-  cvboatrace.signs.list:
-    description: List all race signs for a track.
-    default: op
-
-  cvboatrace.track.create:
-    description: Create a track.
-    default: op
-
-  cvboatrace.track.delete:
-    description: Delete a track.
-    default: op
-
-  cvboatrace.track.close:
-    description: Close a track from being used.
-    default: op
-
-  cvboatrace.track.open:
-    description: Open a track to allow it to be used.
-    default: op
-
-  cvboatrace.track.setexit:
-    description: Set the exit point for a track.
-    default: op
-
-  cvboatrace.track.setspawn:
-    description: Set the spawn point for a track.
-    default: op
-
-  cvboatrace.scores.clear:
-    description: Clear all scores on a specific track.
-    default: op
-
-  cvboatrace.scores.delete:
-    description: Delete a player's score on a specific track.
-    default: op
-
-  cvboatrace.pb:
-    description: View your personal best time for a track.
+# Citizen Commands
+  cvracing.citizen.splits.use:
+    description: Allow a user to use specific splits for their racing
     default: true
-
-  cvboatrace.rank:
-    description: View your ranking for a track.
+  cvracing.citizen.splits.compare:
+    description: Allow a user to compare splits to another person, or between two people
     default: true
-
-  cvboatrace.help:
-    description: View all commands for cvboatrace.
+  cvracing.citizen.leaderboard:
+    description: Allow a user to view the leaderboard for a track
     default: true
-
-  cvboatrace.splits.compare:
-    description: Compare splits gotten on a track between multiple players.
+  cvracing.citizen.pb:
+    description: Allow a user to view the personal best score for themselves or another user on a track
     default: true
-
-  cvboatrace.splits.use:
-    description: Use another user's splits for a race.
+  cvracing.citizen.rank:
+    description: Allow a user to view the rank of themselves or another user on a track
+    default: true
+  cvracing.citizen.help:
+    description: Allow a user to view boat racing commands
     default: true
 
 

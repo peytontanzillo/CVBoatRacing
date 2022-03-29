@@ -5,22 +5,20 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.cubeville.commons.commands.*;
 import org.cubeville.cvracing.TrackManager;
-import org.cubeville.cvracing.TrackStatus;
-import org.cubeville.cvracing.models.Track;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class SetTrackReset extends BaseCommand {
+public class SetTrackTpToCp extends BaseCommand {
 	JavaPlugin plugin;
 
-	public SetTrackReset(JavaPlugin plugin) {
+	public SetTrackTpToCp(JavaPlugin plugin) {
 		super("track tptocp");
 		addBaseParameter(new CommandParameterString());
 		addBaseParameter(new CommandParameterBoolean());
 
-		setPermission("cvboatrace.track.tptocp");
+		setPermission("cvracing.setup.tptocp");
 		this.plugin = plugin;
 	}
 

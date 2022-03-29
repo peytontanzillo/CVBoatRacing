@@ -21,7 +21,7 @@ public class OpenTrack extends BaseCommand {
 	public OpenTrack(JavaPlugin plugin) {
 		super("track open");
 		addBaseParameter(new CommandParameterString());
-		setPermission("cvboatrace.track.open");
+		setPermission("cvracing.admin.open");
 		this.plugin = plugin;
 	}
 

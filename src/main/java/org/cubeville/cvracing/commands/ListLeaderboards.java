@@ -20,7 +20,7 @@ public class ListLeaderboards extends BaseCommand {
 		super("track leaderboards list");
 
 		addBaseParameter(new CommandParameterString());
-		setPermission("cvboatrace.leaderboards.list");
+		setPermission("cvracing.setup.leaderboards.view");
 	}
 
 	@Override

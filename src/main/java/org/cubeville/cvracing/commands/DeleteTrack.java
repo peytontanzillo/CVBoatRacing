@@ -20,7 +20,7 @@ public class DeleteTrack extends BaseCommand {
 		super("track delete");
 		// track
 		addBaseParameter(new CommandParameterString());
-		setPermission("cvboatrace.track.delete");
+		setPermission("cvracing.setup.delete");
 
 		this.plugin = plugin;
 	}

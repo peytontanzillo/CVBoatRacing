@@ -19,7 +19,7 @@ public class SetTrackType extends Command {
 		addBaseParameter(new CommandParameterString());
 		// type
 		addBaseParameter(new CommandParameterEnum(TrackType.class));
-		setPermission("cvboatrace.track.settype");
+		setPermission("cvracing.setup.type");
 
 		this.plugin = plugin;
 	}

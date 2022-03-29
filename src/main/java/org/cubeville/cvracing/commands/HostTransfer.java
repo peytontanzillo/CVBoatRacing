@@ -17,7 +17,7 @@ import java.util.Set;
 
 public class HostTransfer extends Command {
 
-	private final String transferPerm = "cvboatrace.host.transfer";
+	private final String transferPerm = "cvracing.host.transfer";
 
 	public HostTransfer() {
 		super("host transfer");

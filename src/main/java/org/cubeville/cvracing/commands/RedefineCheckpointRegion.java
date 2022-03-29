@@ -28,7 +28,7 @@ public class RedefineCheckpointRegion extends Command {
 		// rg id
 		addBaseParameter(new CommandParameterInteger());
 
-		setPermission("cvboatrace.checkpoints.redefine");
+		setPermission("cvracing.setup.cps.edit");
 		this.plugin = plugin;
 	}
 

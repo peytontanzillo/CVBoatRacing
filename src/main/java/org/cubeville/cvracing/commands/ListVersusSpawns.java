@@ -20,7 +20,7 @@ public class ListVersusSpawns extends BaseCommand {
 		super("track spawns versus list");
 
 		addBaseParameter(new CommandParameterString());
-		setPermission("cvboatrace.track.spawns.versus");
+		setPermission("cvracing.setup.spawns.view");
 	}
 
 	@Override

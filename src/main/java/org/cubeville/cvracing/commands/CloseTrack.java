@@ -21,7 +21,7 @@ public class CloseTrack extends BaseCommand {
 	public CloseTrack(JavaPlugin plugin) {
 		super("track close");
 		addBaseParameter(new CommandParameterString());
-		setPermission("cvboatrace.track.close");
+		setPermission("cvracing.admin.close");
 		this.plugin = plugin;
 	}
 

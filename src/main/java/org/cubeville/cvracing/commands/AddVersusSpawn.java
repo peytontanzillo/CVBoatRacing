@@ -18,10 +18,10 @@ public class AddVersusSpawn extends Command {
     private JavaPlugin plugin;
 
     public AddVersusSpawn(JavaPlugin plugin) {
-        super("track spawns versus add");
+        super("track spawns add versus");
 
         addBaseParameter(new CommandParameterString());
-        setPermission("cvboatrace.track.spawns.versus");
+        setPermission("cvracing.setup.spawns.edit");
         this.plugin = plugin;
     }
 

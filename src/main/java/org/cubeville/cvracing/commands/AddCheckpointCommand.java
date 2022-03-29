@@ -15,19 +15,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class AddCheckpointRegion extends Command {
+public class AddCheckpointCommand extends Command {
 
     private JavaPlugin plugin;
 
-    public AddCheckpointRegion(JavaPlugin plugin) {
-        super("track checkpoints regions add");
+    public AddCheckpointCommand(JavaPlugin plugin) {
+        super("track checkpoints commands add");
 
         // track
         addBaseParameter(new CommandParameterString());
         // int of cp
         addBaseParameter(new CommandParameterInteger());
+        // command to run
+        addBaseParameter(new CommandParameterString());
 
-        setPermission("cvracing.setup.cps.edit");
+
+        setPermission("cvracing.setup.cpcommands.edit");
         this.plugin = plugin;
     }
 
@@ -39,19 +42,10 @@ public class AddCheckpointRegion extends Command {
         String name = baseParameters.get(0).toString().toLowerCase();
         Track track = TrackManager.getTrack(name);
         int cpIndex = (int) baseParameters.get(1);
+        String command = (String) baseParameters.get(2);
 
         if (!config.contains("tracks." + name)) {
             throw new CommandExecutionException("Track " + baseParameters.get(0) + " does not exist.");
-        }
-
-        Location min, max;
-
-        try {
-            min = BlockUtils.getWESelectionMin(player);
-            max = BlockUtils.getWESelectionMax(player).add(1.0, 1.0, 1.0);
-        }
-        catch(IllegalArgumentException e) {
-            throw new CommandExecutionException("Please make a cuboid worldedit selection before running this command.");
         }
 
         Checkpoint cp = track.getCheckpoints().get(cpIndex - 1);
@@ -59,13 +53,12 @@ public class AddCheckpointRegion extends Command {
             throw new CommandExecutionException("Index " + cpIndex + " does not exist, please use /race track checkpoints list to view the indexes.");
         }
 
-        CPRegion cpRegion = cp.addRegion(min, max);
-
-        String locationsPath = "tracks." + name + ".checkpoints." + (cpIndex - 1) + "." + cpRegion.getString();
-        config.createSection(locationsPath);
+        String locationsPath = "tracks." + name + ".checkpoints." + (cpIndex - 1) + ".variables.commands";
+        cp.addCommand(command);
+        config.set(locationsPath, cp.getCommands());
 
         plugin.saveConfig();
 
-        return new CommandResponse("Successfully created a checkpoint for the track " + baseParameters.get(0) + "!");
+        return new CommandResponse("Successfully added a command to checkpoint " + cpIndex + " on track " + track.getName() + "!");
     }
 }

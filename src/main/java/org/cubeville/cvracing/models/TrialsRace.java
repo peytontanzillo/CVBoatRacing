@@ -92,6 +92,7 @@ public class TrialsRace extends Race {
 
     protected void endPlayerRace(Player p) {
         RaceManager.removeRace(p);
+        p.getActivePotionEffects().forEach(potionEffect -> p.removePotionEffect(potionEffect.getType()));
         hasStarted = false;
         this.removePlayerFromRaceAndSendToLoc(p, track.getExit());
         RaceManager.finishRace(track);

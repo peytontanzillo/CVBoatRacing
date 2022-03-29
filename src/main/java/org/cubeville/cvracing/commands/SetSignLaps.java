@@ -22,7 +22,7 @@ public class SetSignLaps extends Command {
 		super("track signs setlaps");
 		// lap number
 		addBaseParameter(new CommandParameterInteger());
-		setPermission("cvboatrace.signs.setlaps");
+		setPermission("cvracing.setup.signs.edit");
 		this.plugin = plugin;
 	}
 

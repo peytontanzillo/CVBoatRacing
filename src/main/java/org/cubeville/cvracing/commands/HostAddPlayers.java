@@ -20,7 +20,7 @@ public class HostAddPlayers extends Command {
 		super("host players add");
 		addBaseParameter(new CommandParameterOnlinePlayer());
 
-		setPermission("cvboatrace.host.players.add");
+		setPermission("cvracing.host.players.edit");
 	}
 
 	@Override

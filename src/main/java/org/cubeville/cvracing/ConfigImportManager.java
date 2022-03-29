@@ -54,11 +54,16 @@ public class ConfigImportManager {
 				while (checkpoints.contains(Integer.toString(i))) {
 					Checkpoint cp = new Checkpoint();
 					for (String cpRegion : Objects.requireNonNull(checkpoints.getConfigurationSection(String.valueOf(i))).getKeys(false)) {
+						if (cpRegion.equals("variables")) {
+							if (checkpoints.contains(i + ".variables.commands")) {
+								cp.setCommands(checkpoints.getStringList(i + ".variables.commands"));
+							}
+							continue;
+						}
 						String[] minMax = cpRegion.split("~");
 						CPRegion cpr = cp.addRegion(parseBlockLocation(minMax[0]), parseBlockLocation(minMax[1]));
 						if (checkpoints.contains(i + "." + cpRegion + ".reset")) {
 							cpr.setReset(parseTeleportLocation(Objects.requireNonNull(checkpoints.getString(i + "." + cpRegion + ".reset"))));
-
 						}
 					}
 					track.addCheckpoint(cp);

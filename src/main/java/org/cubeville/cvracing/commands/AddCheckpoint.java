@@ -27,7 +27,7 @@ public class AddCheckpoint extends Command {
 		super("track checkpoints add");
 
 		addBaseParameter(new CommandParameterString());
-		setPermission("cvboatrace.checkpoints.add");
+		setPermission("cvracing.setup.cps.edit");
 		this.plugin = plugin;
 	}
 

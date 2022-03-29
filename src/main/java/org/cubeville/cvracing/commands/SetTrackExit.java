@@ -16,7 +16,7 @@ public class SetTrackExit extends Command {
 		super("track setexit");
 
 		addBaseParameter(new CommandParameterString());
-		setPermission("cvboatrace.setexit");
+		setPermission("cvracing.setup.exit");
 		this.plugin = plugin;
 	}
 

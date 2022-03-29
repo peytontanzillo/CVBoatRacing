@@ -3,7 +3,6 @@ package org.cubeville.cvracing.models;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
@@ -41,7 +40,7 @@ public abstract class Race {
 		Vehicle v = null;
 		switch (this.track.getType()) {
 			case BOAT:
-				v = (Vehicle) player.getWorld().spawnEntity(location, EntityType.BOAT);
+				v = CustomizationManager.spawnBoat(player, location);
 				break;
 			case PIG:
 				Pig p = (Pig) player.getWorld().spawnEntity(location, EntityType.PIG);
@@ -55,13 +54,7 @@ public abstract class Race {
 				v = p;
 				break;
 			case HORSE:
-				Horse h = (Horse) player.getWorld().spawnEntity(location, EntityType.HORSE);
-				h.getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
-				h.setTamed(true);
-				h.setOwner(player);
-				h.setJumpStrength(.8);
-				h.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(.5);
-				v = h;
+				v = CustomizationManager.spawnHorse(player, location);
 				break;
 			case ELYTRA:
 				player.getInventory().setChestplate(new ItemStack(Material.ELYTRA, 1));
@@ -115,7 +108,7 @@ public abstract class Race {
 	protected void advanceCheckpoint(Player p) {
 		CPRegion regionWithin = this.getCurrentCheckpoint(p).getRegionContaining(p);
 		if (regionWithin == null) { return; }
-
+		this.getCurrentCheckpoint(p).getCommands().forEach(cmd -> Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), cmd.replaceAll("%player%", p.getDisplayName())));
 		RaceState newRaceState = this.raceStates.get(p);
 
 		int playerCheckpointIndex = newRaceState.getCheckpointIndex() + 1;

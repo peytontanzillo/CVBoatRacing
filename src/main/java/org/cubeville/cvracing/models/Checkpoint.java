@@ -10,7 +10,7 @@ import java.util.List;
 public class Checkpoint {
 
     private List<CPRegion> regions = new ArrayList<>();
-    private String command;
+    private List<String> commands = new ArrayList<>();
 
     public CPRegion getRegionContaining(Player p) {
         for (CPRegion rg : regions) {
@@ -33,11 +33,17 @@ public class Checkpoint {
         return regions;
     }
 
-    public String getCommand() {
-        return command;
+    public List<String> getCommands() {
+        return commands;
     }
 
-    public void setCommand(String command) {
-        this.command = command;
+    public void addCommand(String command) {
+        commands.add(command);
     }
+
+    public void setCommands(List<String> commands) {
+        this.commands = commands;
+    }
+
+    public void removeCommand(int index) { commands.remove(index); }
 }

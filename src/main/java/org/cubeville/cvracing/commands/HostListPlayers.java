@@ -19,7 +19,7 @@ public class HostListPlayers extends Command {
 
 	public HostListPlayers() {
 		super("host players list");
-		setPermission("cvboatrace.host.players.list");
+		setPermission("cvracing.host.players.view");
 	}
 
 	@Override

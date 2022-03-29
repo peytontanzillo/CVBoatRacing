@@ -23,7 +23,7 @@ public class DeleteSign extends Command {
 	public DeleteSign(JavaPlugin plugin) {
 		super("track signs delete");
 
-		setPermission("cvboatrace.signs.delete");
+		setPermission("cvracing.setup.signs.edit");
 		this.plugin = plugin;
 	}
 

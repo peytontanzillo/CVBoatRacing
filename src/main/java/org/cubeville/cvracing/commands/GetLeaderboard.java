@@ -18,7 +18,7 @@ public class GetLeaderboard extends Command {
 		super("leaderboard");
 		addBaseParameter(new CommandParameterString());
 		addOptionalBaseParameter(new CommandParameterInteger());
-		setPermission("cvboatrace.leaderboard");
+		setPermission("cvracing.citizen.leaderboard");
 	}
 
 	@Override

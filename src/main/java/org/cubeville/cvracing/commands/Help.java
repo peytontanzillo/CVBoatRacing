@@ -13,28 +13,28 @@ public class Help extends Command {
 
 	public Help() {
 		super("help");
-		setPermission("cvboatrace.help");
+		setPermission("cvracing.citizen.help");
 	}
 
 	@Override
 	public CommandResponse execute(Player player, Set<String> set, Map<String, Object> map, List<Object> list)
 		throws CommandExecutionException {
 		String[] helpOutput = {
-			"&b/race leaderboard <track_id> [page_number]",
-			"&3&oView the leaderboard for a track.",
-			"&b/race pb <track_id> [player_name]",
-			"&3&oView the personal best time on a track.",
-			"&b/race rank <track_id> [player_name]",
-			"&3&oView the rank on a track.",
-			"&b/race splits compare <track_id> <player_name> [player_name]",
-			"&3&oCompare the splits on a track.",
-			"&b/race splits use [player_name]",
-			"&3&oUse the splits of another player on every track.",
-			"&b/race splits use wr",
-			"&3&oUse the splits of the world record holder on every track."
+			"&6/race leaderboard <track_id> [page_number]",
+			"&f&oView the leaderboard for a track.",
+			"&6/race pb <track_id> [player_name]",
+			"&f&oView the personal best time on a track.",
+			"&6/race rank <track_id> [player_name]",
+			"&f&oView the rank on a track.",
+			"&6/race splits compare <track_id> <player_name> [player_name]",
+			"&f&oCompare the splits on a track.",
+			"&6/race splits use [player_name]",
+			"&f&oUse the splits of another player on every track.",
+			"&6/race splits use wr",
+			"&f&oUse the splits of the world record holder on every track."
 		};
 		CommandResponse cr = new CommandResponse();
-		cr.setBaseMessage("&c&lC&9&lV &6&lRacing Commands");
+		cr.setBaseMessage("&c&lC&9&lV &e&lRacing Commands");
 		for (String helpLine : helpOutput) {
 			cr.addMessage(helpLine);
 		}

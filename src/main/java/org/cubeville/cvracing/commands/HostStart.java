@@ -17,7 +17,7 @@ public class HostStart extends Command {
 		super("host start");
 		// track name
 		addBaseParameter(new CommandParameterString());
-		setPermission("cvboatrace.host.start");
+		setPermission("cvracing.host.start");
 	}
 
 	@Override

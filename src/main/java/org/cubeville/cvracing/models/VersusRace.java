@@ -275,6 +275,7 @@ public class VersusRace extends Race {
 
     @Override
     protected void endPlayerRace(Player player) {
+        player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
         removePlayer(player);
         this.removePlayerFromRaceAndSendToLoc(player, endLocation());
         updateScoreboard();

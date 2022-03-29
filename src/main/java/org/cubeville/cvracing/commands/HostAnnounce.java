@@ -17,7 +17,7 @@ public class HostAnnounce extends Command {
 
 	public HostAnnounce() {
 		super("host announce");
-		setPermission("cvboatrace.host.announce");
+		setPermission("cvracing.host.announce");
 		addOptionalBaseParameter(new CommandParameterInteger());
 	}
 

@@ -19,7 +19,7 @@ public class SetTrackSpectate extends Command {
 		super("track setspectate");
 
 		addBaseParameter(new CommandParameterString());
-		setPermission("cvboatrace.setspectate");
+		setPermission("cvracing.setup.spectate");
 		this.plugin = plugin;
 	}
 

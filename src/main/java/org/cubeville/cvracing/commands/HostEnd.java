@@ -19,7 +19,7 @@ public class HostEnd extends Command {
 
 	public HostEnd() {
 		super("host end");
-		setPermission("cvboatrace.host.end");
+		setPermission("cvracing.host.end");
 	}
 
 	@Override

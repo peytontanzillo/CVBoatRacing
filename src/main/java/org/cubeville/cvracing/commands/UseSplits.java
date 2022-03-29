@@ -20,7 +20,7 @@ public class UseSplits extends Command {
 		addOptionalBaseParameter(new CommandParameterString());
 		// TODO include parameter for track on splits
 		// addOptionalBaseParameter(new CommandParameterString());
-		setPermission("cvboatrace.splits.use");
+		setPermission("cvracing.citizen.splits.use");
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class UseSplits extends Command {
 			return new CommandResponse("§6Splits set to your personal best time.");
 		}
 		String p1String = (String) baseParameters.get(0);
-		if (p1String.toLowerCase().equals("wr")) {
+		if (p1String.equalsIgnoreCase("wr")) {
 			SelectedSplits.selectWR(player.getUniqueId());
 			return new CommandResponse("§6Splits set to the world record time on each track.");
 		}

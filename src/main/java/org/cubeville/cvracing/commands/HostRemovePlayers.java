@@ -22,7 +22,7 @@ public class HostRemovePlayers extends Command {
 		super("host players remove");
 		addBaseParameter(new CommandParameterOnlinePlayer());
 
-		setPermission("cvboatrace.host.players.remove");
+		setPermission("cvracing.host.players.edit");
 	}
 
 	@Override

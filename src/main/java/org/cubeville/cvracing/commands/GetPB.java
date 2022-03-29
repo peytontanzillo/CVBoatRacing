@@ -23,7 +23,7 @@ public class GetPB extends Command {
 		super("pb");
 		addBaseParameter(new CommandParameterString());
 		addOptionalBaseParameter(new CommandParameterString());
-		setPermission("cvboatrace.pb");
+		setPermission("cvracing.citizen.pb");
 	}
 
 	@Override

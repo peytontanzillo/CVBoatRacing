@@ -13,16 +13,16 @@ import org.cubeville.cvracing.TrackManager;
 
 import java.util.*;
 
-public class CreateRaceSign extends Command {
+public class AddRaceSign extends Command {
 	private JavaPlugin plugin;
 
-	public CreateRaceSign(JavaPlugin plugin) {
+	public AddRaceSign(JavaPlugin plugin) {
 		super("track signs add");
 		// track
 		addBaseParameter(new CommandParameterString());
 		// type
 		addBaseParameter(new CommandParameterEnum(RaceSignType.class));
-		setPermission("cvboatrace.signs.add");
+		setPermission("cvracing.setup.signs.edit");
 		this.plugin = plugin;
 	}
 

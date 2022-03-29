@@ -20,7 +20,7 @@ public class DeleteLeaderboard extends Command {
 
 		addBaseParameter(new CommandParameterString());
 		addBaseParameter(new CommandParameterInteger());
-		setPermission("cvboatrace.leaderboards.delete");
+		setPermission("cvracing.setup.leaderboards.edit");
 		this.plugin = plugin;
 	}
 

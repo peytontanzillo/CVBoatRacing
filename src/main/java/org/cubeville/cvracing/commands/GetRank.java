@@ -21,7 +21,7 @@ public class GetRank extends Command {
 		super("rank");
 		addBaseParameter(new CommandParameterString());
 		addOptionalBaseParameter(new CommandParameterString());
-		setPermission("cvboatrace.rank");
+		setPermission("cvracing.citizen.rank");
 	}
 
 	@Override

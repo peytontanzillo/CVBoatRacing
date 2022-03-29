@@ -21,7 +21,7 @@ public class HostSetLaps extends Command {
 	public HostSetLaps() {
 		super("host laps");
 		addBaseParameter(new CommandParameterInteger());
-		setPermission("cvboatrace.host.laps");
+		setPermission("cvracing.host.laps");
 	}
 
 	@Override

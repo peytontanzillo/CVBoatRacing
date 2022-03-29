@@ -6,11 +6,14 @@ import org.cubeville.cvracing.models.Track;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class TrackManager {
+
+	public static final List<TrackType> vehicleRaceTypes = Arrays.asList(TrackType.PIG, TrackType.BOAT, TrackType.HORSE, TrackType.STRIDER);
 
 	private static HashMap<String, Track> tracks = new HashMap<>();
 

@@ -18,7 +18,7 @@ public class DeleteCheckpoint extends Command {
 
 		addBaseParameter(new CommandParameterString());
 		addBaseParameter(new CommandParameterInteger());
-		setPermission("cvboatrace.checkpoints.delete");
+		setPermission("cvracing.setup.cps.edit");
 		this.plugin = plugin;
 	}
 

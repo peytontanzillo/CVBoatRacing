@@ -1,7 +1,9 @@
 package org.cubeville.cvracing.dbfiles;
 
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.cubeville.cvracing.CVRacing;
+import org.cubeville.cvracing.models.CustomizationState;
 import org.cubeville.cvracing.models.Score;
 import org.cubeville.cvracing.models.Track;
 
@@ -36,10 +38,19 @@ public class RacingDB extends SQLite {
 		"FOREIGN KEY (`score_id`) REFERENCES scores(`score_id`) ON DELETE CASCADE" +
 		");";
 
+	public String SQLiteCreatePlayersTable = "CREATE TABLE IF NOT EXISTS players (" +
+		"`uuid` varchar(32) PRIMARY KEY NOT NULL," +
+		"`boat_material` varchar(32)," +
+		"`horse_color` varchar(32)," +
+		"`horse_style` varchar(32)," +
+		"`horse_armor` varchar(32)" +
+		");";
+
 	public void load() {
 		connect();
 		update(SQLiteCreateScoresTable);
 		update(SQLiteCreateSplitsTable);
+		update(SQLiteCreatePlayersTable);
 	}
 
 	public ResultSet getAllScores() {
@@ -49,6 +60,8 @@ public class RacingDB extends SQLite {
 	public ResultSet getAllSplits() {
 		return getResult("SELECT * FROM `splits`");
 	}
+
+	public ResultSet getAllPlayers() { return getResult("SELECT * FROM `players`"); }
 
 	public void createBackup(JavaPlugin plugin) throws IOException {
 		File dbFile = new File(plugin.getDataFolder(), "scores.db");
@@ -74,6 +87,13 @@ public class RacingDB extends SQLite {
 		}
 	}
 
+	public void addPlayer(Player p, CustomizationState cs) {
+		// add score to database
+		update("INSERT INTO `players` (uuid, boat_material, horse_color, horse_style, horse_armor) " +
+				"VALUES(\"" + p.getUniqueId() + "\", \"" + cs.boatMaterial.toString() + "\", \"" + cs.horseColor.toString() + "\", \"" + cs.horseStyle.toString() + "\", \"" + cs.horseArmorString + "\");"
+		);
+	}
+
 	public void updateScore(Score s) {
 		update("UPDATE `scores`" +
 			" SET time = " + s.getFinalTime() + ", timestamp = " + s.getTimestamp()
@@ -86,6 +106,15 @@ public class RacingDB extends SQLite {
 				+ splitConditionString(checkpoint, scoreId)
 			);
 		}
+	}
+
+	public void updatePlayer(Player p, CustomizationState cs) {
+		// add score to database
+		update("UPDATE `players`" +
+				" SET boat_material = \"" + cs.boatMaterial.toString() + "\", horse_color = \"" + cs.horseColor.toString() +
+				"\", horse_style = \"" + cs.horseStyle.toString() + "\", horse_armor = \"" + cs.horseArmorString + "\"" +
+				" WHERE uuid = \"" + p.getUniqueId() + "\""
+		);
 	}
 
 	public void deleteScore(Score score) {

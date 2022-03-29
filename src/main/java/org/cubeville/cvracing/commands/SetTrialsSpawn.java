@@ -13,10 +13,10 @@ public class SetTrialsSpawn extends Command {
 	private JavaPlugin plugin;
 
 	public SetTrialsSpawn(JavaPlugin plugin) {
-		super("track spawns trials set");
+		super("track spawns set trials");
 
 		addBaseParameter(new CommandParameterString());
-		setPermission("cvboatrace.track.spawns.trials");
+		setPermission("cvracing.setup.spawns.edit");
 		this.plugin = plugin;
 	}
 

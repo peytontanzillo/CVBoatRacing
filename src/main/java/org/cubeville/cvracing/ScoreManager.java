@@ -10,7 +10,7 @@ import java.util.*;
 
 public class ScoreManager {
 
-	private static HashMap<String, TreeSet<Score>> scoreManager = new HashMap<>(); // player uuid -> track id -> score
+	private static HashMap<String, TreeSet<Score>> scoreManager = new HashMap<>();
 	private static RacingDB database;
 
 	public static void importDataFromDatabase(RacingDB db) {

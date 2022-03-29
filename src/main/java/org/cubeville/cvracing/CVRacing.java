@@ -37,6 +37,7 @@ public class CVRacing extends JavaPlugin implements Listener {
 
         // import data from db
         ScoreManager.importDataFromDatabase(this.db);
+        CustomizationManager.importDataFromDatabase(this.db);
 
         // load leaderboards
         TrackManager.loadLeaderboards();
@@ -48,7 +49,7 @@ public class CVRacing extends JavaPlugin implements Listener {
         commandParser.addCommand(new SetTrackExit(this));
         commandParser.addCommand(new SetTrackSpectate(this));
         commandParser.addCommand(new SetTrackType(this));
-        commandParser.addCommand(new CreateRaceSign(this));
+        commandParser.addCommand(new AddRaceSign(this));
         commandParser.addCommand(new OpenTrack(this));
         commandParser.addCommand(new CloseTrack(this));
         commandParser.addCommand(new AddCheckpoint(this));
@@ -63,7 +64,10 @@ public class CVRacing extends JavaPlugin implements Listener {
         commandParser.addCommand(new DeleteCheckpointRegion(this));
         commandParser.addCommand(new SetCheckpointRegionReset(this));
         commandParser.addCommand(new SetSignLaps(this));
-        commandParser.addCommand(new SetTrackReset(this));
+        commandParser.addCommand(new SetTrackTpToCp(this));
+        commandParser.addCommand(new AddCheckpointCommand(this));
+        commandParser.addCommand(new DeleteCheckpointCommand(this));
+        commandParser.addCommand(new ListCheckpointCommands());
         commandParser.addCommand(new ListVersusSpawns());
         commandParser.addCommand(new ListCheckpoints());
         commandParser.addCommand(new GetPB());
@@ -77,6 +81,7 @@ public class CVRacing extends JavaPlugin implements Listener {
         commandParser.addCommand(new ListLeaderboards());
         commandParser.addCommand(new CompareSplits());
         commandParser.addCommand(new Help());
+        commandParser.addCommand(new Customize());
         commandParser.addCommand(new HostAddPlayers());
         commandParser.addCommand(new HostEnd());
         commandParser.addCommand(new HostListPlayers());
@@ -86,6 +91,9 @@ public class CVRacing extends JavaPlugin implements Listener {
         commandParser.addCommand(new HostRemovePlayers());
         commandParser.addCommand(new HostSetLaps());
         commandParser.addCommand(new HostAnnounce());
+        commandParser.addCommand(new GiveCustomBoat());
+        commandParser.addCommand(new ClearRaceInventory());
+        commandParser.addCommand(new CenterPosition());
 
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new EventHandlers(this), this);

@@ -76,7 +76,7 @@ public class EventHandlers implements Listener {
 			// will cancel race if the player left their vehicle in a race
 			Player p = (Player) e.getExited();
 			Race r = RaceManager.getRace(p);
-			if (r != null) {
+			if (r != null && TrackManager.vehicleRaceTypes.contains(r.getTrack().getType())) {
 				RaceManager.cancelRace(p, "You left the vehicle during the race.");
 				e.getVehicle().remove();
 			}
@@ -97,10 +97,10 @@ public class EventHandlers implements Listener {
 	@EventHandler
 	public void onVehicleDestroy(VehicleDestroyEvent e) {
 		if (RaceManager.racingVehicles.contains(e.getVehicle().getType()) && e.getVehicle().getPassengers().size() > 0 && e.getVehicle().getPassengers().get(0).getType() == EntityType.PLAYER) {
-			// will cancel race if the player exited their boat in a race
+			// will cancel race if the player exited their vehicle in a race
 			Player p = (Player) e.getVehicle().getPassengers().get(0);
 			Race r = RaceManager.getRace(p);
-			if (r != null) {
+			if (r != null && TrackManager.vehicleRaceTypes.contains(r.getTrack().getType())) {
 				RaceManager.cancelRace(p, "Your vehicle was destroyed during the race.");
 				e.getVehicle().remove();
 			}
@@ -112,7 +112,7 @@ public class EventHandlers implements Listener {
 		if (RaceManager.racingVehicles.contains(e.getEntity().getType()) && e.getEntity().getPassengers().size() > 0 && e.getEntity().getPassengers().get(0).getType() == EntityType.PLAYER) {
 			Player p = (Player) e.getEntity().getPassengers().get(0);
 			Race r = RaceManager.getRace(p);
-			if (r != null) {
+			if (r != null && TrackManager.vehicleRaceTypes.contains(r.getTrack().getType())) {
 				RaceManager.cancelRace(p, "Your vehicle was killed during the race.");
 				e.getEntity().remove();
 			}

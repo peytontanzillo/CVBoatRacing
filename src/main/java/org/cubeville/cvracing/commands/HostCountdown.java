@@ -18,7 +18,7 @@ public class HostCountdown extends Command {
 
 	public HostCountdown() {
 		super("host countdown");
-		setPermission("cvboatrace.host.countdown");
+		setPermission("cvracing.host.countdown");
 	}
 
 	@Override

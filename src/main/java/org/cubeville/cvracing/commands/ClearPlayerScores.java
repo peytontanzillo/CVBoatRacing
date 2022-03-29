@@ -18,7 +18,7 @@ public class ClearPlayerScores extends BaseCommand {
 		super("times clear player");
 		// track
 		addBaseParameter(new CommandParameterString());
-		setPermission("cvboatrace.scores.clear");
+		setPermission("cvracing.admin.scores");
 	}
 
 	@Override

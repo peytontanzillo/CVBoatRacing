@@ -20,7 +20,7 @@ public class ListSigns extends BaseCommand {
 		super("track signs list");
 
 		addBaseParameter(new CommandParameterString());
-		setPermission("cvboatrace.signs.list");
+		setPermission("cvracing.setup.signs.view");
 	}
 
 	@Override
