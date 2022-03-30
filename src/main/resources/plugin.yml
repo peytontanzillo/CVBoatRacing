@@ -28,6 +28,12 @@ permissions:
   cvracing.admin.commands:
     description: Allow the user to run various help commands
     default: op
+  cvracing.admin.cpcommands.view:
+    description: Allow a user to view a track's checkpoint commands
+    default: op
+  cvracing.admin.cpcommands.edit:
+    description: Allow a user to edit a track's checkpoint commands
+    default: op
 
 # Track Setup Commands
   cvracing.setup.cps.view:
@@ -35,12 +41,6 @@ permissions:
     default: op
   cvracing.setup.cps.edit:
     description: Allow a user to edit a track's checkpoints
-    default: op
-  cvracing.setup.cpcommands.view:
-    description: Allow a user to view a track's checkpoint commands
-    default: op
-  cvracing.setup.cpcommands.edit:
-    description: Allow a user to edit a track's checkpoint commands
     default: op
   cvracing.setup.leaderboards.view:
     description: Allow a user to view a track's leaderboards

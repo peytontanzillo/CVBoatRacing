@@ -18,7 +18,7 @@ public class ListCheckpointCommands extends BaseCommand {
 		addBaseParameter(new CommandParameterString());
 		// cp id
 		addBaseParameter(new CommandParameterInteger());
-		setPermission("cvracing.setup.cpcommands.view");
+		setPermission("cvracing.admin.cpcommands.view");
 	}
 
 	@Override

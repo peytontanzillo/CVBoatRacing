@@ -30,7 +30,7 @@ public class AddCheckpointCommand extends Command {
         addBaseParameter(new CommandParameterString());
 
 
-        setPermission("cvracing.setup.cpcommands.edit");
+        setPermission("cvracing.admin.cpcommands.edit");
         this.plugin = plugin;
     }
 

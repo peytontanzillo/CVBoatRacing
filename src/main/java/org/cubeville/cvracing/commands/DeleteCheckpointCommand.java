@@ -25,7 +25,7 @@ public class DeleteCheckpointCommand extends Command {
 		// deleting index
 		addBaseParameter(new CommandParameterInteger());
 
-		setPermission("cvracing.setup.cpcommands.edit");
+		setPermission("cvracing.admin.cpcommands.edit");
 		this.plugin = plugin;
 	}
 
