@@ -84,7 +84,7 @@ public class CustomizationState {
     }
 
     public boolean setArmorFromString(String string) {
-        if (determineArmor(string.toUpperCase())) {
+        if (determineArmor(string)) {
             horseArmorString = string.toUpperCase();
             return true;
         }
@@ -93,7 +93,8 @@ public class CustomizationState {
 
     public boolean determineArmor(String string) {
         if (string != null) {
-            switch (string.toUpperCase()) {
+            string = string.toUpperCase();
+            switch (string) {
                 case "DIAMOND":
                     setHorseArmor(new ItemStack(Material.DIAMOND_HORSE_ARMOR));
                     return true;
