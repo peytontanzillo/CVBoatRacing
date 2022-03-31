@@ -56,7 +56,7 @@ public class RedefineCheckpointRegion extends Command {
 
 		int cpIndex = (int) baseParameters.get(1);
 		if (cpIndex > track.getCheckpoints().size() || cpIndex <= 0) {
-			throw new CommandExecutionException("That checkpoint index does not exist, please use /race track checkpoints list to view the indexes.");
+			throw new CommandExecutionException("That checkpoint index does not exist, please use /race track checkpoints list <track_id> to view the indexes.");
 		}
 		cpIndex -= 1;
 
@@ -64,17 +64,15 @@ public class RedefineCheckpointRegion extends Command {
 
 		int rgIndex = (int) baseParameters.get(2);
 		if (rgIndex > cp.getRegions().size() || rgIndex <= 0) {
-			throw new CommandExecutionException("That region index does not exist, please use /race track checkpoints list to view the indexes.");
+			throw new CommandExecutionException("That region index does not exist, please use /race track checkpoints list <track_id> to view the indexes.");
 		}
 		rgIndex -= 1;
 
 		CPRegion cpRegion = cp.getRegions().get(rgIndex);
-
 		String cpLocationsPath = "tracks." + name + ".checkpoints." + cpIndex;
 
 		// remove the previous region
 		config.set(cpLocationsPath + "." + cpRegion.getString(), null);
-
 		cpRegion.defineRegion(min, max);
 
 		if (cpRegion.getReset() == null) {
@@ -83,9 +81,7 @@ public class RedefineCheckpointRegion extends Command {
 			config.set(cpLocationsPath + "." + cpRegion.getString() + ".reset", RaceUtilities.tpLocToString(cpRegion.getReset()));
 		}
 
-		track.getCheckpoints().get(cpIndex).addRegion(min, max);
 		plugin.saveConfig();
-
 		return new CommandResponse("Successfully redefined checkpoint region for the track " + name + "!");
 	}
 }

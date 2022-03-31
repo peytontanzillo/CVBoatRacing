@@ -34,7 +34,7 @@ public class Customize extends Command {
 			switch(customizing) {
 				case "BOAT":
 				case "BOATS":
-					if (!player.hasPermission("cvracing.customize.boat")) {
+					if (!player.hasPermission("cvracing.customization.boat")) {
 						throw new CommandExecutionException("You do not have permission to customize boat color.");
 					}
 					extendedMessage = Arrays.toString(BoatMaterial.values());
@@ -42,7 +42,7 @@ public class Customize extends Command {
 					break;
 				case "HORSE_COLOR":
 				case "HORSECOLOR":
-					if (!player.hasPermission("cvracing.customize.horse.color")) {
+					if (!player.hasPermission("cvracing.customization.horse.color")) {
 						throw new CommandExecutionException("You do not have permission to customize horse color.");
 					}
 					extendedMessage = Arrays.toString(Horse.Color.values());
@@ -50,7 +50,7 @@ public class Customize extends Command {
 					break;
 				case "HORSE_STYLE":
 				case "HORSESTYLE":
-					if (!player.hasPermission("cvracing.customize.horse.style")) {
+					if (!player.hasPermission("cvracing.customization.horse.style")) {
 						throw new CommandExecutionException("You do not have permission to customize horse style.");
 					}
 					extendedMessage = Arrays.toString(Horse.Style.values());
@@ -58,10 +58,10 @@ public class Customize extends Command {
 					break;
 				case "HORSE_ARMOR":
 				case "HORSEARMOR":
-					if (!player.hasPermission("cvracing.customize.horse.armor")) {
+					if (!player.hasPermission("cvracing.customization.horse.armor")) {
 						throw new CommandExecutionException("You do not have permission to customize horse armor.");
 					}
-					if (customization.charAt(0) == '#' && customization.length() == 7 && !player.hasPermission("cvracing.customize.horse.armor.hex")) {
+					if (customization.charAt(0) == '#' && customization.length() == 7 && !player.hasPermission("cvracing.customization.horse.armor.hex")) {
 						throw new CommandExecutionException("You do not have permission to set horse armor to a hexcode color.");
 					}
 					extendedMessage = "[IRON, GOLD, DIAMOND, LEATHER, NONE] or any hexcode value";

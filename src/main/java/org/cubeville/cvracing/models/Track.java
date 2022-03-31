@@ -86,6 +86,10 @@ public class Track implements Listener {
 		this.leaderboards.remove(index);
 	}
 
+	public void removeVersusSpawn(int index) {
+		this.versusSpawns.remove(index);
+	}
+
 	public void loadLeaderboards() {
 		leaderboards.forEach(leaderboard -> leaderboard.setDisplayText(RaceUtilities.getLeaderboardLines(this, 0, 9)));
 	}

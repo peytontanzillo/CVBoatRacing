@@ -11,16 +11,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class DeleteLeaderboard extends Command {
+public class DeleteVersusSpawn extends Command {
 
 	private JavaPlugin plugin;
 
-	public DeleteLeaderboard(JavaPlugin plugin) {
-		super("track leaderboards delete");
+	public DeleteVersusSpawn(JavaPlugin plugin) {
+		super("track spawns delete versus");
 
 		addBaseParameter(new CommandParameterString());
 		addBaseParameter(new CommandParameterInteger());
-		setPermission("cvracing.setup.leaderboards.edit");
+		setPermission("cvracing.setup.spawns.edit");
 		this.plugin = plugin;
 	}
 
@@ -37,20 +37,20 @@ public class DeleteLeaderboard extends Command {
 		}
 
 		int deletingIndex = (int) baseParameters.get(1);
-		if (deletingIndex > track.getLeaderboards().size() || deletingIndex < 1) {
-			throw new CommandExecutionException("That index does not exist, please use /race track leaderboards list <track_id> to view the indexes.");
+		if (deletingIndex > track.getVersusSpawns().size() || deletingIndex < 1) {
+			throw new CommandExecutionException("That index does not exist, please use /race track spawns list versus <track_id> to view the indexes.");
 		}
 		deletingIndex -= 1;
 
-		String leaderboardsPath = "tracks." + name + ".leaderboards";
+		String locationsPath = "tracks." + name + ".versusSpawns";
 
-		List<String> leaderboardsLocation = config.getStringList(leaderboardsPath);
-		leaderboardsLocation.remove(deletingIndex);
-		config.set(leaderboardsPath, leaderboardsLocation);
+		List<String> locations = config.getStringList(locationsPath);
+		locations.remove(deletingIndex);
+		config.set(locationsPath, locations);
 
-		track.removeLeaderboard(deletingIndex);
+		track.removeVersusSpawn(deletingIndex);
 		plugin.saveConfig();
 
-		return new CommandResponse("Successfully deleted a leaderboard for the track " + name + "!");
+		return new CommandResponse("Successfully deleted a versus spawn for the track " + name + "!");
 	}
 }

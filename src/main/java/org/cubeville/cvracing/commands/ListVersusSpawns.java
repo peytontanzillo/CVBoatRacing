@@ -17,7 +17,7 @@ import java.util.Set;
 public class ListVersusSpawns extends BaseCommand {
 
 	public ListVersusSpawns() {
-		super("track spawns versus list");
+		super("track spawns list versus");
 
 		addBaseParameter(new CommandParameterString());
 		setPermission("cvracing.setup.spawns.view");
@@ -32,12 +32,12 @@ public class ListVersusSpawns extends BaseCommand {
 		if (track == null) {
 			throw new CommandExecutionException("Track " + baseParameters.get(0) + " does not exist.");
 		}
-		List<Leaderboard> leaderboards = track.getLeaderboards();
+		List<Location> versusSpawns = track.getVersusSpawns();
 
 		CommandResponse cr = new CommandResponse();
 
-		for (int i = 0; i < leaderboards.size(); i++) {
-			cr.addMessage("&b" + (i + 1) + ": " + formatLeaderboardLocation(leaderboards.get(i).getLocation()));
+		for (int i = 0; i < versusSpawns.size(); i++) {
+			cr.addMessage("&b" + (i + 1) + ": " + formatLeaderboardLocation(versusSpawns.get(i)));
 		}
 		return cr;
 	}
