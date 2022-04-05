@@ -204,6 +204,7 @@ public abstract class Race {
 	private void startStopwatch(Player p) {
 		raceStates.get(p).setElapsed(0);
 		int stopwatch = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
+			if (raceStates.get(p) == null) { stopStopwatch(p); }
 			long elapsed = raceStates.get(p).getElapsed();
 			raceStates.get(p).setElapsed(elapsed + 50);
 			advanceCheckpoint(p);

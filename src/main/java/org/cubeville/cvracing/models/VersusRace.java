@@ -233,7 +233,7 @@ public class VersusRace extends Race {
 
     protected void updateSortedRaceStates() {
         this.sortedRaceStates = this.raceStates.values().stream()
-        .filter(v -> !v.isSpectator())
+        .filter(v -> !v.isSpectator() || v.getEndTime() != 0)
         .sorted(new RaceStateComparator(track.getCheckpoints().size()))
         .collect(Collectors.toList());
     }

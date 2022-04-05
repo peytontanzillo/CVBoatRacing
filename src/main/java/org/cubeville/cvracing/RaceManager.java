@@ -82,6 +82,7 @@ public class RaceManager {
 	}
 
 	public static void endHostedRace(Track t) {
+		t.getHostedRace().getRaceStates().keySet().forEach(player -> player.teleport(t.getExit()));
 		cancelTrackRaces(t, "This hosted session has ended");
 		t.setHostedRace(null);
 		for (RaceSign sign : t.getSigns()) {

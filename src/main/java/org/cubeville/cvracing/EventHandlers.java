@@ -18,9 +18,7 @@ import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.EntitiesLoadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.cubeville.cvracing.models.Race;
-import org.cubeville.cvracing.models.RaceSign;
-import org.cubeville.cvracing.models.VersusRace;
+import org.cubeville.cvracing.models.*;
 import org.spigotmc.event.entity.EntityDismountEvent;
 
 import java.util.List;
@@ -125,13 +123,23 @@ public class EventHandlers implements Listener {
 		Player p = e.getPlayer();
 		Race r = RaceManager.getRace(p);
 		if (r != null) {
-			// remove them from a queue if they're in it
-			TrackManager.clearPlayerFromQueues(p);
 			RaceManager.cancelRace(p, "You left the game during the race.");
 			if (p.getVehicle() != null) {
 				p.getVehicle().remove();
 			}
-			p.teleport(r.getTrack().getExit());
+		}
+
+		// remove player from any hosted lobbies
+		for (Track track : TrackManager.getTracks()) {
+			if (track.getQueue().contains(p)) {
+				track.removePlayerFromQueue(p);
+				for (RaceSign sign : track.getSigns()) {
+					sign.displayQueue();
+				}
+			}
+			if (track.getHostedRace() != null && track.getHostedRace().hasPlayer(p)) {
+				RaceManager.removePlayerFromHostedLobby(track, p);
+			}
 		}
 	}
 
