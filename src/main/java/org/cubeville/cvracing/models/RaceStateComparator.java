@@ -28,8 +28,8 @@ public class RaceStateComparator implements Comparator<RaceState> {
 		}
 
 		int splitIndex = (rsA.getLapIndex() * checkpointSize) + rsA.getCheckpointIndex() - 1;
-		if (rsA.getEndTime() != 0 || rsB.getEndTime() != 0) {
-			if (rsA.getEndTime() > rsB.getEndTime()) {
+		if (rsA.getFinishTime() != 0 || rsB.getFinishTime() != 0) {
+			if (rsA.getFinishTime() > rsB.getFinishTime()) {
 				return 1;
 			}
 			return -1;

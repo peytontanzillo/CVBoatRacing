@@ -68,6 +68,7 @@ public class CVRacing extends JavaPlugin implements Listener {
         commandParser.addCommand(new AddCheckpointCommand(this));
         commandParser.addCommand(new DeleteCheckpointCommand(this));
         commandParser.addCommand(new DeleteVersusSpawn(this));
+        commandParser.addCommand(new SetTimingMethod(this));
         commandParser.addCommand(new ListCheckpointCommands());
         commandParser.addCommand(new ListVersusSpawns());
         commandParser.addCommand(new ListCheckpoints());

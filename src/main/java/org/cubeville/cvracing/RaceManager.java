@@ -15,6 +15,7 @@ public class RaceManager {
 
 	public static final List<EntityType> racingVehicles = Arrays.asList(EntityType.BOAT, EntityType.PIG, EntityType.HORSE, EntityType.STRIDER);
 
+	private static String timing = "SYSTEM";
 	private static HashMap<Player, RacePlayerState> races = new HashMap<>();
 	private static HashMap<String, Integer> queueCountdowns = new HashMap<>();
 	private static JavaPlugin plugin;
@@ -137,8 +138,6 @@ public class RaceManager {
 		});
 	}
 
-	public static RacePlayerState getRacePlayerState(Player p) { return races.get(p); }
-
 	public static Race getRace(Player p) {
 		if (races.get(p) == null) { return null; }
 		return races.get(p).race;
@@ -205,5 +204,13 @@ public class RaceManager {
 		} else {
 			addTrialsRace(t, p);
 		}
+	}
+
+	public static String getTiming() {
+		return timing;
+	}
+
+	public static void setTiming(String timing) {
+		RaceManager.timing = timing;
 	}
 }

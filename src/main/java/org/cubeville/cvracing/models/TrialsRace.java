@@ -45,6 +45,7 @@ public class TrialsRace extends Race {
 
     protected String getSplitString(Player p, long currentTime) {
         if (comparingTime != null) {
+            System.out.println(comparingTime);
             long comparingSplit = comparingTime.getSplit(this.raceStates.get(p).getCheckpointIndex() - 1);
             String comparingName = "";
             if (!comparingTime.getPlayerUUID().equals(p.getUniqueId())) {
@@ -55,7 +56,7 @@ public class TrialsRace extends Race {
             } else if (comparingSplit < currentTime) {
                 return " §6(§c+" + RaceUtilities.formatTimeString(currentTime - comparingSplit) + "§6)" + comparingName;
             } else {
-                return " §6(§e00:00.00§6)" + comparingName;
+                return " §6(§e00:00.000§6)" + comparingName;
             }
         }
         return "";
@@ -63,30 +64,30 @@ public class TrialsRace extends Race {
 
     public void completeRace(Player p) {
         String pbString = " ";
-        long elapsed = raceStates.get(p).getElapsed();
-        if (personalBest == null || personalBest.getFinalTime() > elapsed) {
+        long finalTime = raceStates.get(p).getFinishTime();
+        if (personalBest == null || personalBest.getFinalTime() > finalTime) {
             String pbBy = "";
             if (personalBest != null) {
-                pbBy = ", which was your personal best by " + RaceUtilities.formatTimeString(personalBest.getFinalTime() - elapsed);
+                pbBy = ", which was your personal best by " + RaceUtilities.formatTimeString(personalBest.getFinalTime() - finalTime);
             }
-            p.sendMessage("§bYou achieved a time of " + RaceUtilities.formatTimeString(elapsed) + " on " + track.getName() + pbBy + "!");
+            p.sendMessage("§bYou achieved a time of " + RaceUtilities.formatTimeString(finalTime) + " on " + track.getName() + pbBy + "!");
             pbString = "§a§lNew Personal Best!";
             Score wr = ScoreManager.getWRScore(track);
-            ScoreManager.setNewPB(p.getUniqueId(), track, elapsed, raceStates.get(p).getSplits());
-            if (wr == null || elapsed < wr.getFinalTime()) {
-                String broadcastString = "§b§l" + p.getName() + "§3 just got a new world record time of §b§l" + RaceUtilities.formatTimeString(elapsed) + "§3 on §b§l" + track.getName() + "§3!";
+            ScoreManager.setNewPB(p.getUniqueId(), track, finalTime, raceStates.get(p).getSplits());
+            if (wr == null || finalTime < wr.getFinalTime()) {
+                String broadcastString = "§b§l" + p.getName() + "§3 just got a new world record time of §b§l" + RaceUtilities.formatTimeString(finalTime) + "§3 on §b§l" + track.getName() + "§3!";
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "runalias /announceracewr " + broadcastString);
             } else {
-                String broadcastString = "§d§l" + p.getName() + "§5 just got a new personal best time of §d§l" + RaceUtilities.formatTimeString(elapsed) + "§5, which put them at rank §d§l#" + ScoreManager.getScorePlacement(track, p.getUniqueId()) + "§5 on §d§l" + track.getName() + "§5!";
+                String broadcastString = "§d§l" + p.getName() + "§5 just got a new personal best time of §d§l" + RaceUtilities.formatTimeString(finalTime) + "§5, which put them at rank §d§l#" + ScoreManager.getScorePlacement(track, p.getUniqueId()) + "§5 on §d§l" + track.getName() + "§5!";
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "runalias /announceracepb " + broadcastString);
             }
-            if (ScoreManager.shouldRefreshLeaderboard(elapsed, track)) {
+            if (ScoreManager.shouldRefreshLeaderboard(finalTime, track)) {
                 track.loadLeaderboards();
             }
         } else {
-            p.sendMessage("§bYou achieved a time of " + RaceUtilities.formatTimeString(elapsed) + " on " + track.getName() + ", which was " + RaceUtilities.formatTimeString(elapsed - personalBest.getFinalTime()) + " behind your personal best!");
+            p.sendMessage("§bYou achieved a time of " + RaceUtilities.formatTimeString(finalTime) + " on " + track.getName() + ", which was " + RaceUtilities.formatTimeString(finalTime - personalBest.getFinalTime()) + " behind your personal best!");
         }
-        p.sendTitle("§d§l" + RaceUtilities.formatTimeString(elapsed), pbString, 5, 90, 5);
+        p.sendTitle("§d§l" + RaceUtilities.formatTimeString(finalTime), pbString, 5, 90, 5);
         this.endPlayerRace(p);
     }
 

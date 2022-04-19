@@ -12,9 +12,9 @@ public class Checkpoint {
     private List<CPRegion> regions = new ArrayList<>();
     private List<String> commands = new ArrayList<>();
 
-    public CPRegion getRegionContaining(Player p) {
+    public CPRegion getRegionContaining(RaceState rs) {
         for (CPRegion rg : regions) {
-            if (rg.containsPlayer(p)) { return rg; }
+            if (rg.containsPlayer(rs)) { return rg; }
         }
         return null;
     }

@@ -2,10 +2,8 @@ package org.cubeville.cvracing.models;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -157,7 +155,7 @@ public class VersusRace extends Race {
             int cpIndex = currentRaceState.getCheckpointIndex();
 
             String behindSplit = getBehindSplit(currentRaceState, cpIndex, i);
-            String CPString = currentRaceState.getEndTime() == 0 ? " §f[Lap " + (currentRaceState.getLapIndex() + 1) + " CP " + cpIndex + "]" : " §a§l[Finished]";
+            String CPString = currentRaceState.getFinishTime() == 0 ? " §f[Lap " + (currentRaceState.getLapIndex() + 1) + " CP " + cpIndex + "]" : " §a§l[Finished]";
             String entry = getColorByIndex(i) + placeStrings[i] + "§f: §e"
                 + sortedRaceStates.get(i).getPlayer().getDisplayName()
                 + behindSplit + CPString;
@@ -171,13 +169,13 @@ public class VersusRace extends Race {
         int splitIndex = (currentRaceState.getLapIndex() * track.getCheckpoints().size()) + cpIndex - 1;
         if (i == 0 || splitIndex == -1) { return ""; }
         long behindDiff;
-        if (currentRaceState.getEndTime() == 0) {
+        if (currentRaceState.getFinishTime() == 0) {
             long prevSplit = currentRaceState.getSplit(splitIndex);
             long otherPrevSplit = sortedRaceStates.get(i - 1).getSplit(splitIndex);
             if (prevSplit < otherPrevSplit) { return ""; }
             behindDiff = prevSplit - otherPrevSplit;
         } else {
-            behindDiff = currentRaceState.getEndTime() - sortedRaceStates.get(i - 1).getEndTime();
+            behindDiff = currentRaceState.getFinishTime() - sortedRaceStates.get(i - 1).getFinishTime();
         }
         return " §b§l+" + RaceUtilities.formatTimeString(behindDiff);
     }
@@ -199,7 +197,7 @@ public class VersusRace extends Race {
         if (placement != 0) {
             Player playerAhead = sortedRaceStates.get(placement - 1).getPlayer();
             timeToAhead = "§b which was "
-                    + RaceUtilities.formatTimeString(elapsed - this.raceStates.get(playerAhead).getEndTime())
+                    + RaceUtilities.formatTimeString(elapsed - this.raceStates.get(playerAhead).getFinishTime())
                     + " behind " + playerAhead.getDisplayName();
         }
         player.sendMessage("§bYou completed the race in " + getColorByIndex(placement) + placeStrings[placement] + " place§b!");
@@ -219,7 +217,7 @@ public class VersusRace extends Race {
             Player playerAhead = sortedRaceStates.get(placement - 1).getPlayer();
             int splitIndex = (pState.getLapIndex() * track.getCheckpoints().size()) + pState.getCheckpointIndex() - 1;
             timeToAhead = "§6 "
-                    + RaceUtilities.formatTimeString(pState.getElapsed()
+                    + RaceUtilities.formatTimeString(elapsed
                     - this.raceStates.get(playerAhead).getSplit(splitIndex)
                     ) + " behind " + playerAhead.getDisplayName();
         }
@@ -233,7 +231,7 @@ public class VersusRace extends Race {
 
     protected void updateSortedRaceStates() {
         this.sortedRaceStates = this.raceStates.values().stream()
-        .filter(v -> !v.isSpectator() || v.getEndTime() != 0)
+        .filter(v -> !v.isSpectator() || v.getFinishTime() != 0)
         .sorted(new RaceStateComparator(track.getCheckpoints().size()))
         .collect(Collectors.toList());
     }
@@ -256,9 +254,9 @@ public class VersusRace extends Race {
         finalResults.add("§b§lFinal results on §e§l" + track.getName());
         int i = 0;
         for (RaceState rs : sortedRaceStates) {
-            if (rs.getEndTime() != 0) {
+            if (rs.getFinishTime() != 0) {
                 finalResults.add("§b" + getColorByIndex(i) + placeStrings[i]
-                + "§b: §e" + rs.getPlayer().getDisplayName() + "§f -- §b" + RaceUtilities.formatTimeString(rs.getEndTime()));
+                + "§b: §e" + rs.getPlayer().getDisplayName() + "§f -- §b" + RaceUtilities.formatTimeString(rs.getFinishTime()));
             } else if (rs.isCanceled()) {
                 finalResults.add("§cDNF§b: §e" + rs.getPlayer().getDisplayName());
             } else {
@@ -280,7 +278,7 @@ public class VersusRace extends Race {
         this.removePlayerFromRaceAndSendToLoc(player, endLocation());
         updateScoreboard();
         for (RaceState rs : raceStates.values()) {
-            if (rs.getEndTime() == 0 && !rs.isCanceled() && !rs.isSpectator()) {
+            if (rs.getFinishTime() == 0 && !rs.isCanceled() && !rs.isSpectator()) {
                 return;
             }
         }

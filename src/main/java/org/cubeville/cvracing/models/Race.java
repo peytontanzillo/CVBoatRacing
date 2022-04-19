@@ -99,6 +99,7 @@ public abstract class Race {
 		}
 		this.raceStates.get(player).setArmorStand(as);
 		this.raceStates.get(player).setResetLocation(location);
+		this.raceStates.get(player).setPreviousTickLocation(player.getLocation());
 	}
 
 	private Checkpoint getCurrentCheckpoint(Player p) {
@@ -106,9 +107,10 @@ public abstract class Race {
 	}
 
 	protected void advanceCheckpoint(Player p) {
-		CPRegion regionWithin = this.getCurrentCheckpoint(p).getRegionContaining(p);
+		CPRegion regionWithin = this.getCurrentCheckpoint(p).getRegionContaining(raceStates.get(p));
 		if (regionWithin == null) { return; }
-		this.getCurrentCheckpoint(p).getCommands().forEach(cmd -> Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), cmd.replaceAll("%player%", p.getDisplayName())));
+		long elapsed = raceStates.get(p).getElapsed() - regionWithin.getTPSOffset(raceStates.get(p));
+
 		RaceState newRaceState = this.raceStates.get(p);
 
 		int playerCheckpointIndex = newRaceState.getCheckpointIndex() + 1;
@@ -117,17 +119,21 @@ public abstract class Race {
 			playerCheckpointIndex = 0;
 			lapIndex += 1;
 		}
+
+		int splitIndex = (lapIndex * this.track.getCheckpoints().size()) + playerCheckpointIndex - 1;
+		newRaceState.addSplit(splitIndex, elapsed);
+
 		if (regionWithin.getReset() != null) {
 			newRaceState.setResetLocation(regionWithin.getReset());
 		}
+
 		newRaceState.setCheckpointIndex(playerCheckpointIndex);
 		newRaceState.setLapIndex(lapIndex);
-
 
 		if (lapIndex == this.laps) {
 			stopStopwatch(p);
 			p.playSound(this.track.getExit(), Sound.ENTITY_PLAYER_LEVELUP, 2F, 1F);
-			newRaceState.setEndTime();
+			newRaceState.setFinishTime(elapsed);
 			this.raceStates.put(p, newRaceState);
 			this.completeRace(p);
 			return;
@@ -137,9 +143,9 @@ public abstract class Race {
 		if (track.getType() == TrackType.ELYTRA) {
 			p.getInventory().setItem(0, new ItemStack(Material.FIREWORK_ROCKET, 1));
 		}
-		int splitIndex = (lapIndex * this.track.getCheckpoints().size()) + playerCheckpointIndex - 1;
-		long elapsed = raceStates.get(p).getElapsed();
-		newRaceState.addSplit(splitIndex, elapsed);
+
+		this.getCurrentCheckpoint(p).getCommands().forEach(cmd -> Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), cmd.replaceAll("%player%", p.getDisplayName())));
+
 		this.raceStates.put(p, newRaceState);
 		p.sendMessage("§6CP" + playerCheckpointIndex + ": " + RaceUtilities.formatTimeString(elapsed) + getSplitString(p, elapsed));
 	}
@@ -147,7 +153,7 @@ public abstract class Race {
 	public void cancelRace(Player p, String subtitle) {
 		if (!raceStates.containsKey(p)) { return; }
 		RaceState rs = raceStates.get(p);
-		if (rs.getEndTime() != 0) { return; }
+		if (rs.getFinishTime() != 0) { return; }
 		p.sendTitle( ChatColor.RED + "Race ended", ChatColor.DARK_RED + subtitle, 5, 90, 5);
 		if (rs.getCountdown() != 0) { endCountdown(p); }
 		if (rs.getStopwatch() != 0) { stopStopwatch(p); }
@@ -184,10 +190,6 @@ public abstract class Race {
 		RaceState rs = this.raceStates.get(p);
 		Bukkit.getScheduler().cancelTask(rs.getCountdown());
 		rs.setCountdown(0);
-		ArmorStand as = rs.getArmorStand();
-		as.eject();
-		as.remove();
-		rs.setArmorStand(null);
 		if (track.getType() == TrackType.ELYTRA) {
 			p.setGliding(true);
 		}
@@ -195,6 +197,10 @@ public abstract class Race {
 			p.getInventory().setItem(7, RaceUtilities.getCPResetItem());
 		}
 		startStopwatch(p);
+		ArmorStand as = rs.getArmorStand();
+		as.eject();
+		as.remove();
+		rs.setArmorStand(null);
 	}
 
 	public boolean isCountingDown(Player p) {
@@ -203,12 +209,20 @@ public abstract class Race {
 
 	private void startStopwatch(Player p) {
 		raceStates.get(p).setElapsed(0);
+		raceStates.get(p).setStartTime(System.currentTimeMillis());
 		int stopwatch = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.plugin, () -> {
 			if (raceStates.get(p) == null) { stopStopwatch(p); }
-			long elapsed = raceStates.get(p).getElapsed();
-			raceStates.get(p).setElapsed(elapsed + 50);
+			long elapsed;
+			if (RaceManager.getTiming().equals("TPS")) {
+				elapsed = raceStates.get(p).getElapsed();
+				raceStates.get(p).setElapsed(elapsed + 50);
+			} else {
+				elapsed = System.currentTimeMillis() - raceStates.get(p).getStartTime();
+			}
 			advanceCheckpoint(p);
 			if ((int) elapsed / 60000 >= minuteCap) { cancelRace(p, "You took too long to finish.");}
+			raceStates.get(p).setPreviousTickLocation(p.getLocation());
+			raceStates.get(p).setPreviousTick(System.currentTimeMillis());
 			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§a§l" + RaceUtilities.formatTimeString(elapsed)));
 		}, 0L, 1L);
 		raceStates.get(p).setStopwatch(stopwatch);

@@ -20,6 +20,9 @@ public class ConfigImportManager {
 
 	public static void importConfiguration(JavaPlugin plugin) {
 		FileConfiguration config = plugin.getConfig();
+		if (config.getString("timing") != null) {
+			RaceManager.setTiming(config.getString("timing"));
+		}
 		if (config.getConfigurationSection("tracks") == null) {
 			return;
 		}

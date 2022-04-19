@@ -34,6 +34,9 @@ permissions:
   cvracing.admin.cpcommands.edit:
     description: Allow a user to edit a track's checkpoint commands
     default: op
+  cvracing.admin.timing:
+    description: Allow a user to edit a track's checkpoint commands
+    default: op
 
 # Track Setup Commands
   cvracing.setup.cps.view:

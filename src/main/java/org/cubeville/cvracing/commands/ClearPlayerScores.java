@@ -15,8 +15,8 @@ import java.util.Set;
 
 public class ClearPlayerScores extends BaseCommand {
 	public ClearPlayerScores() {
-		super("times clear player");
-		// track
+		super("player scores clear");
+		// player
 		addBaseParameter(new CommandParameterString());
 		setPermission("cvracing.admin.scores");
 	}

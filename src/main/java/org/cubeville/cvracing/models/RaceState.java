@@ -3,20 +3,23 @@ package org.cubeville.cvracing.models;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
+import org.cubeville.cvracing.RaceManager;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class RaceState {
 
     private HashMap<Integer, Long> splits = new HashMap<>();
     private Player player;
+    private Location previousTickLocation;
+    private long previousTick;
     private int checkpointIndex = 0;
     private int lapIndex = 0;
     private int countdown = 0;
     private int stopwatch = 0;
     private long elapsed = 0;
-    private long endTime = 0;
+    private long finishTime = 0;
+    private long startTime = 0;
     private boolean isCanceled = false;
     private Location resetLocation;
     private ArmorStand armorStand;
@@ -55,26 +58,28 @@ public class RaceState {
     public void setStopwatch(int stopwatch) { this.stopwatch = stopwatch; }
 
     public long getElapsed() {
-        return elapsed;
+        if (RaceManager.getTiming().equals("TPS")) {
+            return elapsed;
+        } else {
+            return System.currentTimeMillis() - startTime;
+        }
     }
 
     public void setElapsed(long elapsed) {
         this.elapsed = elapsed;
     }
 
-    public long getEndTime() {
-        return endTime;
+    public long getFinishTime() {
+        return finishTime;
     }
 
-    public void setEndTime() {
-        this.endTime = elapsed;
+    public void setFinishTime(long finishTime) {
+        this.finishTime = finishTime;
     }
 
     public boolean isCanceled() {
         return isCanceled;
     }
-
-
 
     public void setCanceled(boolean canceled) {
         isCanceled = canceled;
@@ -119,8 +124,33 @@ public class RaceState {
     public void reset() {
         this.checkpointIndex = 0;
         this.lapIndex = 0;
-        this.endTime = 0;
+        this.finishTime = 0;
+        this.startTime = 0;
         this.elapsed = 0;
         this.splits.clear();
+    }
+
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+
+    public Location getPreviousTickLocation() {
+        return previousTickLocation;
+    }
+
+    public void setPreviousTickLocation(Location previousTickLocation) {
+        this.previousTickLocation = previousTickLocation;
+    }
+
+    public long getPreviousTick() {
+        return previousTick;
+    }
+
+    public void setPreviousTick(long previousTick) {
+        this.previousTick = previousTick;
     }
 }
