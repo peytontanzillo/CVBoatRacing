@@ -4,6 +4,8 @@ import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.cubeville.cvracing.*;
+
+import java.util.Map;
 import java.util.UUID;
 
 public class TrialsRace extends Race {
@@ -41,11 +43,21 @@ public class TrialsRace extends Race {
         this.setupPlayerOnTrack(player, this.getTrack().getTrialsSpawn());
         hasStarted = true;
         runCountdown(player, 3);
+        RaceUtilities.sendMetricToCVStats("race_start", Map.of(
+            "track", this.getTrack().getName(),
+            "type", this.getTrack().getType().name().toLowerCase(),
+            "gamemode", "trials"
+        ));
+        RaceUtilities.sendMetricToCVStats("player_race_start", Map.of(
+            "player", player.getUniqueId().toString(),
+            "track", this.getTrack().getName(),
+            "type", this.getTrack().getType().name().toLowerCase(),
+            "gamemode", "trials"
+        ));
     }
 
     protected String getSplitString(Player p, long currentTime) {
         if (comparingTime != null) {
-            System.out.println(comparingTime);
             long comparingSplit = comparingTime.getSplit(this.raceStates.get(p).getCheckpointIndex() - 1);
             String comparingName = "";
             if (!comparingTime.getPlayerUUID().equals(p.getUniqueId())) {
@@ -88,6 +100,17 @@ public class TrialsRace extends Race {
             p.sendMessage("§bYou achieved a time of " + RaceUtilities.formatTimeString(finalTime) + " on " + track.getName() + ", which was " + RaceUtilities.formatTimeString(finalTime - personalBest.getFinalTime()) + " behind your personal best!");
         }
         p.sendTitle("§d§l" + RaceUtilities.formatTimeString(finalTime), pbString, 5, 90, 5);
+        RaceUtilities.sendMetricToCVStats("race_finish", Map.of(
+            "track", this.getTrack().getName(),
+            "type", this.getTrack().getType().name().toLowerCase(),
+            "gamemode", "trials"
+        ));
+        RaceUtilities.sendMetricToCVStats("player_race_finish", Map.of(
+            "player", player.getUniqueId().toString(),
+            "track", this.getTrack().getName(),
+            "type", this.getTrack().getType().name().toLowerCase(),
+            "gamemode", "trials"
+        ));
         this.endPlayerRace(p);
     }
 

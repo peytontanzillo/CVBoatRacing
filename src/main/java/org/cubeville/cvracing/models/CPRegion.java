@@ -1,14 +1,7 @@
 package org.cubeville.cvracing.models;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Server;
-import org.bukkit.entity.Player;
 import org.cubeville.cvracing.RaceUtilities;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class CPRegion {
     private Location min, max, reset;
@@ -60,7 +53,6 @@ public class CPRegion {
                 percentOffset(location.getY(), previousLocation.getY(), min.getY(), max.getY())
         );
         pct = Math.min(pct, percentOffset(location.getZ(), previousLocation.getZ(), min.getZ(), max.getZ()));
-        System.out.println(pct);
         return Math.round((System.currentTimeMillis() - rs.getPreviousTick()) * pct);
     }
 

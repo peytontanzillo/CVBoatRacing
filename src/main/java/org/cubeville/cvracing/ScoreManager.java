@@ -42,7 +42,6 @@ public class ScoreManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	public static void importSplitsFromDB(RacingDB db, HashMap<Integer, Score> importScoreManager) {

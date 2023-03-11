@@ -134,8 +134,19 @@ public class VersusRace extends Race {
             this.setupPlayerOnTrack(p, track.getVersusSpawns().get(i));
             runCountdown(p, 3);
             p.setScoreboard(scoreboard);
+            RaceUtilities.sendMetricToCVStats("player_race_start", Map.of(
+                "player", p.getUniqueId().toString(),
+                "track", this.getTrack().getName(),
+                "type", this.getTrack().getType().name().toLowerCase(),
+                "gamemode", "versus"
+            ));
             i++;
         }
+        RaceUtilities.sendMetricToCVStats("race_start", Map.of(
+            "track", this.getTrack().getName(),
+            "type", this.getTrack().getType().name().toLowerCase(),
+            "gamemode", "versus"
+        ));
     }
 
     protected Scoreboard getRaceScoreboard() {
@@ -202,6 +213,12 @@ public class VersusRace extends Race {
         }
         player.sendMessage("§bYou completed the race in " + getColorByIndex(placement) + placeStrings[placement] + " place§b!");
         player.sendMessage("§bYou had a time of §n" + RaceUtilities.formatTimeString(elapsed) + timeToAhead);
+        RaceUtilities.sendMetricToCVStats("player_race_finish", Map.of(
+            "player", player.getUniqueId().toString(),
+            "track", this.getTrack().getName(),
+            "type", this.getTrack().getType().name().toLowerCase(),
+            "gamemode", "versus"
+        ));
         this.endPlayerRace(player);
     }
 
@@ -282,6 +299,12 @@ public class VersusRace extends Race {
                 return;
             }
         }
+
+        RaceUtilities.sendMetricToCVStats("race_finish", Map.of(
+            "track", this.getTrack().getName(),
+            "type", this.getTrack().getType().name().toLowerCase(),
+            "gamemode", "versus"
+        ));
 
         hasStarted = false;
         this.raceStates.keySet().forEach(p -> {

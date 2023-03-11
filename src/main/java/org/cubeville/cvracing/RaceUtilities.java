@@ -6,10 +6,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.cubeville.cvracing.models.Score;
 import org.cubeville.cvracing.models.Track;
+import org.cubeville.cvstats.CVStats;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+
+import static org.bukkit.Bukkit.getServer;
 
 public class RaceUtilities {
 	public static String formatTimeString(long time) {
@@ -95,5 +99,11 @@ public class RaceUtilities {
 				)
 		);
 		return String.join(",", locParameters);
+	}
+
+	public static void sendMetricToCVStats(String metricName, Map<String, String> fields) {
+		if (getServer().getPluginManager().getPlugin("CVStats") != null) {
+			CVStats.getInstance().sendMetric(metricName, fields);
+		}
 	}
 }

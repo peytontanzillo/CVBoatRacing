@@ -4,7 +4,8 @@ authors: [Ptown16]
 version: 0.1
 api-version: 1.18
 depend: [CVTools]
-description: This is a plugin for time trials racing on the server cubeville.org!
+softdepend: [CVStats]
+description: This is a plugin for racing on the server cubeville.org!
 
 commands:
   race:
