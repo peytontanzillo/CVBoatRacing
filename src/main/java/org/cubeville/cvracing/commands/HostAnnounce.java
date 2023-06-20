@@ -29,7 +29,7 @@ public class HostAnnounce extends Command {
 		}
 		HostedRace hostedRace = track.getHostedRace();
 
-		String announceString = "§6[§eCVRacing§6]§b A hosted " + hostedRace.getTrack().getType().toString().toLowerCase() + " race on track " + hostedRace.getTrack().getName() + " will be starting ";
+		String announceString = "&6[&eCVRacing&6]&b A hosted " + hostedRace.getTrack().getType().toString().toLowerCase() + " race on track " + hostedRace.getTrack().getName() + " will be starting ";
 		if (baseParameters.size() == 0) {
 			announceString += "soon!";
 		} else {
@@ -42,7 +42,7 @@ public class HostAnnounce extends Command {
 				announceString += "in " + minutes + " minutes!";
 			}
 		}
-		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "runalias /announceracehost " + announceString);
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pcmd tr " + announceString);
 		return new CommandResponse("");
 	}
 }

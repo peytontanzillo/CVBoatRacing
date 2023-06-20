@@ -59,6 +59,7 @@ public class HostedRace extends VersusRace {
 
     @Override
     public void removePlayer(Player p) {
+        raceStates.keySet().forEach(player -> player.sendMessage("§b" + p.getDisplayName() + " will no longer be racing in the next race."));
         raceStates.get(p).setSpectator(true);
         RaceManager.removeRace(p);
     }

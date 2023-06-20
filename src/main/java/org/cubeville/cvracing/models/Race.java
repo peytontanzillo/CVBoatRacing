@@ -16,7 +16,7 @@ public abstract class Race {
 	protected JavaPlugin plugin;
 	protected Track track;
 	protected HashMap<Player, RaceState> raceStates = new HashMap<>();
-	private final int minuteCap = 10; // The player can go for x minutes before they are kicked out of the game
+	private final int minuteCap = 10; // The player can go for 10 minutes per lap before being kicked out of the game
 	int laps;
 	boolean hasStarted = false;
 
@@ -220,7 +220,7 @@ public abstract class Race {
 				elapsed = System.currentTimeMillis() - raceStates.get(p).getStartTime();
 			}
 			advanceCheckpoint(p);
-			if ((int) elapsed / 60000 >= minuteCap) { cancelRace(p, "You took too long to finish.");}
+			if ((int) elapsed / 60000 >= (minuteCap * laps)) { cancelRace(p, "You took too long to finish.");}
 			raceStates.get(p).setPreviousTickLocation(p.getLocation());
 			raceStates.get(p).setPreviousTick(System.currentTimeMillis());
 			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§a§l" + RaceUtilities.formatTimeString(elapsed)));

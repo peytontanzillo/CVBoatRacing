@@ -41,6 +41,6 @@ public class HostRemovePlayers extends Command {
 
 		hostedRace.removePlayer(removingPlayer);
 
-		return new CommandResponse("Removed " + player.getDisplayName() + " from the race");
+		return new CommandResponse("Removed " + removingPlayer.getDisplayName() + " from the race");
 	}
 }
