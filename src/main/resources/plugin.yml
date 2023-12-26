@@ -1,8 +1,8 @@
 name: CVRacing
 main: org.cubeville.cvracing.CVRacing
 authors: [Ptown16]
-version: 0.1
-api-version: 1.18
+version: 1.20
+api-version: 1.20
 depend: [CVTools]
 softdepend: [CVStats]
 description: This is a plugin for racing on the server cubeville.org!
