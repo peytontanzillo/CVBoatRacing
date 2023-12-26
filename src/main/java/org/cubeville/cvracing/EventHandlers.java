@@ -44,6 +44,7 @@ public class EventHandlers implements Listener {
 				return;
 			}
 			sign.onRightClick(event.getPlayer());
+			event.setCancelled(true);
 		}
 
 		if ((event.getAction() == Action.RIGHT_CLICK_BLOCK

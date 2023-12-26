@@ -1,5 +1,6 @@
 package org.cubeville.cvracing.models;
 
+import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
 import org.bukkit.entity.Player;
@@ -16,53 +17,55 @@ public class RaceSign {
 	public RaceSign(Sign sign, Track track, RaceSignType type) {
 		this.sign = sign;
 		this.track = track;
-		this.sign.getSide(Side.FRONT).setLine(1, track.getName());
+		Sign editSign = (Sign) this.sign.getLocation().getBlock().getState();
+		editSign.getSide(Side.FRONT).setLine(1, track.getName());
 		this.setType(type);
 		this.displayQueue();
 		this.displayStatus(track.getStatus());
 	}
 
 	public void displayType() {
+		Sign editSign = (Sign) this.sign.getLocation().getBlock().getState();
 		if (track.getHostedRace() != null && type != RaceSignType.ERROR && type != RaceSignType.EXIT) {
-			this.sign.getSide(Side.FRONT).setLine(0, "§e§l[HOSTING]");
-			this.sign.update();
+			editSign.getSide(Side.FRONT).setLine(0, ChatColor.YELLOW + "" + ChatColor.BOLD + "[HOSTING]"); //§e§l
+			editSign.update();
 			return;
 		}
 		String typeText = "";
 		switch (type) {
 			case TRIALS:
-				typeText += "§b";
+				typeText += ChatColor.AQUA; //§b
 				break;
 			case VERSUS:
-				typeText += "§d";
+				typeText += ChatColor.LIGHT_PURPLE; //§d
 				break;
 			case SPECTATE:
-				typeText += "§7";
+				typeText += ChatColor.GRAY; //§7
 				break;
 			case EXIT:
 			case ERROR:
-				typeText += "§c";
+				typeText += ChatColor.RED; //§c
 				break;
 		}
-		typeText += "§l[";
+		typeText += ChatColor.BOLD + "["; //§l
 		typeText += type;
 		typeText += "]";
-		this.sign.getSide(Side.FRONT).setLine(0, typeText);
-		this.sign.update();
+		editSign.getSide(Side.FRONT).setLine(0, typeText);
 	}
 
 	public void displayQueue() {
+		Sign editSign = (Sign) this.sign.getLocation().getBlock().getState();
 		if (track.getHostedRace() != null) {
-			this.sign.getSide(Side.FRONT).setLine(3, "");
-			this.sign.update();
+			editSign.getSide(Side.FRONT).setLine(3, "");
+			editSign.update();
 			return;
 		}
 		switch (type) {
 			case TRIALS:
 				if (track.getQueue().size() > 0) {
-					this.sign.getSide(Side.FRONT).setLine(3, "§6§o" + track.getQueue().size() + " in queue");
+					editSign.getSide(Side.FRONT).setLine(3, ChatColor.GOLD + "" + ChatColor.ITALIC + track.getQueue().size() + " in queue"); //"§6§o"
 				} else {
-					this.sign.getSide(Side.FRONT).setLine(3, "");
+					editSign.getSide(Side.FRONT).setLine(3, "");
 				}
 				break;
 			case VERSUS:
@@ -70,40 +73,41 @@ public class RaceSign {
 				if (track.getVersusRace() != null) {
 					playerFill = track.getVersusRace().playerSize();
 				}
-				this.sign.getSide(Side.FRONT).setLine(3, playerFill + " / " + track.getVersusSpawns().size());
+				editSign.getSide(Side.FRONT).setLine(3, playerFill + " / " + track.getVersusSpawns().size());
 				break;
 			default:
-				this.sign.getSide(Side.FRONT).setLine(3, "");
+				editSign.getSide(Side.FRONT).setLine(3, "");
 				break;
 		}
-		this.sign.update();
+		editSign.update();
 	}
 
 	public void displayStatus(TrackStatus status) {
+		Sign editSign = (Sign) this.sign.getLocation().getBlock().getState();
 		boolean displayStatusAlways = type == RaceSignType.TRIALS || type == RaceSignType.VERSUS;
 		boolean shouldOverrideStatusHide = status == TrackStatus.HOSTING && type == RaceSignType.SPECTATE;
 		if (!displayStatusAlways && !shouldOverrideStatusHide) {
-			this.sign.getSide(Side.FRONT).setLine(2, "");
+			editSign.getSide(Side.FRONT).setLine(2, "");
 		} else {
 			switch (status) {
 				case OPEN:
-					this.sign.getSide(Side.FRONT).setLine(2, "§a§lOPEN");
+					editSign.getSide(Side.FRONT).setLine(2, ChatColor.GREEN + "" + ChatColor.BOLD + "OPEN"); //§a§l
 					break;
 				case IN_USE:
-					this.sign.getSide(Side.FRONT).setLine(2, "§7§lIN USE");
+					editSign.getSide(Side.FRONT).setLine(2, ChatColor.GRAY + "" + ChatColor.BOLD + "IN USE"); //§7§l
 					break;
 				case CLOSED:
-					this.sign.getSide(Side.FRONT).setLine(2, "§c§lCLOSED");
+					editSign.getSide(Side.FRONT).setLine(2, ChatColor.RED + "" + ChatColor.BOLD + "CLOSED"); //§c§l
 					break;
 				case IN_LOBBY:
-					this.sign.getSide(Side.FRONT).setLine(2, "§e§lIN LOBBY");
+					editSign.getSide(Side.FRONT).setLine(2, ChatColor.YELLOW + "" + ChatColor.BOLD + "IN LOBBY"); //§e§l
 					break;
 				case HOSTING:
-					this.sign.getSide(Side.FRONT).setLine(2, "§b§lHOSTING");
+					editSign.getSide(Side.FRONT).setLine(2, ChatColor.AQUA + "" + ChatColor.BOLD + "HOSTING"); //§b§l
 					break;
 			}
 		}
-		this.sign.update();
+		editSign.update();
 	}
 
 	public void setType(RaceSignType type) {
