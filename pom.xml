@@ -21,7 +21,7 @@
     <dependency>
       <groupId>org.cubeville</groupId>
       <artifactId>CVTools</artifactId>
-      <version>1.18</version>
+      <version>1.20</version>
       <scope>compile</scope>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
