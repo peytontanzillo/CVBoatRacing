@@ -1,8 +1,8 @@
 package org.cubeville.cvracing.models;
 
 import org.bukkit.block.Sign;
+import org.bukkit.block.sign.Side;
 import org.bukkit.entity.Player;
-import org.cubeville.cvracing.RaceManager;
 import org.cubeville.cvracing.RaceSignType;
 import org.cubeville.cvracing.TrackStatus;
 
@@ -16,7 +16,7 @@ public class RaceSign {
 	public RaceSign(Sign sign, Track track, RaceSignType type) {
 		this.sign = sign;
 		this.track = track;
-		this.sign.setLine(1, track.getName());
+		this.sign.getSide(Side.FRONT).setLine(1, track.getName());
 		this.setType(type);
 		this.displayQueue();
 		this.displayStatus(track.getStatus());
@@ -24,7 +24,7 @@ public class RaceSign {
 
 	public void displayType() {
 		if (track.getHostedRace() != null && type != RaceSignType.ERROR && type != RaceSignType.EXIT) {
-			this.sign.setLine(0, "§e§l[HOSTING]");
+			this.sign.getSide(Side.FRONT).setLine(0, "§e§l[HOSTING]");
 			this.sign.update();
 			return;
 		}
@@ -47,22 +47,22 @@ public class RaceSign {
 		typeText += "§l[";
 		typeText += type;
 		typeText += "]";
-		this.sign.setLine(0, typeText);
+		this.sign.getSide(Side.FRONT).setLine(0, typeText);
 		this.sign.update();
 	}
 
 	public void displayQueue() {
 		if (track.getHostedRace() != null) {
-			this.sign.setLine(3, "");
+			this.sign.getSide(Side.FRONT).setLine(3, "");
 			this.sign.update();
 			return;
 		}
 		switch (type) {
 			case TRIALS:
 				if (track.getQueue().size() > 0) {
-					this.sign.setLine(3, "§6§o" + track.getQueue().size() + " in queue");
+					this.sign.getSide(Side.FRONT).setLine(3, "§6§o" + track.getQueue().size() + " in queue");
 				} else {
-					this.sign.setLine(3, "");
+					this.sign.getSide(Side.FRONT).setLine(3, "");
 				}
 				break;
 			case VERSUS:
@@ -70,10 +70,10 @@ public class RaceSign {
 				if (track.getVersusRace() != null) {
 					playerFill = track.getVersusRace().playerSize();
 				}
-				this.sign.setLine(3, playerFill + " / " + track.getVersusSpawns().size());
+				this.sign.getSide(Side.FRONT).setLine(3, playerFill + " / " + track.getVersusSpawns().size());
 				break;
 			default:
-				this.sign.setLine(3, "");
+				this.sign.getSide(Side.FRONT).setLine(3, "");
 				break;
 		}
 		this.sign.update();
@@ -83,23 +83,23 @@ public class RaceSign {
 		boolean displayStatusAlways = type == RaceSignType.TRIALS || type == RaceSignType.VERSUS;
 		boolean shouldOverrideStatusHide = status == TrackStatus.HOSTING && type == RaceSignType.SPECTATE;
 		if (!displayStatusAlways && !shouldOverrideStatusHide) {
-			this.sign.setLine(2, "");
+			this.sign.getSide(Side.FRONT).setLine(2, "");
 		} else {
 			switch (status) {
 				case OPEN:
-					this.sign.setLine(2, "§a§lOPEN");
+					this.sign.getSide(Side.FRONT).setLine(2, "§a§lOPEN");
 					break;
 				case IN_USE:
-					this.sign.setLine(2, "§7§lIN USE");
+					this.sign.getSide(Side.FRONT).setLine(2, "§7§lIN USE");
 					break;
 				case CLOSED:
-					this.sign.setLine(2, "§c§lCLOSED");
+					this.sign.getSide(Side.FRONT).setLine(2, "§c§lCLOSED");
 					break;
 				case IN_LOBBY:
-					this.sign.setLine(2, "§e§lIN LOBBY");
+					this.sign.getSide(Side.FRONT).setLine(2, "§e§lIN LOBBY");
 					break;
 				case HOSTING:
-					this.sign.setLine(2, "§b§lHOSTING");
+					this.sign.getSide(Side.FRONT).setLine(2, "§b§lHOSTING");
 					break;
 			}
 		}
